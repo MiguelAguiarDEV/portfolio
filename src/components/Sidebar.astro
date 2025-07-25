@@ -1,62 +1,11 @@
 ---
-import { Home, User, Mail, Settings } from "lucide-astro";
+import SidebarNav from "./SidebarNav.astro";
+import SidebarFooter from "./SidebarFooter.astro";
 ---
 
 <aside
-    class="sidebar fixed left-4 top-4 h-[calc(100vh-2rem)] w-20 bg-primary rounded-[30px] shadow-xl flex flex-col items-center py-6 z-50"
+    class="sidebar fixed left-0 top-4 h-[calc(100vh-2rem)] w-20 bg-primary rounded-r-[30px] shadow-xl flex flex-col items-center py-6 z-50"
 >
-    <nav class="flex flex-col items-center space-y-6 flex-1">
-        <div
-            class="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-8"
-        >
-            <div class="w-6 h-6 bg-light rounded-full"></div>
-        </div>
-
-        <ul class="flex flex-col space-y-4">
-            <li>
-                <a
-                    href="/"
-                    class="group flex items-center justify-center w-12 h-12 rounded-xl bg-light/10 hover:bg-light/20 transition-all duration-300 hover:scale-110"
-                >
-                    <Home
-                        size={20}
-                        class="text-light group-hover:text-accent transition-colors"
-                    />
-                </a>
-            </li>
-            <li>
-                <a
-                    href="/about"
-                    class="group flex items-center justify-center w-12 h-12 rounded-xl bg-light/10 hover:bg-light/20 transition-all duration-300 hover:scale-110"
-                >
-                    <User
-                        size={20}
-                        class="text-light group-hover:text-accent transition-colors"
-                    />
-                </a>
-            </li>
-            <li>
-                <a
-                    href="/contact"
-                    class="group flex items-center justify-center w-12 h-12 rounded-xl bg-light/10 hover:bg-light/20 transition-all duration-300 hover:scale-110"
-                >
-                    <Mail
-                        size={20}
-                        class="text-light group-hover:text-accent transition-colors"
-                    />
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-    <div class="sidebar-footer mt-auto">
-        <button
-            class="group flex items-center justify-center w-12 h-12 rounded-xl bg-light/10 hover:bg-light/20 transition-all duration-300 hover:scale-110"
-        >
-            <Settings
-                size={20}
-                class="text-light group-hover:text-accent transition-colors"
-            />
-        </button>
-    </div>
+    <SidebarNav />
+    <SidebarFooter />
 </aside>

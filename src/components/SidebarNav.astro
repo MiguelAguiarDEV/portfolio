@@ -1,0 +1,30 @@
+---
+import { Home, User, Mail } from "lucide-astro";
+import SidebarNavItem from "./SidebarNavItem.astro";
+import SidebarAvatar from "./SidebarAvatar.astro";
+
+// Aquí puedes obtener la URL actual para determinar qué elemento está activo
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+    { href: "/", icon: Home, label: "Home" },
+    { href: "/about", icon: User, label: "About" },
+    { href: "/contact", icon: Mail, label: "Contact" },
+];
+---
+
+<nav class="flex flex-col items-center space-y-6 flex-1">
+    <SidebarAvatar />
+
+    <ul class="flex flex-col space-y-4">
+        {
+            navItems.map((item) => (
+                <SidebarNavItem
+                    href={item.href}
+                    icon={item.icon}
+                    isActive={currentPath === item.href}
+                />
+            ))
+        }
+    </ul>
+</nav>
