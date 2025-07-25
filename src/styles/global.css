@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definición de la fuente personalizada */
+@font-face {
+    font-family: 'MiguerSans';
+    src: url('/fonts/MiguerSans-Regular.otf') format('opentype');
+    font-display: swap;
+}
+
+:root {
+    --color-primary: #308072;
+    --color-secondary: #06181a;
+    --color-accent: #57696b;
+    --color-light: #ffffff;
+    --color-gray-100: #f7fafc;
+    --color-gray-800: #2d3748;
+    --color-gray-900: #1a202c;
+}
+
+@layer components {
+    .bg-light {
+        background-color: var(--color-light);
+    }
+
+    .bg-primary {
+        background-color: var(--color-primary);
+    }
+
+    .bg-secondary {
+        background-color: var(--color-secondary);
+    }
+
+    .bg-accent {
+        background-color: var(--color-accent);
+    }
+
+    .bg-gray-100 {
+        background-color: var(--color-gray-100);
+    }
+
+    .bg-gray-800 {
+        background-color: var(--color-gray-800);
+    }
+
+    .bg-gray-900 {
+        background-color: var(--color-gray-900);
+    }
+
+    .text-primary {
+        color: var(--color-primary);
+    }
+
+    .text-secondary {
+        color: var(--color-secondary);
+    }
+
+    .text-accent {
+        color: var(--color-accent);
+    }
+
+    .text-light {
+        color: var(--color-light);
+    }
+
+    .border-primary {
+        border-color: var(--color-primary);
+    }
+
+    .border-secondary {
+        border-color: var(--color-secondary);
+    }
+
+    .border-accent {
+        border-color: var(--color-accent);
+    }
+
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'MiguerSans', 'Inter', 'system-ui', sans-serif;
+    background-color: var(--color-gray-100);
+    color: #1a202c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'MiguerSans', 'Inter', sans-serif;
+    font-weight: 700;
+}
+
+input {
+    font-family: 'MiguerSans', 'Inter', sans-serif;
+}
+
+button {
+    font-family: 'MiguerSans', 'Inter', sans-serif;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
