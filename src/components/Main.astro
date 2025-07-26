@@ -1,9 +1,28 @@
 ---
-
+import { Linkedin } from "lucide-astro";
+import Instagram from "lucide-astro/Instagram";
+import Twitter from "lucide-astro/Twitter";
 ---
 
 <main
-    class="bg-primary text-light p-6 rounded-[40px] shadow-lg w-full ml-28 mr-4 my-4"
+    class="w-full rounded-[57px] overflow-hidden grid grid-rows-[auto_1fr_auto]"
 >
-    <slot />
+    <div class="w-full h-27 flex">
+        <span class="col-span-1 bg-primary w-full rounded-tr-[57px]"></span>
+
+        <div class="col-span-1 bg-primary w-fit">
+            <div class="bg-light w-full rounded-b-[57px] h-full px-6 pb-6">
+                <div
+                    class="bg-primary flex w-full h-full items-center align-middle justify-center rounded-[57px] gap-7 px-7"
+                >
+                    <Twitter class="w-6 h-6 text-light" />
+                    <Instagram class="w-6 h-6 text-light" />
+                    <Linkedin class="w-6 h-6 text-light" />
+                </div>
+            </div>
+        </div>
+        <span class="col-span-1 bg-primary w-72 rounded-tl-[57px]"></span>
+    </div>
+    <div class="bg-yellow-500 w-full">MAINN</div>
+    <div class="bg-blue-500 w-full h-70">ADIOS</div>
 </main>

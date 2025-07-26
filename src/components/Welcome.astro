@@ -1,7 +1,9 @@
 ---
-
+import Sidebar from "./Sidebar.astro";
+import Main from "./Main.astro";
 ---
 
-<div class="bg-light border-black min-h-screen w-full flex gap-7">
-    <slot />
+<div class="bg-light sticky flex p-7 min-h-screen w-full h-100vh gap-7">
+    <Sidebar />
+    <Main />
 </div>
