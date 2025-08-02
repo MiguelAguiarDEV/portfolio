@@ -1,5 +1,4 @@
 ---
-import Welcome from "../components/Welcome.astro";
 import Sidebar from "../components/Sidebar.astro";
 import Main from "../components/Main.astro";
 import "../styles/global.css";
@@ -13,6 +12,11 @@ import "../styles/global.css";
 		<title>Portfolio</title>
 	</head>
 	<body>
-		<Welcome />
+		<div
+			class="bg-bg-secondary sticky flex p-7 min-h-screen w-full h-100vh gap-7"
+		>
+			<Sidebar />
+			<Main />
+		</div>
 	</body>
 </html>

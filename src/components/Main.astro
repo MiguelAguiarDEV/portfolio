@@ -1,22 +1,15 @@
 ---
 import Socials from "./Main/Socials.astro";
+import MainContentLayout from "../layouts/MainContentLayout.astro";
 ---
 
 <main
     class="w-full rounded-[57px] grid grid-rows-[auto_1fr_auto] rounded-t-[57px]"
 >
     <div class="w-full h-27 flex rounded-t-[57px]">
-        <span class="col-span-1 bg-primary w-full rounded-t-[57px]"></span>
+        <span class="col-span-1 bg-bg-primary w-full rounded-t-[57px]"></span>
         <Socials />
-        <span class="col-span-1 bg-primary w-72 rounded-t-[57px]"></span>
+        <span class="col-span-1 bg-bg-primary w-72 rounded-t-[57px]"></span>
     </div>
-    <div
-        class="bg-primary w-full rounded-b-[57px] grid grid-cols-[1fr_3fr] grid-rows-[auto_1fr] p-7 h-full"
-        id="main-content "
-    >
-        <!-- MAIN CONTENT -->
-        <!-- <div class="name text-3xl text-light font-bold">
-            Miguel A. Santiesteban Aguiar
-        </div> -->
-    </div>
+    <MainContentLayout />
 </main>

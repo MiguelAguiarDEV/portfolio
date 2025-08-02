@@ -11,13 +11,15 @@ const { href, icon: Icon, isActive = false } = Astro.props;
 <li>
     <a
         href={href}
-        class={`group flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 hover:scale-110 ${
-            isActive ? "bg-light/20 scale-105" : "bg-light/10 hover:bg-light/20"
+        class={`group flex items-center justify-center align-middle  w-12 h-12 rounded-[57px] transition-all duration-300 hover:scale-110 ${
+            isActive
+                ? "bg-light/20 scale-105"
+                : "bg-bg-primary hover:bg-light/20"
         }`}
     >
         <Icon
             size={20}
-            class="text-light group-hover:text-accent transition-colors"
+            class="text-light flex group-hover:text-accent transition-colors"
         />
     </a>
 </li>
