@@ -38,3 +38,8 @@
     --color-neutral-500: #111111;
     --color-neutral-600: #000000;
 }
+
+
+button {
+    cursor: move;
+}

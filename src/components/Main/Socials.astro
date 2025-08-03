@@ -2,6 +2,7 @@
 import { Linkedin } from "lucide-astro";
 import Instagram from "lucide-astro/Instagram";
 import Twitter from "lucide-astro/Twitter";
+import SidebarNavItem from "../Sidebar/SidebarNavItem.astro";
 ---
 
 <div class="col-span-1 bg-bg-primary w-fit">
@@ -9,21 +10,21 @@ import Twitter from "lucide-astro/Twitter";
         <div
             class="bg-bg-primary flex w-full h-full items-center align-middle justify-center rounded-[57px] gap-2 px-7"
         >
-            <div
-                class="group flex items-center hover:bg-light/20 justify-center align-middle w-12 h-12 rounded-[57px] transition-all duration-300 hover:scale-110"
+            <a
+                class="cursor-pointer group flex items-center hover:bg-light/20 justify-center align-middle w-12 h-12 rounded-[57px] transition-all duration-300 hover:scale-110"
             >
                 <Twitter class="w-6 h-6 text-light" />
-            </div>
-            <div
-                class="group flex items-center hover:bg-light/20 justify-center align-middle w-12 h-12 rounded-[57px] transition-all duration-300 hover:scale-110"
+            </a>
+            <a
+                class="cursor-pointer group flex items-center hover:bg-light/20 justify-center align-middle w-12 h-12 rounded-[57px] transition-all duration-300 hover:scale-110"
             >
                 <Instagram class="w-6 h-6 text-light" />
-            </div>
-            <div
-                class="group flex items-center hover:bg-light/20 justify-center align-middle w-12 h-12 rounded-[57px] transition-all duration-300 hover:scale-110"
+            </a>
+            <a
+                class="cursor-pointer group flex items-center hover:bg-light/20 justify-center align-middle w-12 h-12 rounded-[57px] transition-all duration-300 hover:scale-110"
             >
                 <Linkedin class="w-6 h-6 text-light" />
-            </div>
+            </a>
         </div>
     </div>
 </div>
