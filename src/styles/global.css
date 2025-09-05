@@ -70,15 +70,9 @@ body {
     background: var(--wipe-color);
     padding: 10px;
     /* grosor del halo */
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
+
     mask-composite: exclude;
-    filter: blur(300px);
+    filter: blur(20px);
     pointer-events: none;
     opacity: .9;
 }
@@ -90,10 +84,10 @@ body {
     }
 
     to {
-        width: 320vmax;
+        width: 175vmax;
     }
 }
 
 .panel.reveal .wipe {
-    animation: wipeGrowW 1820ms cubic-bezier(.22, .61, .36, 1) both;
+    animation: wipeGrowW 1110ms linear both;
 }

@@ -15,9 +15,10 @@ const { color = "blue", target = "", title = "" } = Astro.props;
     data-target={target}
     title={title || color}
     aria-label={title || color}
+    class="shadow-2xl"
 >
     <button
-        class="w-3.5 h-3.5 rounded-full shadow-sm hover:scale-125 transition-transform"
+        class="w-3.5 h-3.5 rounded-full shadow-2xl hover:scale-125 transition-transform"
         style={`background:${palette[color]}`}
         type="button"></button>
 </color-dot>
