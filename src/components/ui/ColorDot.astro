@@ -1,0 +1,21 @@
+---
+import type { Pola } from "../../lib/colors";
+import { palette } from "../../lib/colors";
+
+export interface Props {
+    color?: Pola;
+    target?: string; // id del panel destino
+    title?: string;
+}
+
+const { color = "blue", target = "", title = "" } = Astro.props;
+---
+
+<button
+    type="button"
+    data-color={color}
+    data-target={target}
+    class="w-3.5 h-3.5 rounded-full shadow-sm hover:scale-125 transition-transform"
+    title={title || color}
+    aria-label={title || color}
+    style={`background:${palette[color]}`}></button>

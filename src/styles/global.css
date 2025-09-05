@@ -1,45 +1,76 @@
 @import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Definición de la fuente personalizada */
-@font-face {
-    font-family: 'MiguerSans';
-    src: url('/fonts/MiguerSans-Regular.otf') format('opentype');
-    font-display: swap;
+/* Layout base */
+html {
+    height: 100%;
+    box-sizing: border-box;
 }
 
-@theme dark-grayscale {
-    --color-primary: #4d4d4d;
-    /* gris medio */
-    --color-secondary: #3c3c3c;
-    /* gris oscuro */
-    --color-accent: #1e1e1e;
-    /* gris muy oscuro */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
 
-    --color-bg-primary: #111111;
-    /* fondo casi negro */
-    --color-bg-secondary: #000000;
-    /* negro absoluto */
-    --color-bg-accent: #1e1e1e;
-
-    --color-light: #ffffff;
-    /* texto claro */
-    --color-dark: #000000;
-    /* negro */
-
-    /* Extras por niveles */
-    --color-neutral-100: #4d4d4d;
-    --color-neutral-200: #3c3c3c;
-    --color-neutral-300: #2e2e2e;
-    --color-neutral-400: #1e1e1e;
-    --color-neutral-500: #111111;
-    --color-neutral-600: #000000;
+body {
+    height: 100dvh;
+    margin: 0;
+    overflow: hidden;
 }
 
 
-button {
-    cursor: move;
+#app-main {
+    background: #161616;
+}
+
+/* Paneles apilados y animación */
+.panel {
+    position: absolute;
+    inset: 0;
+    will-change: opacity;
+    contain: paint;
+}
+
+/* Solo el activo es visible; transición de opacidad para suavizar */
+.panel {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.panel.is-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Overlay para wipe diagonal sin artefactos */
+.panel .wipe {
+    position: absolute;
+    left: -10%;
+    top: -10%;
+    width: 10%;
+    height: 10%;
+    background: #c51010;
+    /* se puede sobrescribir desde JS si quieres el color del panel anterior */
+
+    z-index: 20;
+}
+
+/* El panel activo mantiene el overlay fuera de la vista */
+.panel.is-active .wipe {
+    transform: scale(1) rotate(-35deg);
+}
+
+@keyframes wipeDiagDown {
+    from {
+        transform: scale(1) rotate(-35deg);
+    }
+
+    to {
+        transform: scale(100) rotate(-35deg);
+    }
+}
+
+/* Al activar el panel, el overlay se desplaza fuera revelando el contenido */
+.panel.reveal .wipe {
+    animation: wipeDiagDown 900ms cubic-bezier(.3, .7, .2, 1) both;
 }

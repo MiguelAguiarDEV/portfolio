@@ -1,0 +1,10 @@
+---
+import { order } from "../../lib/colors";
+import ColorDot from "./ColorDot.astro";
+---
+
+<nav class="w-full flex justify-center mt-3 relative z-30 pointer-events-auto">
+    <div class="flex items-center gap-3">
+        {order.map((c) => <ColorDot color={c} target={`#panel-${c}`} />)}
+    </div>
+</nav>

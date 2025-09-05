@@ -1,0 +1,29 @@
+---
+import type { Pola } from "../../lib/colors";
+import { palette } from "../../lib/colors";
+
+export interface Props {
+    id?: string;
+    color: Pola;
+    active?: boolean;
+    label?: string;
+}
+
+const { id = undefined, color, active = false, label = "" } = Astro.props;
+---
+
+<section
+    id={id}
+    class={`panel absolute inset-0 flex items-center justify-center rounded-lg transition-opacity duration-500 ${
+        active ? "is-active" : ""
+    }`}
+    style={`background:${palette[color]}`}
+    data-color={color}
+>
+    <div class="wipe" style={`background:${palette[color]}`}></div>
+    <span
+        class="text-white text-3xl font-semibold mix-blend-luminosity select-none"
+    >
+        {label}
+    </span>
+</section>

@@ -1,0 +1,66 @@
+---
+import { order } from "../../lib/colors";
+import Panel from "./Panel.astro";
+---
+
+<div class="relative h-full w-full rounded-lg overflow-hidden">
+    {
+        order.map((c, i) => (
+            <Panel id={`panel-${c}`} color={c} active={i === 0} label={c} />
+        ))
+    }
+    <slot />
+</div>
+
+<script>
+    // Manejo de navegación entre paneles con animación
+    const root = document.currentScript?.closest("div.relative");
+    if (root) {
+        const panels = Array.from(
+            root.querySelectorAll(".panel"),
+        ) as HTMLElement[];
+        let activeIdx = panels.findIndex((p) =>
+            p.classList.contains("is-active"),
+        );
+        if (activeIdx < 0) activeIdx = 0;
+
+        function activate(targetId: string) {
+            const toIdx = panels.findIndex(
+                (p) => p.id === targetId.replace(/^#/, ""),
+            );
+            if (toIdx < 0 || toIdx === activeIdx) return;
+
+            const from = panels[activeIdx];
+            const to = panels[toIdx];
+
+            // Preparar destino
+            to.classList.add("is-active");
+            // Disparar wipe del panel saliente para efecto de transición
+            from.classList.add("reveal");
+
+            // Al finalizar la animación, limpiar estado
+            const wipe = from.querySelector(".wipe");
+            const cleanup = () => {
+                from.classList.remove("is-active", "reveal");
+                wipe?.removeEventListener("animationend", cleanup);
+            };
+            if (wipe)
+                wipe.addEventListener("animationend", cleanup, { once: true });
+            else cleanup();
+
+            activeIdx = toIdx;
+        }
+
+        // Delegación de eventos para los ColorDot del NavBar
+        document.addEventListener("click", (e) => {
+            const btn = (e.target as HTMLElement)?.closest(
+                "button[data-target]",
+            ) as HTMLElement | null;
+            if (!btn) return;
+            const target = btn.getAttribute("data-target");
+            if (!target) return;
+            e.preventDefault();
+            activate(target);
+        });
+    }
+</script>
