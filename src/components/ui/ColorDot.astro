@@ -4,18 +4,131 @@ import { palette } from "../../lib/colors";
 
 export interface Props {
     color?: Pola;
-    target?: string; // id del panel destino
+    target?: string;
     title?: string;
 }
-
 const { color = "blue", target = "", title = "" } = Astro.props;
 ---
 
-<button
-    type="button"
+<color-dot
     data-color={color}
     data-target={target}
-    class="w-3.5 h-3.5 rounded-full shadow-sm hover:scale-125 transition-transform"
     title={title || color}
     aria-label={title || color}
-    style={`background:${palette[color]}`}></button>
+>
+    <button
+        class="w-3.5 h-3.5 rounded-full shadow-sm hover:scale-125 transition-transform"
+        style={`background:${palette[color]}`}
+        type="button"></button>
+</color-dot>
+<script>
+    let txId = 0; // token global
+    let running = null; // transición en curso
+
+    const norm = (s) => (s?.startsWith("#") ? s : s ? "#" + s : "");
+
+    function cleanupStale() {
+        document
+            .querySelectorAll(".panel.reveal")
+            .forEach((p) => p.classList.remove("reveal"));
+    }
+
+    function cancelRunning() {
+        if (!running) return;
+        const { next, curr, wipe, onEnd, toHide, prevBg } = running;
+
+        // cancela listener y anima instantáneamente a estado consistente
+        if (wipe && onEnd) wipe.removeEventListener("animationend", onEnd);
+
+        // rollback del panel destino
+        next.classList.remove("reveal", "is-active");
+        next.style.zIndex = "0";
+        next.style.background = prevBg || "";
+        toHide.forEach((el) => (el.style.visibility = ""));
+
+        // el actual vuelve a ser el visible
+        if (curr) {
+            curr.classList.add("is-active");
+            curr.style.zIndex = "1";
+        }
+
+        running = null;
+    }
+
+    class ColorDotEl extends HTMLElement {
+        connectedCallback() {
+            const btn = this.querySelector("button");
+            if (!btn) return;
+
+            btn.addEventListener("click", () => {
+                const sel = norm(this.dataset.target);
+                if (!sel) return;
+
+                cleanupStale();
+                cancelRunning(); // corta animación previa si existía
+
+                const next = document.querySelector(sel);
+                const curr = document.querySelector(".panel.is-active");
+                if (!next || next === curr) return;
+
+                const wipe = next.querySelector(".wipe");
+                const nextColor = getComputedStyle(next).backgroundColor;
+
+                // prepara destino visible pero con contenido oculto
+                const toHide = Array.from(next.children).filter(
+                    (el) => !el.classList.contains("wipe"),
+                );
+                const prevBg = next.style.background;
+                toHide.forEach((el) => (el.style.visibility = "hidden"));
+                next.style.background = "transparent";
+
+                if (curr) curr.style.zIndex = "0";
+                next.style.zIndex = "2";
+                next.classList.add("is-active");
+
+                const id = ++txId;
+
+                const onEnd = () => {
+                    if (!running || running.id !== id) return; // ignorar eventos viejos
+
+                    // finaliza
+                    next.style.zIndex = "1";
+                    next.classList.remove("reveal");
+                    if (curr) curr.classList.remove("is-active");
+
+                    next.style.background = prevBg || nextColor;
+                    toHide.forEach((el) => (el.style.visibility = ""));
+                    running = null;
+                };
+
+                if (wipe) {
+                    // reinicia y dispara el wipe sin delay
+                    wipe.style.animation = "none";
+                    wipe.style.setProperty("--wipe-color", nextColor);
+
+                    requestAnimationFrame(() => {
+                        // si otro clic se adelantó, aborta
+                        if (running && running.id !== id) return;
+                        next.classList.add("reveal");
+                        wipe.style.animation = ""; // aplica @keyframes
+                        wipe.addEventListener("animationend", onEnd, {
+                            once: true,
+                        });
+                    });
+
+                    running = { id, next, curr, wipe, onEnd, toHide, prevBg };
+                } else {
+                    // sin overlay: cambio inmediato
+                    next.style.zIndex = "1";
+                    if (curr) curr.classList.remove("is-active");
+                    next.style.background = prevBg || nextColor;
+                    toHide.forEach((el) => (el.style.visibility = ""));
+                    running = null;
+                }
+            });
+        }
+    }
+
+    if (!customElements.get("color-dot"))
+        customElements.define("color-dot", ColorDotEl);
+</script>
