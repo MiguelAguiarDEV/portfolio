@@ -2,8 +2,8 @@
 const { class: cls = "" } = Astro.props;
 ---
 
-<div class={`rounded-lg p-3 h-full w-full flex flex-col ${cls}`}>
-    <div class="rounded-lg p-3 h-full w-full flex-1 min-h-0">
+<div class={`rounded-lg h-full w-full flex flex-col ${cls}`}>
+    <div class="rounded-lg h-full w-full flex-1 min-h-0">
         <slot />
     </div>
 </div>
