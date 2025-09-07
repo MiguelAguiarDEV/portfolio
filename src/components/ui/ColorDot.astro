@@ -16,6 +16,7 @@ const { color = "blue", target = "", title = "" } = Astro.props;
     title={title || color}
     aria-label={title || color}
     class="shadow-2xl"
+    style={`--dot-color:${palette[color]}; --dot-ring:${palette[color]}66`}
 >
     <button
         class="w-3.5 h-3.5 rounded-full shadow-2xl hover:scale-125 transition-transform"
@@ -24,8 +25,20 @@ const { color = "blue", target = "", title = "" } = Astro.props;
 </color-dot>
 <script>
     let txId = 0; // token global
+    /**
+     * @typedef {Object} RunningState
+     * @property {number} id
+     * @property {HTMLElement} next
+     * @property {HTMLElement|null} curr
+     * @property {HTMLElement|null} wipe
+     * @property {(ev: AnimationEvent) => void} onEnd
+     * @property {HTMLElement[]} toHide
+     * @property {string} prevBg
+     */
+    /** @type {RunningState | null} */
     let running = null; // transición en curso
 
+    /** @type {(s?: string) => string} */
     const norm = (s) => (s?.startsWith("#") ? s : s ? "#" + s : "");
 
     function cleanupStale() {
@@ -36,7 +49,8 @@ const { color = "blue", target = "", title = "" } = Astro.props;
 
     function cancelRunning() {
         if (!running) return;
-        const { next, curr, wipe, onEnd, toHide, prevBg } = running;
+        const { next, curr, wipe, onEnd, toHide, prevBg } =
+            /** @type {RunningState} */ (running);
 
         // cancela listener y anima instantáneamente a estado consistente
         if (wipe && onEnd) wipe.removeEventListener("animationend", onEnd);
@@ -68,16 +82,28 @@ const { color = "blue", target = "", title = "" } = Astro.props;
                 cleanupStale();
                 cancelRunning(); // corta animación previa si existía
 
-                const next = document.querySelector(sel);
-                const curr = document.querySelector(".panel.is-active");
+                const next = /** @type {HTMLElement | null} */ (
+                    document.querySelector(sel)
+                );
+                const curr = /** @type {HTMLElement | null} */ (
+                    document.querySelector(".panel.is-active")
+                );
                 if (!next || next === curr) return;
 
-                const wipe = next.querySelector(".wipe");
+                const wipe = /** @type {HTMLElement | null} */ (
+                    next.querySelector(".wipe")
+                );
                 const nextColor = getComputedStyle(next).backgroundColor;
 
                 // prepara destino visible pero con contenido oculto
-                const toHide = Array.from(next.children).filter(
-                    (el) => !el.classList.contains("wipe"),
+                const toHide = /** @type {HTMLElement[]} */ (
+                    Array.from(next.children).filter(
+                        /** @returns {boolean} */
+                        (el) =>
+                            !/** @type {HTMLElement} */ (el).classList.contains(
+                                "wipe",
+                            ),
+                    )
                 );
                 const prevBg = next.style.background;
                 toHide.forEach((el) => (el.style.visibility = "hidden"));
@@ -99,6 +125,15 @@ const { color = "blue", target = "", title = "" } = Astro.props;
 
                     next.style.background = prevBg || nextColor;
                     toHide.forEach((el) => (el.style.visibility = ""));
+                    // actualizar dots activos
+                    document
+                        .querySelectorAll('color-dot[data-active="true"]')
+                        .forEach((el) => el.removeAttribute("data-active"));
+                    const activeDot = document.querySelector(
+                        `color-dot[data-target="#${next.id}"]`,
+                    );
+                    if (activeDot)
+                        activeDot.setAttribute("data-active", "true");
                     running = null;
                 };
 
@@ -124,12 +159,34 @@ const { color = "blue", target = "", title = "" } = Astro.props;
                     if (curr) curr.classList.remove("is-active");
                     next.style.background = prevBg || nextColor;
                     toHide.forEach((el) => (el.style.visibility = ""));
+                    document
+                        .querySelectorAll('color-dot[data-active="true"]')
+                        .forEach((el) => el.removeAttribute("data-active"));
+                    const activeDot = document.querySelector(
+                        `color-dot[data-target="#${next.id}"]`,
+                    );
+                    if (activeDot)
+                        activeDot.setAttribute("data-active", "true");
                     running = null;
                 }
             });
         }
     }
 
-    if (!customElements.get("color-dot"))
+    if (!customElements.get("color-dot")) {
         customElements.define("color-dot", ColorDotEl);
+        // inicial: marcar según panel activo
+        requestAnimationFrame(() => {
+            const activePanel = document.querySelector(".panel.is-active");
+            if (activePanel instanceof HTMLElement) {
+                const dot = document.querySelector(
+                    `color-dot[data-target=\"#${activePanel.id}\"]`,
+                );
+                if (dot) dot.setAttribute("data-active", "true");
+            } else {
+                const first = document.querySelector("color-dot[data-target]");
+                if (first) first.setAttribute("data-active", "true");
+            }
+        });
+    }
 </script>
