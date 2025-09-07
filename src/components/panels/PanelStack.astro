@@ -1,12 +1,23 @@
 ---
 import { order } from "../../lib/colors";
 import Panel from "./Panel.astro";
+import About from "../sections/About.astro";
+import Skills from "../sections/Skills.astro";
+import Projects from "../sections/Projects.astro";
+import Experience from "../sections/Experience.astro";
+import Contact from "../sections/Contact.astro";
 ---
 
 <div class="relative h-full w-full rounded-lg overflow-hidden">
     {
         order.map((c, i) => (
-            <Panel id={`panel-${c}`} color={c} active={i === 0} label={c} />
+            <Panel id={`panel-${c}`} color={c} active={i === 0} label={c}>
+                {c === "blue" && <About />}
+                {c === "green" && <Skills />}
+                {c === "yellow" && <Projects />}
+                {c === "orange" && <Experience />}
+                {c === "magenta" && <Contact />}
+            </Panel>
         ))
     }
     <slot />

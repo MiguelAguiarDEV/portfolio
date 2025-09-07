@@ -22,6 +22,6 @@ const { id = undefined, color, active = false, label = "" } = Astro.props;
     <span
         class="text-white text-3xl font-semibold mix-blend-luminosity select-none"
     >
-        {label}
+        <slot />
     </span>
 </section>
