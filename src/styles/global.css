@@ -42,7 +42,7 @@ body {
     position: absolute;
     left: -12vmax;
     top: -100vmax;
-    height: 160vmax;
+    height: 190vmax;
     /* grosor del “barrido” */
     width: 0;
     /* empieza sin ancho */
@@ -54,7 +54,7 @@ body {
     background: var(--wipe-color);
 
     transform-origin: 0 0;
-    transform: rotate(35deg);
+    transform: rotate(25deg);
     /* diagonal sup-izq → inf-der */
     will-change: width;
     /* optimiza para cambiar width */
@@ -89,5 +89,5 @@ body {
 }
 
 .panel.reveal .wipe {
-    animation: wipeGrowW 1110ms linear both;
+    animation: wipeGrowW 510ms linear both;
 }
