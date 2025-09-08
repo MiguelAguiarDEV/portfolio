@@ -5,7 +5,7 @@ import ColorDot from "./ColorDot.astro";
 
 <nav class="w-full flex justify-center mt-3 relative z-30 pointer-events-auto">
     <div
-        class="flex items-center gap-4 px-4 py-2 rounded-full bg-black/20 backdrop-blur border border-white/10 shadow-inner"
+        class="flex items-center gap-4 px-4 py-2 rounded-full border border-white shadow-inner"
     >
         {
             order.map((c) => (
@@ -14,86 +14,3 @@ import ColorDot from "./ColorDot.astro";
         }
     </div>
 </nav>
-
-<style>
-    nav color-dot {
-        position: relative;
-        display: grid;
-        place-items: center;
-    }
-    nav color-dot button {
-        width: 1rem;
-        height: 1rem; /* bigger */
-        position: relative;
-        outline: none;
-    }
-    nav color-dot button::after {
-        /* ring / active outline */
-        content: "";
-        position: absolute;
-        inset: -4px;
-        border-radius: 999px;
-        background: radial-gradient(
-            circle at 50% 50%,
-            var(--dot-ring, transparent),
-            transparent 70%
-        );
-        opacity: 0;
-        transform: scale(0.65);
-        transition:
-            opacity 0.25s ease,
-            transform 0.25s ease;
-        pointer-events: none;
-    }
-    nav color-dot button:hover::after {
-        opacity: 0.7;
-        transform: scale(0.9);
-    }
-    nav color-dot button:focus-visible::after {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    /* Active state (panel visible) */
-    .panel.is-active[data-color] ~ nav color-dot[data-color] button::after {
-    }
-    /* JS marcará el activo añadiendo atributo data-active al color-dot */
-    nav color-dot[data-active="true"] button::after {
-        opacity: 1;
-        transform: scale(1);
-    }
-    nav color-dot[data-active="true"] button {
-        box-shadow:
-            0 0 0 2px rgba(255, 255, 255, 0.25),
-            0 0 0 6px
-                color-mix(in srgb, var(--dot-color, #fff) 45%, transparent);
-    }
-
-    /* Tooltip simple */
-    nav color-dot[data-color]::before {
-        content: attr(data-color);
-        position: absolute;
-        bottom: -1.6rem;
-        left: 50%;
-        translate: -50% 0;
-        font-size: 0.55rem;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        background: rgba(0, 0, 0, 0.55);
-        padding: 2px 6px;
-        border-radius: 6px;
-        color: #fff;
-        opacity: 0;
-        pointer-events: none;
-        white-space: nowrap;
-        transition:
-            opacity 0.2s ease,
-            transform 0.2s ease;
-        transform: translate(-50%, -2px);
-    }
-    nav color-dot:hover::before,
-    nav color-dot:focus-within::before {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-</style>

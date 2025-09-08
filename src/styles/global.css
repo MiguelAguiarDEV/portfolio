@@ -91,3 +91,11 @@ body {
 .panel.reveal .wipe {
     animation: wipeGrowW 510ms linear both;
 }
+
+/* Dot activo: borde blanco */
+color-dot[data-active="true"]>button {
+    outline: 2px solid #fff;
+    /* “borde” blanco */
+    outline-offset: 2px;
+    /* separa el borde del círculo */
+}
