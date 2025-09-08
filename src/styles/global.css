@@ -92,10 +92,82 @@ body {
     animation: wipeGrowW 510ms linear both;
 }
 
-/* Dot activo: borde blanco */
+:root {
+    --dot-ease: cubic-bezier(.22, .61, .36, 1);
+    --dot-pop: 160ms;
+}
+
+/* estado base del botón del dot */
+color-dot>button {
+    position: relative;
+    transition:
+        transform var(--dot-pop) var(--dot-ease),
+        box-shadow var(--dot-pop) var(--dot-ease),
+        outline-offset var(--dot-pop) var(--dot-ease);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    /* sin borde visible */
+    outline: 0;
+    /* no uses outline si quieres animación suave */
+}
+
+/* activo: borde blanco animado + “pop” */
 color-dot[data-active="true"]>button {
-    outline: 2px solid #fff;
-    /* “borde” blanco */
-    outline-offset: 2px;
-    /* separa el borde del círculo */
+    box-shadow: 0 0 0 2px #fff;
+    /* borde blanco animable */
+    animation: dot-pop var(--dot-pop) var(--dot-ease) 1;
+}
+
+/* anillo efímero que se expande al activarse */
+color-dot>button::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 9999px;
+    border: 2px solid #fff;
+    opacity: 0;
+    transform: scale(.6);
+    pointer-events: none;
+}
+
+color-dot[data-active="true"]>button::after {
+    animation: dot-ring 360ms ease-out 1;
+}
+
+/* keyframes */
+@keyframes dot-pop {
+    0% {
+        transform: scale(.85);
+    }
+
+    60% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes dot-ring {
+    0% {
+        opacity: .6;
+        transform: scale(.6);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.4);
+    }
+}
+
+/* accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    color-dot>button {
+        transition: none;
+        animation: none;
+    }
+
+    color-dot>button::after {
+        animation: none;
+    }
 }
