@@ -1,14 +1,15 @@
 ---
-import type { Pola } from "../../lib/colors";
-import { palette } from "../../lib/colors";
+import type { ColorId } from "../../lib/colors";
+import { palette, nameOf } from "../../lib/colors";
 
 export interface Props {
-    color?: Pola;
+    color?: ColorId;
     target?: string; // id del panel destino (con o sin '#')
-    title?: string;
+    title?: string; // etiqueta accesible
 }
 
-const { color = "blue", target = "", title = "" } = Astro.props;
+const { color = 0, target = "", title = "" } = Astro.props; // 0 = blue por defecto
+const colorName = nameOf(color);
 ---
 
 <!--
@@ -19,9 +20,10 @@ const { color = "blue", target = "", title = "" } = Astro.props;
 -->
 <color-dot
     data-color={color}
+    data-color-name={colorName}
     data-target={target}
-    title={title || color}
-    aria-label={title || color}
+    title={title || colorName}
+    aria-label={title || colorName}
     class="shadow-2xl"
     style={`--dot-color:${palette[color]}; --dot-ring:${palette[color]}66`}
 >
@@ -44,14 +46,22 @@ const { color = "blue", target = "", title = "" } = Astro.props;
 
     let txCounter = 0;
 
-    /** @typedef {{ id:number, next:HTMLElement, curr:HTMLElement|null, wipe:HTMLElement|null, toHide:HTMLElement[], prevBg:string, onEnd:(ev:AnimationEvent)=>void }} RunningState */
+    interface RunningState {
+        id: number;
+        next: HTMLElement;
+        curr: HTMLElement | null;
+        wipe: HTMLElement | null;
+        toHide: HTMLElement[];
+        prevBg: string;
+        onEnd: (ev: AnimationEvent) => void;
+    }
 
     /** Transición en curso (o null si no hay). */
     /** @type {RunningState|null} */
-    let running = null;
+    let running: RunningState | null = null;
 
     /** Normaliza un selector de id. Acepta "panel-1" o "#panel-1". */
-    const normId = (s) => (s ? (s[0] === "#" ? s : "#" + s) : "");
+    const normId = (s: string) => (s ? (s[0] === "#" ? s : "#" + s) : "");
 
     /** Quita restos de `.reveal` por animaciones interrumpidas. */
     const cleanupReveal = () => {
@@ -65,17 +75,20 @@ const { color = "blue", target = "", title = "" } = Astro.props;
      * Útil si quieres que el contenido aparezca sólo al terminar el wipe.
      * Devuelve la lista de nodos afectados para poder revertir rápido.
      */
-    const setChildrenVisibility = (panel, hidden) => {
+    const setChildrenVisibility = (panel: HTMLElement, hidden: boolean) => {
         /** @type {HTMLElement[]} */
         const kids = Array.from(panel.children).filter(
-            (el) => !el.classList.contains("wipe"),
+            (el): el is HTMLElement =>
+                !el.classList.contains("wipe") && el.id !== "noise",
         );
-        kids.forEach((el) => (el.style.visibility = hidden ? "hidden" : ""));
+        kids.forEach(
+            (el: HTMLElement) => (el.style.visibility = hidden ? "hidden" : ""),
+        );
         return kids;
     };
 
     /** Marca el dot activo según el panel visible. */
-    const markActiveDot = (panel) => {
+    const markActiveDot = (panel: HTMLElement) => {
         document
             .querySelectorAll('color-dot[data-active="true"]')
             .forEach((el) => el.removeAttribute("data-active"));
@@ -112,7 +125,7 @@ const { color = "blue", target = "", title = "" } = Astro.props;
      * Cambia al panel `next`. Si existe `.wipe` dentro de `next`, ejecuta animación.
      * Si no, hace el cambio instantáneo.
      */
-    const goToPanel = (next, curr) => {
+    const goToPanel = (next: HTMLElement, curr: HTMLElement | null) => {
         if (next === curr) return;
 
         const prevBg = next.style.background;
@@ -127,7 +140,7 @@ const { color = "blue", target = "", title = "" } = Astro.props;
 
         const id = ++txCounter;
         /** @type {HTMLElement|null} */
-        const wipe = next.querySelector(".wipe");
+        const wipe = next.querySelector(".wipe") as HTMLElement | null;
 
         const finish = () => {
             // Ignora eventos de una transición vieja si hubo clices rápidos
@@ -149,13 +162,14 @@ const { color = "blue", target = "", title = "" } = Astro.props;
 
         if (wipe) {
             // Reinicia la animación CSS para poder dispararla de nuevo
-            wipe.style.animation = "none";
-            wipe.style.setProperty("--wipe-color", nextColor);
+            wipe!.style.animation = "none";
+            wipe!.style.setProperty("--wipe-color", nextColor);
 
             // Disparo en frame siguiente para que el navegador procese el "none"
             requestAnimationFrame(() => {
                 if (running && running.id !== id) return;
                 next.classList.add("reveal");
+                if (!wipe) return;
                 wipe.style.animation = ""; // reaplica @keyframes definidos en CSS
                 wipe.addEventListener("animationend", finish, { once: true });
             });
@@ -183,16 +197,18 @@ const { color = "blue", target = "", title = "" } = Astro.props;
             if (!btn) return;
 
             btn.addEventListener("click", () => {
-                const sel = normId(this.dataset.target);
+                const sel = normId(this.dataset.target || "");
                 if (!sel) return;
 
                 cleanupReveal(); // limpia estados residuales
                 cancelRunning(); // corta animación previa si la hay
 
                 /** @type {HTMLElement|null} */
-                const next = document.querySelector(sel);
+                const next = document.querySelector(sel) as HTMLElement | null;
                 /** @type {HTMLElement|null} */
-                const curr = document.querySelector(".panel.is-active");
+                const curr = document.querySelector(
+                    ".panel.is-active",
+                ) as HTMLElement | null;
                 if (!next) return;
 
                 goToPanel(next, curr);

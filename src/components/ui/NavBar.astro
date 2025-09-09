@@ -1,5 +1,5 @@
 ---
-import { order } from "../../lib/colors";
+import { order, nameOf } from "../../lib/colors";
 import ColorDot from "./ColorDot.astro";
 ---
 
@@ -15,9 +15,16 @@ import ColorDot from "./ColorDot.astro";
         style={{ WebkitBackdropFilter: "saturate(180%) blur(20px)" }}
     >
         {
-            order.map((c) => (
-                <ColorDot key={c} color={c} target={`#panel-${c}`} title={c} />
-            ))
+            order.map((cid) => {
+                const name = nameOf(cid);
+                return (
+                    <ColorDot
+                        color={cid}
+                        target={`#panel-${name}`}
+                        title={name}
+                    />
+                );
+            })
         }
     </div>
 </nav>

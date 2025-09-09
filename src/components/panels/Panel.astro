@@ -1,15 +1,20 @@
 ---
-import type { Pola } from "../../lib/colors";
-import { palette } from "../../lib/colors";
+import type { ColorId } from "../../lib/colors";
+import { palette, nameOf } from "../../lib/colors";
 
 export interface Props {
     id?: string;
-    color: Pola;
+    color: ColorId; // id numérico
     active?: boolean;
-    label?: string;
+    label?: string; // etiqueta opcional (por defecto el nombre del color)
 }
 
-const { id = undefined, color, active = false, label = "" } = Astro.props;
+const {
+    id = undefined,
+    color,
+    active = false,
+    label = nameOf(color),
+} = Astro.props;
 ---
 
 <section
@@ -17,6 +22,7 @@ const { id = undefined, color, active = false, label = "" } = Astro.props;
     class={`panel absolute inset-0 flex items-center justify-center rounded-lg ${active ? "is-active" : ""}`}
     style={`background:${palette[color]}`}
     data-color={color}
+    data-color-name={nameOf(color)}
 >
     <div class="wipe"></div>
     <span

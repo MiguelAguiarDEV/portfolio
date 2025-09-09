@@ -1,5 +1,5 @@
 ---
-import { order } from "../../lib/colors";
+import { order, nameOf } from "../../lib/colors";
 import Panel from "./Panel.astro";
 import About from "../sections/About.astro";
 import Skills from "../sections/Skills.astro";
@@ -10,15 +10,23 @@ import Contact from "../sections/Contact.astro";
 
 <div class="relative h-full w-full rounded-lg overflow-hidden">
     {
-        order.map((c, i) => (
-            <Panel id={`panel-${c}`} color={c} active={i === 0} label={c}>
-                {c === "blue" && <About />}
-                {c === "green" && <Skills />}
-                {c === "yellow" && <Projects />}
-                {c === "orange" && <Experience />}
-                {c === "magenta" && <Contact />}
-            </Panel>
-        ))
+        order.map((cid, i) => {
+            const name = nameOf(cid);
+            return (
+                <Panel
+                    id={`panel-${name}`}
+                    color={cid}
+                    active={i === 0}
+                    label={name}
+                >
+                    {name === "blue" && <About />}
+                    {name === "green" && <Skills />}
+                    {name === "yellow" && <Projects />}
+                    {name === "orange" && <Experience />}
+                    {name === "magenta" && <Contact />}
+                </Panel>
+            );
+        })
     }
     <slot />
 </div>

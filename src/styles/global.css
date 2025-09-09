@@ -171,3 +171,17 @@ color-dot[data-active="true"]>button::after {
         animation: none;
     }
 }
+
+/* Capa de ruido que viaja con el wipe usando pseudo-elemento */
+.panel .wipe::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: url('/public/noiseTex.webp') repeat;
+    background-size: 400px 400px;
+    mix-blend-mode: overlay;
+    opacity: .4;
+    pointer-events: none;
+    /* Hereda el mismo crecimiento de ancho con el contenedor (.wipe) */
+}
