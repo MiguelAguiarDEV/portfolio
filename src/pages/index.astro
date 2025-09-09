@@ -3,6 +3,10 @@ import "../styles/global.css";
 import Frame from "../components/layout/Frame.astro";
 import NavBar from "../components/ui/NavBar.astro";
 import PanelStack from "../components/panels/PanelStack.astro";
+
+// Lee las variables de entorno.
+const enableNoise = import.meta.env.ENABLE_NOISE === "true";
+const enableNoiseAnimation = import.meta.env.ENABLE_NOISE_ANIMATION === "true";
 ---
 
 <!doctype html>
@@ -14,6 +18,11 @@ import PanelStack from "../components/panels/PanelStack.astro";
 	</head>
 
 	<body class="bg-[#111111] m-0 overflow-hidden">
+		{
+			enableNoise && (
+				<div class="noise bg-[url('/noiseTex.webp')] absolute bg-repeat inset-[-20px]" />
+			)
+		}
 		<!-- Ocupa 100vw x 100dvh garantizado -->
 		<main id="app-main" class="h-[100dvh] w-screen p-4 box-border">
 			<Frame class="h-full w-full">
@@ -33,3 +42,25 @@ import PanelStack from "../components/panels/PanelStack.astro";
 		</main>
 	</body>
 </html>
+
+<script define:vars={{ enableNoise, enableNoiseAnimation }}>
+	if (enableNoise) {
+		const noiseElement = document.querySelector(".noise");
+
+		if (noiseElement && enableNoiseAnimation) {
+			// Optimización para el navegador
+			noiseElement.style.willChange = "transform";
+
+			const animateNoise = () => {
+				// Genera un desplazamiento aleatorio
+				const x = Math.floor(Math.random() * 20) - 3;
+				const y = Math.floor(Math.random() * 25) - 5;
+
+				noiseElement.style.transform = `translate(${x}px, ${y}px)`;
+			};
+
+			// Llama a la función para crear el efecto "entrecortado"
+			setInterval(animateNoise, 120);
+		}
+	}
+</script>
