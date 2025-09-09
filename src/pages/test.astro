@@ -1,0 +1,129 @@
+---
+import "@/styles/global.css";
+// import Frame from "@/components/layout/Frame.astro"; // removed
+import NavBar from "@/components/ui/NavBar.astro";
+import PanelStack from "@/components/panels/PanelStack.astro";
+import Panel from "@/components/panels/Panel.astro";
+
+// Lee las variables de entorno.
+const enableNoise = import.meta.env.ENABLE_NOISE === "true";
+const enableNoiseAnimation = import.meta.env.ENABLE_NOISE_ANIMATION === "true";
+const wipeSameColor = import.meta.env.WIPE_SAME_COLOR === "true";
+const enableWipeNoiseAnimation =
+    import.meta.env.ENABLE_WIPE_NOISE_ANIMATION === "true";
+---
+
+<!doctype html>
+<html lang="es" class="dark">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Demo Polaroid Panels</title>
+    </head>
+
+    <body class="body-root">
+        <main id="app-main" class="main-shell">
+            <div class="frame-root">
+                <div class="layer layer-1">
+                    <div class="wipe bg-amber-700">
+                        <section class="bg-red-700">SECTION 1</section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
+
+<script>
+    // (Opcional) Animación de ruido si quieres reutilizar lógica existente
+</script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        border: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+    }
+    .body-root {
+        background: #111111;
+        margin: 0;
+        overflow: hidden;
+        min-height: 100dvh;
+    }
+
+    .main-shell {
+        height: 100dvh;
+        width: 100vw;
+        padding: 1rem; /* p-4 */
+        box-sizing: border-box; /* box-border */
+        position: relative;
+    }
+
+    .frame-root {
+        /* h-full w-full relative */
+        background-color: #112e77;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+    }
+
+    .layer {
+        position: absolute; /* absolute */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0; /* inset-0 equivalente */
+        width: 100%;
+        height: 100%;
+        top: 50%;
+        left: 50%;
+        right: auto;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+    }
+    .wipe {
+        position: relative;
+        background: #000;
+        mix-blend-mode: normal;
+        /* Tamaño del rectángulo barrido */
+        width: 150vmax; /* ancho largo para cubrir diagonal */
+        height: 150vmax; /* grosor de la franja */
+        /* Centrado absoluto */
+        top: 50%;
+        left: 50%;
+        right: auto;
+        bottom: auto;
+        /* Desplazamiento horizontal controlado por variable */
+        --wipe-shift: 30vmax; /* Ajusta este valor (+ derecha, - izquierda) */
+        --wipe-rotate: 35deg;
+        transform: translate(calc(-50% + (var(--wipe-shift))), -50%)
+            rotate(var(--wipe-rotate));
+        border-radius: 1.5rem;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .wipe section {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20vmax; /* ancho largo para cubrir diagonal */
+        height: 20vmax; /* grosor de la franja */
+        /* Centrado absoluto */
+        top: 50%;
+        left: 50%;
+        right: auto;
+        bottom: auto;
+        /* Desplazamiento horizontal controlado por variable */
+
+        transform: translate(-50%, -50%) rotate(calc(-1 * var(--wipe-rotate)));
+        border-radius: 1.5rem;
+        pointer-events: none;
+    }
+</style>
