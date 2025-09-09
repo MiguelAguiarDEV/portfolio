@@ -1,6 +1,7 @@
 ---
 import type { ColorId } from "../../lib/colors";
 import { palette, nameOf } from "../../lib/colors";
+const sectionNoise = import.meta.env.ENABLE_SECTION_NOISE === "true";
 
 export interface Props {
     id?: string;
@@ -19,14 +20,17 @@ const {
 
 <section
     id={id}
-    class={`panel absolute inset-0 flex items-center justify-center rounded-lg ${active ? "is-active" : ""}`}
+    class={`overflow-hidden panel absolute inset-0 flex items-center justify-center rounded-lg ${active ? "is-active" : ""}`}
     style={`background:${palette[color]}`}
     data-color={color}
     data-color-name={nameOf(color)}
 >
-    <div class="wipe"></div>
-    <div class="wipe wipe--img" style="--wipe-image: url('/noiseTex.webp')">
-    </div>
+    <div class="wipe absolute bg-repeat inset-[-20px]"></div>
+    {
+        sectionNoise && (
+            <div class="noise bg-[url('/noiseTex.webp')] absolute bg-repeat inset-[-20px] !opacity-20" />
+        )
+    }
 
     <span
         class="text-white text-3xl font-semibold mix-blend-luminosity select-none"

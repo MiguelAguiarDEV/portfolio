@@ -13,11 +13,11 @@ export type ColorName = typeof colorNames[number];
 
 // Paleta indexada por id
 export const palette: string[] = [
-  "#0063D3", // 0 blue
-  "#00A35C", // 1 green
-  "#FFD200", // 2 yellow
-  "#FF5F00", // 3 orange
-  "#E6007E", // 4 magenta
+  "#3658FF", // 0 blue
+  "#B4D400", // 1 green
+  "#c06835", // 3 orange
+  "#911200", // 4 magenta
+  "#161616", // 2 yellow
 ];
 
 // Orden de iteración por id (explícito para claridad)

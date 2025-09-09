@@ -7,6 +7,9 @@ import PanelStack from "../components/panels/PanelStack.astro";
 // Lee las variables de entorno.
 const enableNoise = import.meta.env.ENABLE_NOISE === "true";
 const enableNoiseAnimation = import.meta.env.ENABLE_NOISE_ANIMATION === "true";
+const wipeSameColor = import.meta.env.WIPE_SAME_COLOR === "true";
+const enableWipeNoiseAnimation =
+	import.meta.env.ENABLE_WIPE_NOISE_ANIMATION === "true";
 ---
 
 <!doctype html>
@@ -18,17 +21,13 @@ const enableNoiseAnimation = import.meta.env.ENABLE_NOISE_ANIMATION === "true";
 	</head>
 
 	<body class="bg-[#111111] m-0 overflow-hidden">
-		{
-			enableNoise && (
-				<div class="noise bg-[url('/noiseTex.webp')] absolute bg-repeat inset-[-20px]" />
-			)
-		}
+		{enableNoise && <div class="noise absolute inset-[-20px]" />}
 		<!-- Ocupa 100vw x 100dvh garantizado -->
 		<main id="app-main" class="h-[100dvh] w-screen p-4 box-border">
 			<Frame class="h-full w-full">
 				<div class="flex flex-col h-full">
 					<div class="flex-1 min-h-0 w-full relative">
-						<PanelStack>
+						<PanelStack wipeSameColor={wipeSameColor}>
 							<!-- Nav dentro del contenedor de secciones, flotando arriba -->
 							<div
 								class="absolute top-3 left-0 right-0 z-50 flex justify-center"
@@ -43,24 +42,44 @@ const enableNoiseAnimation = import.meta.env.ENABLE_NOISE_ANIMATION === "true";
 	</body>
 </html>
 
-<script define:vars={{ enableNoise, enableNoiseAnimation }}>
-	if (enableNoise) {
-		const noiseElement = document.querySelector(".noise");
+<script
+	define:vars={{
+		enableNoise,
+		enableNoiseAnimation,
+		enableWipeNoiseAnimation,
+	}}
+>
+	if (enableNoise && enableNoiseAnimation) {
+		const noiseElements = document.querySelectorAll(".noise");
 
-		if (noiseElement && enableNoiseAnimation) {
-			// Optimización para el navegador
+		noiseElements.forEach((noiseElement) => {
 			noiseElement.style.willChange = "transform";
 
 			const animateNoise = () => {
-				// Genera un desplazamiento aleatorio
 				const x = Math.floor(Math.random() * 20) - 3;
 				const y = Math.floor(Math.random() * 25) - 5;
-
 				noiseElement.style.transform = `translate(${x}px, ${y}px)`;
 			};
 
-			// Llama a la función para crear el efecto "entrecortado"
 			setInterval(animateNoise, 120);
-		}
+		});
+	}
+
+	if (enableWipeNoiseAnimation) {
+		// Busca los pseudo-elementos ::after de .panel .wipe
+		const styleSheet = document.createElement("style");
+		document.head.appendChild(styleSheet);
+
+		const animateWipeNoise = () => {
+			const x = Math.floor(Math.random() * 20) - 3;
+			const y = Math.floor(Math.random() * 25) - 5;
+			styleSheet.textContent = `
+				.panel .wipe::after {
+					background-position: ${x}px ${y}px !important;
+				}
+			`;
+		};
+
+		setInterval(animateWipeNoise, 120);
 	}
 </script>

@@ -44,6 +44,9 @@ const colorName = nameOf(color);
      * Si cambias nombres de clases o estructura de paneles, ajusta los selectores aquí.
      */
 
+    const enableWipeSameColor =
+        import.meta.env.ENABLE_WIPE_SAME_COLOR === "true";
+
     let txCounter = 0;
 
     interface RunningState {
@@ -163,7 +166,10 @@ const colorName = nameOf(color);
         if (wipe) {
             // Reinicia la animación CSS para poder dispararla de nuevo
             wipe!.style.animation = "none";
-            wipe!.style.setProperty("--wipe-color", nextColor);
+            if (!enableWipeSameColor) {
+                wipe!.style.setProperty("--wipe-color", nextColor);
+            }
+            // wipe!.style.setProperty("--wipe-color", nextColor);
 
             // Disparo en frame siguiente para que el navegador procese el "none"
             requestAnimationFrame(() => {

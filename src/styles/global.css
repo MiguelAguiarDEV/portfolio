@@ -68,13 +68,21 @@ body {
     inset: -10px;
     border-radius: inherit;
     background: var(--wipe-color);
-    padding: 10px;
 
-    mask-composite: exclude;
-    filter: blur(20px);
+    padding: 10px;
+    background-image: url("/noiseTex.webp");
+    background-size: 1000px 1000px;
+    background-repeat: repeat;
     pointer-events: none;
-    opacity: .9;
+    opacity: .5;
 } */
+
+.noise {
+    background-image: url("/noiseTex.webp");
+    background-size: 100px 100px;
+    background-repeat: repeat;
+    opacity: .5;
+}
 
 /* Animación por ancho: 0 → valor enorme para cubrir seguro */
 @keyframes wipeGrowW {
