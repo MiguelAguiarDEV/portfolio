@@ -1,0 +1,113 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Hijo centrado y recortado por el padre</title>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+    }
+    #stage {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background: #111;
+    }
+    #padre {
+        position: absolute;
+        left: 120px;
+        top: 120px;
+        width: 320px;
+        height: 320px;
+        background: #20232a;
+        border: 2px solid #5eead4;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: move;
+    }
+    /* Hijo siempre centrado al viewport */
+    #hijo {
+        position: fixed;
+        left: 50vw;
+        top: 50vh;
+        transform: translate(-50%, -50%);
+        padding: 24px 40px;
+        background: #22c55e;
+        color: #111;
+        font: 700 20px/1 system-ui;
+        border-radius: 8px;
+        /* se recorta dinámicamente con clip-path */
+        will-change: clip-path, visibility;
+    }
+</style>
+<div id="stage">
+    <div id="padre">
+        <div id="hijo">HIJO CENTRADO</div>
+    </div>
+</div>
+<script>
+    const padre = document.getElementById("padre");
+    const hijo = document.getElementById("hijo");
+
+    // Recorta el hijo al rectángulo del padre
+    function clipToParent() {
+        const pr = padre.getBoundingClientRect();
+        const cr = hijo.getBoundingClientRect();
+
+        const left = Math.max(pr.left, cr.left);
+        const right = Math.min(pr.right, cr.right);
+        const top = Math.max(pr.top, cr.top);
+        const bottom = Math.min(pr.bottom, cr.bottom);
+
+        hijo.style.visibility = "visible";
+
+        // const insetTop = Math.max(0, top - cr.top);
+        // const insetRight = Math.max(0, cr.right - right);
+        // const insetBottom = Math.max(0, cr.bottom - bottom);
+        // const insetLeft = Math.max(0, left - cr.left);
+
+        hijo.style.clipPath = `inset(${insetTop}px ${insetRight}px ${insetBottom}px ${insetLeft}px)`;
+    }
+
+    // Arrastrar el padre
+    let drag = null;
+    padre.addEventListener("mousedown", (e) => {
+        drag = {
+            dx: e.clientX - padre.offsetLeft,
+            dy: e.clientY - padre.offsetTop,
+        };
+    });
+    window.addEventListener("mousemove", (e) => {
+        if (!drag) return;
+        padre.style.left = e.clientX - drag.dx + "px";
+        padre.style.top = e.clientY - drag.dy + "px";
+        clipToParent();
+    });
+    window.addEventListener("mouseup", () => (drag = null));
+
+    // Recalcular en resize y al inicio
+    window.addEventListener("resize", clipToParent);
+    clipToParent();
+</script>
+
+<!-- Ancla: el hijo va position: fixed centrado al viewport. Así ignora al padre al posicionarse.
+
+Recorte: como overflow del padre no afecta a un fixed, simulas ese recorte en el hijo con clip-path calculada por JS:
+
+Tomas getBoundingClientRect() del padre y del hijo.
+
+Calculas la intersección.
+
+Pasas esa intersección a inset(top right bottom left) relativo al rect del hijo.
+
+Sin solape → visibility:hidden.
+
+Extras clave:
+
+Recalcula en drag, resize, scroll (usa requestAnimationFrame/ResizeObserver si quieres fino).
+
+Bordes redondeados: clip-path: inset(... round 12px).
+
+Padre rotado/transformado: da igual, getBoundingClientRect() ya te da el rect transformado.
+
+No hay alternativa CSS pura que haga esto con un hijo realmente independiente del padre. -->

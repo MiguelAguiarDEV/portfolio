@@ -91,18 +91,20 @@ const enableWipeNoiseAnimation =
         background: #000;
         mix-blend-mode: normal;
         /* Tamaño del rectángulo barrido */
-        width: 150vmax; /* ancho largo para cubrir diagonal */
-        height: 150vmax; /* grosor de la franja */
+        --wipe-size-x: 50vmax; /* ancho largo para cubrir diagonal */
+        --wipe-size-y: 50vmax; /* grosor de la franja */
+        width: var(--wipe-size-x); /* ancho largo para cubrir diagonal */
+        height: var(--wipe-size-y); /* grosor de la franja */
         /* Centrado absoluto */
         top: 50%;
         left: 50%;
         right: auto;
         bottom: auto;
         /* Desplazamiento horizontal controlado por variable */
-        --wipe-shift: 30vmax; /* Ajusta este valor (+ derecha, - izquierda) */
+        --wipe-shift: 50vmax; /* Ajusta este valor (+ derecha, - izquierda) */
         --wipe-rotate: 35deg;
-        transform: translate(calc(-50% + (var(--wipe-shift))), -50%)
-            rotate(var(--wipe-rotate));
+        transform: translate(-50%, -50%)
+            rotate(var(--wipe-rotate) translateX(var(--wipe-shift)));
         border-radius: 1.5rem;
         pointer-events: none;
         overflow: hidden;
@@ -110,20 +112,20 @@ const enableWipeNoiseAnimation =
 
     .wipe section {
         position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20vmax;
+        height: 20vmax;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 20vmax; /* ancho largo para cubrir diagonal */
-        height: 20vmax; /* grosor de la franja */
-        /* Centrado absoluto */
-        top: 50%;
-        left: 50%;
-        right: auto;
-        bottom: auto;
-        /* Desplazamiento horizontal controlado por variable */
-
-        transform: translate(-50%, -50%) rotate(calc(-1 * var(--wipe-rotate)));
         border-radius: 1.5rem;
         pointer-events: none;
+
+        /* Neutralizar transformaciones del padre */
+        transform: translate(-50%, -50%) translate(); /* centra */
+
+        /* anula desplazamiento horizontal */
+        /* rotate(calc(-1 * var(--wipe-rotate)));*/ /* anula rotación */
     }
 </style>
