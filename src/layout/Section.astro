@@ -10,13 +10,30 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
 
 <form
     id={`slider-form-${uniqueId}`}
-    class="flex flex-col gap-2 w-fit h-fit bg-white text-black"
+    class="pointer-events-auto w-[min(92vw,22rem)] md:w-[22rem] bg-white/80 text-zinc-900 dark:bg-zinc-900/70 dark:text-zinc-100 backdrop-blur-xl border border-white/20 dark:border-zinc-700/60 rounded-2xl shadow-xl p-4 md:p-5 flex flex-col gap-4"
 >
-    <span>
-        Section ID: {uniqueId} - Background Color: {bgColor} - Show Menu: {
-            showMenu.toString()
-        }
-    </span>
+    <div class="flex items-center justify-between">
+        <div class="text-sm font-semibold tracking-wide">Controls</div>
+        <div class="flex items-center gap-2 text-[10px]">
+            <span
+                class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60"
+            >
+                ID {uniqueId}
+            </span>
+            <span
+                class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60"
+            >
+                BG {bgColor}
+            </span>
+            <span
+                class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60"
+            >
+                menu {showMenu ? "on" : "off"}
+            </span>
+        </div>
+    </div>
+    <hr class="border-zinc-200/40 dark:border-zinc-700/50" />
+    <div data-controls class="flex flex-col gap-4"></div>
 </form>
 
 <!-- STAGE -->
@@ -37,40 +54,60 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
         console.log("sliderForm:", sliderForm);
         const formContainer = document.getElementById("form-container");
         console.log("formContainer:", formContainer);
-        if (formContainer) {
+        if (formContainer && sliderForm) {
             formContainer.appendChild(sliderForm);
             console.log("Form moved to container");
         }
 
-        // console.log("sliderForm:", sliderForm);
         const sectionElement = document.getElementById(uniqueId);
-        // console.log("sectionElement:", sectionElement);
-
-        // Move form to form container
-        // const formContainer = document.getElementById("form-container");
-        // console.log("formContainer:", formContainer);
-
-        // if (sliderForm && formContainer) {
-        //     const formContent = sliderForm.firstElementChild;
-        //     console.log("formContent:", formContent);
-        //     if (formContent) {
-        //         formContainer.appendChild(formContent);
-        //         console.log("Form moved to container");
-        //     }
-        // }
+        const controlsRoot = sliderForm
+            ? sliderForm.querySelector("[data-controls]") || sliderForm
+            : null;
 
         function createAndSetupSlider(options) {
-            if (!sliderForm || !sectionElement) return;
+            if (!controlsRoot || !sectionElement) return;
 
             const { id, labelText, min, max, value, cssVariable } = options;
             const uniqueInputId = `${id}-${uniqueId}`;
 
             const container = document.createElement("div");
-            container.classList.add("flex", "flex-col");
+            container.classList.add("flex", "flex-col", "gap-2");
+
+            const headerRow = document.createElement("div");
+            headerRow.classList.add(
+                "flex",
+                "items-center",
+                "justify-between",
+                "text-xs",
+            );
 
             const mainLabel = document.createElement("label");
             mainLabel.htmlFor = uniqueInputId;
             mainLabel.textContent = labelText;
+            mainLabel.classList.add(
+                "font-medium",
+                "text-zinc-600",
+                "dark:text-zinc-300",
+            );
+
+            const valueLabel = document.createElement("span");
+            valueLabel.id = `${uniqueInputId}Label`;
+            valueLabel.textContent = value;
+            valueLabel.classList.add(
+                "ml-2",
+                "px-2",
+                "py-0.5",
+                "rounded",
+                "bg-zinc-200",
+                "dark:bg-zinc-700",
+                "text-zinc-800",
+                "dark:text-zinc-100",
+                "font-mono",
+                "tabular-nums",
+            );
+
+            headerRow.appendChild(mainLabel);
+            headerRow.appendChild(valueLabel);
 
             const slider = document.createElement("input");
             slider.type = "range";
@@ -78,19 +115,28 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
             slider.min = min;
             slider.max = max;
             slider.value = value;
+            slider.classList.add(
+                "ui-range",
+                "w-full",
+                "accent-indigo-600",
+                "focus:outline-none",
+                "focus-visible:ring-2",
+                "focus-visible:ring-indigo-500/60",
+                "focus-visible:ring-offset-0",
+            );
 
-            const valueLabel = document.createElement("label");
-            valueLabel.htmlFor = uniqueInputId;
-            valueLabel.id = `${uniqueInputId}Label`;
-            valueLabel.textContent = value;
-
-            container.appendChild(mainLabel);
+            container.appendChild(headerRow);
             container.appendChild(slider);
-            container.appendChild(valueLabel);
-            sliderForm.appendChild(container);
+            controlsRoot.appendChild(container);
 
             const update = () => {
                 valueLabel.textContent = slider.value;
+                // dynamic fill for the track based on current value
+                const minNum = Number(min);
+                const maxNum = Number(max);
+                const valNum = Number(slider.value);
+                const pct = ((valNum - minNum) / (maxNum - minNum)) * 100;
+                slider.style.backgroundSize = `${pct}% 100%`;
                 sectionElement.style.setProperty(
                     cssVariable,
                     `${slider.value}%`,
