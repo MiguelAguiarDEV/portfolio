@@ -25,7 +25,8 @@ const wipeLabelId = `${wipeId}Label`;
 const staticId = `staticXOffsetInput-${sectionId}`;
 const staticLabelId = `${staticId}Label`;
 const resetBtnId = `reset-${sectionId}`;
-const defaults = { x: 0, wipe: 40, stat: 0 };
+// Fallback defaults aligned with Section's CSS vars; runtime will refine from actual DOM values
+const serverDefaults = { x: 0, wipe: 40, stat: 41 };
 ---
 
 <form
@@ -122,7 +123,7 @@ const defaults = { x: 0, wipe: 40, stat: 0 };
                 <span
                     id={staticLabelId}
                     class="ml-2 px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-100 font-mono tabular-nums"
-                    >0</span
+                    >41</span
                 >
             </div>
             <input
@@ -130,7 +131,7 @@ const defaults = { x: 0, wipe: 40, stat: 0 };
                 type="range"
                 min="-100"
                 max="100"
-                value="0"
+                value="41"
                 class="ui-range w-full accent-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 focus-visible:ring-offset-0"
             />
         </div>
@@ -147,7 +148,7 @@ const defaults = { x: 0, wipe: 40, stat: 0 };
         staticId,
         staticLabelId,
         resetBtnId,
-        defaults,
+        serverDefaults,
     }}
 >
     // @ts-nocheck
@@ -232,25 +233,30 @@ const defaults = { x: 0, wipe: 40, stat: 0 };
         const xEl = document.getElementById(xId);
         const wipeEl = document.getElementById(wipeId);
         const statEl = document.getElementById(staticId);
+        const runtimeDefaults = {
+            x: xEl ? Number(xEl.value) : serverDefaults.x,
+            wipe: wipeEl ? Number(wipeEl.value) : serverDefaults.wipe,
+            stat: statEl ? Number(statEl.value) : serverDefaults.stat,
+        };
         if (resetBtn) {
             resetBtn.addEventListener("click", () => {
                 console.log("[SectionControls] reset clicked", {
                     sectionId,
-                    defaults,
+                    runtimeDefaults,
                 });
                 if (xEl) {
-                    xEl.value = String(defaults.x);
+                    xEl.value = String(runtimeDefaults.x);
                     xEl.dispatchEvent(new Event("input", { bubbles: true }));
                 }
                 if (wipeEl) {
-                    wipeEl.value = String(defaults.wipe);
+                    wipeEl.value = String(runtimeDefaults.wipe);
                     wipeEl.dispatchEvent(new Event("input", { bubbles: true }));
                 }
                 if (statEl) {
-                    statEl.value = String(defaults.stat);
+                    statEl.value = String(runtimeDefaults.stat);
                     statEl.dispatchEvent(new Event("input", { bubbles: true }));
                 }
-                console.log("[SectionControls] reset applied", defaults);
+                console.log("[SectionControls] reset applied", runtimeDefaults);
             });
         }
     }
