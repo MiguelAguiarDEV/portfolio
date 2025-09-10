@@ -7,6 +7,9 @@ interface Props {
     showXDisplacement?: boolean;
     showWipeAngle?: boolean;
     showStaticXOffset?: boolean;
+    defaultX?: number;
+    defaultWipe?: number;
+    defaultStatic?: number;
 }
 
 const {
@@ -15,6 +18,9 @@ const {
     showXDisplacement = true,
     showWipeAngle = true,
     showStaticXOffset = true,
+    defaultX = 0,
+    defaultWipe = 40,
+    defaultStatic = -41,
 } = Astro.props;
 const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
 ---
@@ -28,6 +34,9 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
             showXDisplacement={showXDisplacement}
             showWipeAngle={showWipeAngle}
             showStaticXOffset={showStaticXOffset}
+            defaultX={defaultX}
+            defaultWipe={defaultWipe}
+            defaultStatic={defaultStatic}
         />
     )
 }
@@ -35,6 +44,7 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
 <div
     id={uniqueId}
     class:list={["h-full w-full absolute inset-0 z-10", bgColor]}
+    style={`--x-displacement: ${defaultX}%; --wipe-angle: ${defaultWipe}%; --static-x-offset: ${defaultStatic}%;`}
 >
     <section class="grid place-items-center h-full text-5xl font-extrabold">
         <slot />
@@ -44,7 +54,7 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
 <style>
     [id^="section-"] {
         --x-displacement: 0%;
-        --static-x-offset: 0%;
+        --static-x-offset: -41%;
         --wipe-angle: 40%;
 
         --x1-position: var(--static-x-offset);
@@ -71,5 +81,23 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
             var(--x3-position) var(--y3-position),
             var(--x4-position) var(--y4-position)
         );
+    }
+    [id^="section-"] {
+        animation: wipeAnimation 4s linear forwards;
+    }
+
+    @keyframes wipeAnimation {
+        0% {
+        }
+
+        100% {
+            clip-path: polygon(
+                var(--x1-position) var(--y1-position),
+                var(--x2-position) var(--y2-position),
+                calc(var(--wipe-angle) + var(--x2-position) + 101%)
+                    var(--y3-position),
+                calc(var(--x1-position) + 141%) var(--y4-position)
+            );
+        }
     }
 </style>
