@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import Section from "@/components/layout/Section.astro";
 ---
 
 <!doctype html>
@@ -12,174 +13,17 @@ import "@/styles/global.css";
 
     <body class="bg-[#111111] m-0 overflow-hidden text-white">
         <main id="app-main" class="h-[100dvh] w-screen p-4 box-border p4">
-            <!-- NAV -->
-            <nav
-                id="nav"
-                class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex gap-2
-                  bg-white/10 backdrop-blur px-3 py-1 rounded-full border border-white/15"
-            >
-                <button
-                    data-to="0"
-                    class="px-3 py-1 rounded-full hover:bg-white/10">ME</button
-                >
-                <button
-                    data-to="1"
-                    class="px-3 py-1 rounded-full hover:bg-white/10"
-                    >ABOUT</button
-                >
-            </nav>
-
-            <!-- STAGE -->
             <div
                 id="frame"
                 class="h-full w-full rounded-2xl overflow-hidden relative inset-0"
             >
-                <!-- Actual al fondo -->
-                <div
-                    id="prev"
-                    class="h-full w-full absolute inset-0 z-10"
-                    style="background:#ef4444"
-                >
-                    <section
-                        class="grid place-items-center h-full text-5xl font-extrabold"
-                    >
-                        <div>MEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    </section>
-                </div>
-
-                <!-- Nueva arriba: se revela con el span -->
-                <div
-                    id="next"
-                    class="panel-next h-full w-full absolute inset-0 z-20"
-                    style="background:#3b82f6"
-                >
-                    <section
-                        class="grid place-items-center h-full text-5xl font-extrabold"
-                    >
-                        ABOUT
-                    </section>
-                </div>
+                <Section bgColor="bg-red-500">
+                    <div>ME</div>
+                </Section>
+                <Section bgColor="bg-blue-500 hidden">
+                    <div>ABOUT</div>
+                </Section>
             </div>
         </main>
-
-        <script is:inline>
-            // --- SELECCIÓN DE ELEMENTOS ---
-            // Obtenemos los elementos principales del DOM que vamos a necesitar.
-            const frame = document.getElementById("frame"); // El contenedor principal de la animación.
-            const prev = document.getElementById("prev"); // El panel que está actualmente visible (al fondo).
-            const next = document.getElementById("next"); // El panel que se mostrará a continuación (encima).
-            const nav = document.getElementById("nav"); // La barra de navegación.
-
-            // --- DATOS DE LAS SECCIONES ---
-            // Un array de objetos que define las propiedades de cada sección.
-            const sections = [
-                { label: "ME", color: "#ef4444" }, // Sección 0: ME (rojo)
-                { label: "ABOUT", color: "#3b82f6" }, // Sección 1: ABOUT (azul)
-            ];
-
-            // --- ESTADO DE LA ANIMACIÓN ---
-            let current = 0, // Índice de la sección actualmente visible.
-                running = false; // Bandera para saber si una animación está en curso.
-
-            // --- FUNCIÓN PRINCIPAL DE NAVEGACIÓN Y ANIMACIÓN ---
-            function goTo(idx) {
-                if (running || idx === current) return;
-                running = true;
-
-                next.querySelector("section").textContent = sections[idx].label;
-                next.style.setProperty("--reveal", "0%");
-
-                frame.classList.add("is-wiping");
-
-                next.addEventListener(
-                    "animationend",
-                    () => {
-                        prev.querySelector("section").textContent =
-                            sections[idx].label;
-
-                        next.style.setProperty("--reveal", "0%");
-                        frame.classList.remove("is-wiping");
-                        current = idx;
-                        running = false;
-                    },
-                    { once: true },
-                );
-            }
-
-            // --- ASIGNACIÓN DE EVENTOS A LOS BOTONES ---
-            // Recorremos todos los botones de la navegación que tengan el atributo 'data-to'.
-            nav.querySelectorAll("[data-to]").forEach((btn) => {
-                // A cada botón le añadimos un listener para el evento 'click'.
-                btn.addEventListener("click", () =>
-                    // Cuando se hace click, llamamos a la función goTo con el índice del botón.
-                    goTo(Number(btn.dataset.to)),
-                );
-            });
-        </script>
-
-        <style>
-            /* --- DEFINICIÓN DE UNA PROPIEDAD CSS PERSONALIZADA ANIMABLE --- */
-            /* @property nos permite registrar una propiedad CSS, dándole un tipo,
-               un valor inicial y diciendo si se hereda o no.
-               Esto es clave para poder animar cosas que normalmente no se pueden, como el clip-path.
-               Aquí definimos '--reveal' como un porcentaje. */
-            @property --reveal {
-                syntax: "<percentage>";
-                initial-value: 0%;
-                inherits: false;
-            }
-
-            /* --- ESTILO DEL PANEL 'NEXT' (EL QUE SE REVELA) --- */
-            .panel-next {
-                position: absolute;
-                inset: 0;
-                /* 'clip-path' define qué parte del elemento es visible.
-                   'polygon' crea una forma con los puntos que le damos.
-                   Aquí, creamos un polígono que al principio es una línea vertical en el borde izquierdo,
-                   por lo que el panel está completamente oculto. */
-                clip-path: polygon(0 0, 0 100%, 0 100%, 0 0);
-            }
-
-            /* --- ESTILO DE LA BARRA DIAGONAL (EL 'WIPE') --- */
-            /* Este es un elemento 'span' dentro del panel 'next' que crea el efecto
-               visual de una barra que lidera la transición. */
-
-            /* --- ACTIVACIÓN DE LA ANIMACIÓN --- */
-            /* Cuando el 'frame' tiene la clase 'is-wiping', se aplica la animación 'reveal-diag' al panel 'next'. */
-            .is-wiping .panel-next {
-                animation: reveal-diag 0.8s ease-in-out forwards;
-            }
-
-            /* --- KEYFRAMES DE LA ANIMACIÓN DE REVELADO --- */
-            /* Aquí definimos los pasos de la animación 'reveal-diag'. */
-            @keyframes reveal-diag {
-                /* ESTADO INICIAL (0% de la animación) */
-                0% {
-                    /* El panel está oculto (es una línea a la izquierda). */
-                    /**
-                     * CSS polygon() points are specified as x y coordinates in clockwise order:
-                     * polygon(x1 y1, x2 y2, x3 y3, x4 y4)
-                     * 
-                     * In this animation, the polygon points represent:
-                     * (0 0)       - top-left corner
-                     * (0 100%)    - bottom-left corner
-                     * (100% 100%) - bottom-right corner
-                     * (0% 0)      - back to top-left (creating a triangle)
-                     */
-                    clip-path: polygon(0 0, 0 100%, 100% 100%, 0% 0);
-                }
-
-                /* ESTADO INTERMEDIO para crear la curva */
-                50% {
-                    clip-path: polygon(0 0, 0 100%, 100% 100%, 0% 0);
-                }
-
-                /* ESTADO FINAL (100% de la animación) */
-                100% {
-                    /* El panel es totalmente visible (un rectángulo que cubre todo el contenedor). */
-                    clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0);
-                }
-            }
-        </style>
     </body>
 </html>

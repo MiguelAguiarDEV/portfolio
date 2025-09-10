@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import Section from "@/components/layout/Section.astro";
 ---
 
 <!doctype html>
@@ -35,23 +36,21 @@ import "@/styles/global.css";
             </div>
 
             <!-- STAGE -->
+
+            <!-- Actual al fondo -->
             <div
-                id="frame"
-                class="h-full w-full rounded-2xl overflow-hidden relative inset-0"
+                id="prev"
+                class="h-full w-full absolute inset-0 z-10"
+                style="background:#ef4444"
             >
-                <!-- Actual al fondo -->
-                <div
-                    id="prev"
-                    class="h-full w-full absolute inset-0 z-10"
-                    style="background:#ef4444"
+                <section
+                    class="grid place-items-center h-full text-5xl font-extrabold"
                 >
-                    <section
-                        class="grid place-items-center h-full text-5xl font-extrabold"
-                    >
-                        <div>MEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
-                    </section>
-                </div>
+                    <div>MEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                </section>
             </div>
+            <!-- Nueva arriba: se revela con el span -->
+            <Section />
         </main>
         <script>
             const sliderForm = document.getElementById("slider-form");
