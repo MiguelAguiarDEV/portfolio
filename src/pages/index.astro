@@ -13,26 +13,18 @@ import FormContainer from "../components/FormContainer.astro";
     </head>
 
     <body class="bg-[#111111] m-0 overflow-hidden text-white">
-        <!-- <FormContainer /> -->
+        <FormContainer />
         <main
             id="app-main"
             class="h-[100dvh] w-screen p-4 box-border p4 relative"
         >
-            <Section bgColor="bg-red-500" menuPosition="left-4" showMenu={true}>
+            <Section bgColor="bg-red-500" showMenu={true}>
                 <div>SECCIÓN 1</div>
             </Section>
-            <Section
-                bgColor="bg-blue-500"
-                menuPosition="right-4"
-                showMenu={true}
-            >
+            <Section bgColor="bg-blue-500" showMenu={true}>
                 <div>SECCIÓN 2</div>
             </Section>
-            <Section
-                bgColor="bg-green-500"
-                menuPosition="right-3"
-                showMenu={true}
-            >
+            <Section bgColor="bg-green-500" showMenu={true}>
                 <div>SECCIÓN 3</div>
             </Section>
         </main>
