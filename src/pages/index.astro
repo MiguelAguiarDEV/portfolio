@@ -1,85 +1,189 @@
 ---
 import "@/styles/global.css";
-import Frame from "@/components/layout/Frame.astro";
-import NavBar from "@/components/ui/NavBar.astro";
-import PanelStack from "@/components/panels/PanelStack.astro";
-
-// Lee las variables de entorno.
-const enableNoise = import.meta.env.ENABLE_NOISE === "true";
-const enableNoiseAnimation = import.meta.env.ENABLE_NOISE_ANIMATION === "true";
-const wipeSameColor = import.meta.env.WIPE_SAME_COLOR === "true";
-const enableWipeNoiseAnimation =
-	import.meta.env.ENABLE_WIPE_NOISE_ANIMATION === "true";
 ---
 
 <!doctype html>
 <html lang="es" class="dark">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<title>Demo Polaroid Panels</title>
-	</head>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Wipe con navbar</title>
+    </head>
 
-	<body class="bg-[#111111] m-0 overflow-hidden">
-		{enableNoise && <div class="noise absolute inset-[-20px]" />}
-		<!-- Ocupa 100vw x 100dvh garantizado -->
-		<main id="app-main" class="h-[100dvh] w-screen p-4 box-border">
-			<Frame class="h-full w-full">
-				<div class="flex flex-col h-full">
-					<div class="flex-1 min-h-0 w-full relative">
-						<PanelStack wipeSameColor={wipeSameColor}>
-							<!-- Nav dentro del contenedor de secciones, flotando arriba -->
-							<div
-								class="absolute top-3 left-0 right-0 z-50 flex justify-center"
-							>
-								<NavBar />
-							</div>
-						</PanelStack>
-					</div>
-				</div>
-			</Frame>
-		</main>
-	</body>
+    <body class="bg-[#111111] m-0 overflow-hidden text-white">
+        <main id="app-main" class="h-[100dvh] w-screen p-4 box-border p4">
+            <!-- NAV -->
+            <!-- <nav
+                id="nav"
+                class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex gap-2
+                  bg-white/10 backdrop-blur px-3 py-1 rounded-full border border-white/15"
+            >
+                <button
+                    data-to="0"
+                    class="px-3 py-1 rounded-full hover:bg-white/10">ME</button
+                >
+                <button
+                    data-to="1"
+                    class="px-3 py-1 rounded-full hover:bg-white/10"
+                    >ABOUT</button
+                >
+            </nav> -->
+            <div
+                class="menu h-fit w-fit p-4 box-border absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-white text-black flex flex-col gap-2"
+            >
+                <form id="slider-form" class="flex flex-col gap-2"></form>
+            </div>
+
+            <!-- STAGE -->
+            <div
+                id="frame"
+                class="h-full w-full rounded-2xl overflow-hidden relative inset-0"
+            >
+                <!-- Actual al fondo -->
+                <div
+                    id="prev"
+                    class="h-full w-full absolute inset-0 z-10"
+                    style="background:#ef4444"
+                >
+                    <section
+                        class="grid place-items-center h-full text-5xl font-extrabold"
+                    >
+                        <div>MEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+                    </section>
+                </div>
+            </div>
+        </main>
+        <script>
+            const sliderForm = document.getElementById("slider-form");
+
+            function createAndSetupSlider(options: {
+                id: string;
+                labelText: string;
+                min: string;
+                max: string;
+                value: string;
+                cssVariable: string;
+            }) {
+                if (!sliderForm) return;
+
+                const { id, labelText, min, max, value, cssVariable } = options;
+
+                const container = document.createElement("div");
+                container.classList.add("flex", "flex-col");
+
+                const mainLabel = document.createElement("label");
+                mainLabel.htmlFor = id;
+                mainLabel.textContent = labelText;
+
+                const slider = document.createElement("input");
+                slider.type = "range";
+                slider.id = id;
+                slider.min = min;
+                slider.max = max;
+                slider.value = value;
+
+                const valueLabel = document.createElement("label");
+                valueLabel.htmlFor = id;
+                valueLabel.id = `${id}Label`;
+                valueLabel.textContent = value;
+
+                container.appendChild(mainLabel);
+                container.appendChild(slider);
+                container.appendChild(valueLabel);
+                sliderForm.appendChild(container);
+
+                const update = () => {
+                    valueLabel.textContent = slider.value;
+                    document.documentElement.style.setProperty(
+                        cssVariable,
+                        `${slider.value}%`,
+                    );
+                };
+
+                slider.addEventListener("input", update);
+                update(); // Initial update
+            }
+
+            const sliders = [
+                {
+                    id: "xDisplacementInput",
+                    labelText: "X-Displacement",
+                    min: "0",
+                    max: "100",
+                    value: "0",
+                    cssVariable: "--x-displacement",
+                },
+                {
+                    id: "wipeAngleInput",
+                    labelText: "Wipe Angle",
+                    min: "0",
+                    max: "100",
+                    value: "40",
+                    cssVariable: "--wipe-angle",
+                },
+                {
+                    id: "staticXOffsetInput",
+                    labelText: "Static X-Offset",
+                    min: "-100",
+                    max: "100",
+                    value: "0",
+                    cssVariable: "--static-x-offset",
+                },
+            ];
+
+            sliders.forEach(createAndSetupSlider);
+        </script>
+    </body>
 </html>
 
-<script
-	define:vars={{
-		enableNoise,
-		enableNoiseAnimation,
-		enableWipeNoiseAnimation,
-	}}
->
-	if (enableNoise && enableNoiseAnimation) {
-		const noiseElements = document.querySelectorAll(".noise");
+<style>
+    :root {
+        /* --- VARIABLES DE CONTROL (Sliders) --- */
 
-		noiseElements.forEach((noiseElement) => {
-			noiseElement.style.willChange = "transform";
+        /* Desplazamiento horizontal de la transición. Controla qué tan lejos se mueven los puntos derechos del polígono. */
+        --x-displacement: 0%;
+        /* Desplazamiento horizontal estático. Mueve toda la forma a la izquierda o derecha. */
+        --static-x-offset: 0%;
+        /* Ángulo de la transición. Controla la inclinación de los bordes superior e inferior. */
+        --wipe-angle: 40%;
 
-			const animateNoise = () => {
-				const x = Math.floor(Math.random() * 20) - 3;
-				const y = Math.floor(Math.random() * 25) - 5;
-				noiseElement.style.transform = `translate(${x}px, ${y}px)`;
-			};
+        /* --- PUNTOS DEL POLÍGONO (clip-path) --- */
+        /* El clip-path es un polígono de 4 puntos que define el área visible. */
+        /* Estos puntos se calculan a partir de las variables de control. */
 
-			setInterval(animateNoise, 120);
-		});
-	}
+        /* P1: Esquina superior izquierda del polígono. */
+        --x1-position: var(--static-x-offset);
+        --y1-position: 0%;
 
-	if (enableWipeNoiseAnimation) {
-		// Busca los pseudo-elementos ::after de .panel .wipe
-		const styleSheet = document.createElement("style");
-		document.head.appendChild(styleSheet);
+        /* P2: Esquina inferior izquierda del polígono. */
+        --x2-position: var(--static-x-offset);
+        --y2-position: 100%;
 
-		const animateWipeNoise = () => {
-			const x = Math.floor(Math.random() * 20) - 3;
-			const y = Math.floor(Math.random() * 25) - 5;
-			styleSheet.textContent = `
-				.panel .wipe::after {
-					background-position: ${x}px ${y}px !important;
-				}
-			`;
-		};
+        /* Variable intermedia para el ángulo, aunque no se usa en los cálculos finales de x3/x4. */
+        --wipe-angle-modified: calc(var(--wipe-angle) - var(--static-x-offset));
 
-		setInterval(animateWipeNoise, 120);
-	}
-</script>
+        /* P3: Esquina inferior derecha del polígono. */
+        --x3-position: calc(
+            var(--wipe-angle) + var(--x2-position) + var(--x-displacement)
+        );
+        --y3-position: var(--y2-position);
+
+        /* P4: Esquina superior derecha del polígono. */
+        --x4-position: calc(var(--x1-position) + var(--x-displacement));
+        --y4-position: var(--y1-position);
+    }
+
+    #prev {
+        /* 
+            Aplica el recorte a la capa #prev.
+            La forma del polígono se define por los 4 puntos (P1, P2, P3, P4) calculados arriba.
+            La sintaxis es: polygon(x1 y1, x2 y2, x3 y3, x4 y4)
+        */
+        clip-path: polygon(
+            var(--x1-position) var(--y1-position),
+            var(--x2-position) var(--y2-position),
+            var(--x3-position) var(--y3-position),
+            var(--x4-position) var(--y4-position)
+        );
+    }
+</style>

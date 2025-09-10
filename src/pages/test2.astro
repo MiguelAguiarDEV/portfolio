@@ -1,113 +1,222 @@
 <!doctype html>
-<meta charset="utf-8" />
-<title>Hijo centrado y recortado por el padre</title>
-<style>
-    html,
-    body {
-        height: 100%;
-        margin: 0;
-    }
-    #stage {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        background: #111;
-    }
-    #padre {
-        position: absolute;
-        left: 120px;
-        top: 120px;
-        width: 320px;
-        height: 320px;
-        background: #20232a;
-        border: 2px solid #5eead4;
-        border-radius: 12px;
-        overflow: hidden;
-        cursor: move;
-    }
-    /* Hijo siempre centrado al viewport */
-    #hijo {
-        position: fixed;
-        left: 50vw;
-        top: 50vh;
-        transform: translate(-50%, -50%);
-        padding: 24px 40px;
-        background: #22c55e;
-        color: #111;
-        font: 700 20px/1 system-ui;
-        border-radius: 8px;
-        /* se recorta dinámicamente con clip-path */
-        will-change: clip-path, visibility;
-    }
-</style>
-<div id="stage">
-    <div id="padre">
-        <div id="hijo">HIJO CENTRADO</div>
-    </div>
-</div>
-<script>
-    const padre = document.getElementById("padre");
-    const hijo = document.getElementById("hijo");
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Multi-secciones con wipe (clip-path)</title>
+        <style>
+            :root {
+                --dur: 700ms;
+                --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+            }
+            html,
+            body {
+                height: 100%;
+            }
+            body {
+                margin: 0;
+                background: #111;
+                color: #fff;
+                font-family: system-ui, sans-serif;
+            }
+            .shell {
+                height: 100dvh;
+                display: grid;
+                grid-template-rows: auto 1fr;
+            }
+            /* navbar */
+            .nav {
+                display: flex;
+                gap: 0.5rem;
+                padding: 0.75rem;
+                justify-content: center;
+                position: relative;
+                z-index: 10;
+            }
+            .nav button {
+                padding: 0.5rem 0.9rem;
+                border-radius: 999px;
+                border: 0;
+                cursor: pointer;
+                background: #fff1;
+                color: #fff;
+                backdrop-filter: blur(8px) saturate(140%);
+                transition: background 0.2s;
+            }
+            .nav button[aria-current="page"] {
+                background: #fff3;
+            }
+            .stage {
+                position: relative;
+                overflow: hidden;
+                border-radius: 18px;
+                margin: 0 0.75rem 0.75rem;
+                box-shadow: 0 8px 30px #0008;
+            }
+            /* Secciones apiladas y recortadas por clip-path */
+            .section {
+                position: absolute;
+                inset: 0;
+                overflow: hidden;
+                /* empieza totalmente oculto: recorte a 100% del lado derecho */
+                clip-path: inset(0 100% 0 0 round 24px);
+                transition: clip-path var(--dur) var(--ease);
+                will-change: clip-path;
+            }
+            .section.is-active {
+                clip-path: inset(0 0 0 0 round 24px);
+                z-index: 1;
+            }
+            /* durante salida, se cierra hacia la derecha */
+            .section.hiding-right {
+                clip-path: inset(0 0 0 100% round 24px);
+            }
 
-    // Recorta el hijo al rectángulo del padre
-    function clipToParent() {
-        const pr = padre.getBoundingClientRect();
-        const cr = hijo.getBoundingClientRect();
+            /* Colores de demo */
+            .s1 {
+                background: radial-gradient(
+                    120vmax 120vmax at 20% 20%,
+                    #1e293b,
+                    #0b1020
+                );
+            }
+            .s2 {
+                background: radial-gradient(
+                    120vmax 120vmax at 80% 20%,
+                    #064e3b,
+                    #051a14
+                );
+            }
+            .s3 {
+                background: radial-gradient(
+                    120vmax 120vmax at 20% 80%,
+                    #7c2d12,
+                    #1a0b05
+                );
+            }
+            .s4 {
+                background: radial-gradient(
+                    120vmax 120vmax at 80% 80%,
+                    #3b0764,
+                    #0f0620
+                );
+            }
 
-        const left = Math.max(pr.left, cr.left);
-        const right = Math.min(pr.right, cr.right);
-        const top = Math.max(pr.top, cr.top);
-        const bottom = Math.min(pr.bottom, cr.bottom);
+            .content {
+                height: 100%;
+                display: grid;
+                place-items: center;
+                text-align: center;
+            }
+            .content h1 {
+                font-size: clamp(24px, 4vw, 48px);
+                margin: 0 0 0.25rem;
+            }
+            .content p {
+                opacity: 0.8;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="shell">
+            <nav class="nav" id="nav">
+                <button data-target="s1" aria-current="page">Sección 1</button>
+                <button data-target="s2">Sección 2</button>
+                <button data-target="s3">Sección 3</button>
+                <button data-target="s4">Sección 4</button>
+            </nav>
 
-        hijo.style.visibility = "visible";
+            <div class="stage" id="stage">
+                <section class="section s1 is-active" id="s1">
+                    <div class="content">
+                        <div><h1>Sección 1</h1><p>Wipe con clip-path</p></div>
+                    </div>
+                </section>
+                <section class="section s2" id="s2">
+                    <div class="content">
+                        <div><h1>Sección 2</h1><p>Mismo efecto</p></div>
+                    </div>
+                </section>
+                <section class="section s3" id="s3">
+                    <div class="content">
+                        <div><h1>Sección 3</h1><p>Transición limpia</p></div>
+                    </div>
+                </section>
+                <section class="section s4" id="s4">
+                    <div class="content">
+                        <div><h1>Sección 4</h1><p>Sin pseudo-elementos</p></div>
+                    </div>
+                </section>
+            </div>
+        </div>
 
-        // const insetTop = Math.max(0, top - cr.top);
-        // const insetRight = Math.max(0, cr.right - right);
-        // const insetBottom = Math.max(0, cr.bottom - bottom);
-        // const insetLeft = Math.max(0, left - cr.left);
+        <script>
+            const nav = document.getElementById("nav");
+            const buttons = [...nav.querySelectorAll("button")];
+            const sections = new Map(
+                [...document.querySelectorAll(".section")].map((s) => [
+                    s.id,
+                    s,
+                ]),
+            );
+            let current = document.querySelector(".section.is-active");
+            let lock = false;
 
-        hijo.style.clipPath = `inset(${insetTop}px ${insetRight}px ${insetBottom}px ${insetLeft}px)`;
-    }
+            function go(targetId) {
+                if (lock) return;
+                const next = sections.get(targetId);
+                if (!next || next === current) return;
 
-    // Arrastrar el padre
-    let drag = null;
-    padre.addEventListener("mousedown", (e) => {
-        drag = {
-            dx: e.clientX - padre.offsetLeft,
-            dy: e.clientY - padre.offsetTop,
-        };
-    });
-    window.addEventListener("mousemove", (e) => {
-        if (!drag) return;
-        padre.style.left = e.clientX - drag.dx + "px";
-        padre.style.top = e.clientY - drag.dy + "px";
-        clipToParent();
-    });
-    window.addEventListener("mouseup", () => (drag = null));
+                lock = true;
+                // preparar estados iniciales
+                next.classList.remove("is-active"); // asegura que parte desde oculto (clip a 100%)
+                next.style.zIndex = 2;
+                // reflow para fijar el estado inicial antes de transicionar
+                next.getBoundingClientRect();
 
-    // Recalcular en resize y al inicio
-    window.addEventListener("resize", clipToParent);
-    clipToParent();
-</script>
+                // lanzar transiciones: entra "next", sale "current"
+                next.classList.add("is-active"); // 100% → 0%  (revela)
+                current.classList.add("hiding-right"); // 0% → 100%  (cierra)
 
-<!-- Ancla: el hijo va position: fixed centrado al viewport. Así ignora al padre al posicionarse.
+                const onDone = (e) => {
+                    if (e.propertyName !== "clip-path") return;
+                    next.removeEventListener("transitionend", onDone);
+                    // limpiar estados
+                    current.classList.remove("is-active", "hiding-right");
+                    next.style.zIndex = "";
+                    current = next;
+                    lock = false;
+                };
+                next.addEventListener("transitionend", onDone);
 
-Recorte: como overflow del padre no afecta a un fixed, simulas ese recorte en el hijo con clip-path calculada por JS:
+                // actualizar navbar
+                buttons.forEach((b) =>
+                    b.setAttribute(
+                        "aria-current",
+                        b.dataset.target === targetId ? "page" : "false",
+                    ),
+                );
+            }
 
-Tomas getBoundingClientRect() del padre y del hijo.
+            nav.addEventListener("click", (e) => {
+                const btn = e.target.closest("button[data-target]");
+                if (!btn) return;
+                go(btn.dataset.target);
+            });
 
-Calculas la intersección.
-
-Pasas esa intersección a inset(top right bottom left) relativo al rect del hijo.
-
-Sin solape → visibility:hidden.
-
-Extras clave:
-
-Recalcula en drag, resize, scroll (usa requestAnimationFrame/ResizeObserver si quieres fino).
-
-Bordes redondeados: clip-path: inset(... round 12px).
-
-Padre rotado/transformado: da igual, getBoundingClientRect() ya te da el rect transformado.
-
-No hay alternativa CSS pura que haga esto con un hijo realmente independiente del padre. -->
+            // opcional: teclado ← →
+            window.addEventListener("keydown", (e) => {
+                if (!["ArrowLeft", "ArrowRight"].includes(e.key) || lock)
+                    return;
+                const order = buttons.map((b) => b.dataset.target);
+                const i = order.indexOf(current.id);
+                const next =
+                    e.key === "ArrowRight"
+                        ? order[(i + 1) % order.length]
+                        : order[(i - 1 + order.length) % order.length];
+                go(next);
+            });
+        </script>
+    </body>
+</html>
