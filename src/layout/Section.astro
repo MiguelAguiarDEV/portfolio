@@ -4,37 +4,32 @@ interface Props {
     showMenu?: boolean;
 }
 
-const { bgColor = "bg-gray-500", showMenu = true } = Astro.props;
+const { bgColor = "bg-gray-500", showMenu = false } = Astro.props;
 const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<form
-    id={`slider-form-${uniqueId}`}
-    class="pointer-events-auto w-[min(92vw,22rem)] md:w-[22rem] bg-white/80 text-zinc-900 dark:bg-zinc-900/70 dark:text-zinc-100 backdrop-blur-xl border border-white/20 dark:border-zinc-700/60 rounded-2xl shadow-xl p-4 md:p-5 flex flex-col gap-4"
->
-    <div class="flex items-center justify-between">
-        <div class="text-sm font-semibold tracking-wide">Controls</div>
-        <div class="flex items-center gap-2 text-[10px]">
-            <span
-                class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60"
-            >
-                ID {uniqueId}
-            </span>
-            <span
-                class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60"
-            >
-                BG {bgColor}
-            </span>
-            <span
-                class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60"
-            >
-                menu {showMenu ? "on" : "off"}
-            </span>
-        </div>
-    </div>
-    <hr class="border-zinc-200/40 dark:border-zinc-700/50" />
-    <div data-controls class="flex flex-col gap-4"></div>
-</form>
+{
+    showMenu && (
+        <form
+            id={`slider-form-${uniqueId}`}
+            class="pointer-events-auto w-[min(92vw,22rem)] md:w-[22rem] bg-white/80 text-zinc-900 dark:bg-zinc-900/70 dark:text-zinc-100 backdrop-blur-xl border border-white/20 dark:border-zinc-700/60 rounded-2xl shadow-xl p-4 md:p-5 flex flex-col gap-4"
+        >
+            <div class="flex items-center justify-between">
+                <div class="text-sm font-semibold tracking-wide">Controls</div>
+                <div class="flex items-center gap-2 text-[10px]">
+                    <span class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60">
+                        ID {uniqueId}
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60">
+                        BG {bgColor}
+                    </span>
+                </div>
+            </div>
+            <hr class="border-zinc-200/40 dark:border-zinc-700/50" />
+            <div data-controls class="flex flex-col gap-4" />
+        </form>
+    )
+}
 
 <!-- STAGE -->
 
