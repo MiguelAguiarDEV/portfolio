@@ -1,39 +1,37 @@
 ---
+import SectionControls from "../components/SectionControls.astro";
+
 interface Props {
     bgColor?: string;
     showMenu?: boolean;
+    showXDisplacement?: boolean;
+    showWipeAngle?: boolean;
+    showStaticXOffset?: boolean;
 }
 
-const { bgColor = "bg-gray-500", showMenu = false } = Astro.props;
+const {
+    bgColor = "bg-gray-500",
+    showMenu = false,
+    showXDisplacement = true,
+    showWipeAngle = true,
+    showStaticXOffset = true,
+} = Astro.props;
 const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
 {
     showMenu && (
-        <form
-            id={`slider-form-${uniqueId}`}
-            class="pointer-events-auto w-[min(92vw,22rem)] md:w-[22rem] bg-white/80 text-zinc-900 dark:bg-zinc-900/70 dark:text-zinc-100 backdrop-blur-xl border border-white/20 dark:border-zinc-700/60 rounded-2xl shadow-xl p-4 md:p-5 flex flex-col gap-4"
-        >
-            <div class="flex items-center justify-between">
-                <div class="text-sm font-semibold tracking-wide">Controls</div>
-                <div class="flex items-center gap-2 text-[10px]">
-                    <span class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60">
-                        ID {uniqueId}
-                    </span>
-                    <span class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60">
-                        BG {bgColor}
-                    </span>
-                </div>
-            </div>
-            <hr class="border-zinc-200/40 dark:border-zinc-700/50" />
-            <div data-controls class="flex flex-col gap-4" />
-        </form>
+        <SectionControls
+            sectionId={uniqueId}
+            bgColor={bgColor}
+            title="Controls"
+            showXDisplacement={showXDisplacement}
+            showWipeAngle={showWipeAngle}
+            showStaticXOffset={showStaticXOffset}
+        />
     )
 }
 
-<!-- STAGE -->
-
-<!-- Actual al fondo -->
 <div
     id={uniqueId}
     class:list={["h-full w-full absolute inset-0 z-10", bgColor]}
@@ -43,179 +41,30 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
     </section>
 </div>
 
-<script define:vars={{ uniqueId, showMenu }}>
-    if (showMenu) {
-        const sliderForm = document.getElementById(`slider-form-${uniqueId}`);
-        console.log("sliderForm:", sliderForm);
-        const formContainer = document.getElementById("form-container");
-        console.log("formContainer:", formContainer);
-        if (formContainer && sliderForm) {
-            formContainer.appendChild(sliderForm);
-            console.log("Form moved to container");
-        }
-
-        const sectionElement = document.getElementById(uniqueId);
-        const controlsRoot = sliderForm
-            ? sliderForm.querySelector("[data-controls]") || sliderForm
-            : null;
-
-        function createAndSetupSlider(options) {
-            if (!controlsRoot || !sectionElement) return;
-
-            const { id, labelText, min, max, value, cssVariable } = options;
-            const uniqueInputId = `${id}-${uniqueId}`;
-
-            const container = document.createElement("div");
-            container.classList.add("flex", "flex-col", "gap-2");
-
-            const headerRow = document.createElement("div");
-            headerRow.classList.add(
-                "flex",
-                "items-center",
-                "justify-between",
-                "text-xs",
-            );
-
-            const mainLabel = document.createElement("label");
-            mainLabel.htmlFor = uniqueInputId;
-            mainLabel.textContent = labelText;
-            mainLabel.classList.add(
-                "font-medium",
-                "text-zinc-600",
-                "dark:text-zinc-300",
-            );
-
-            const valueLabel = document.createElement("span");
-            valueLabel.id = `${uniqueInputId}Label`;
-            valueLabel.textContent = value;
-            valueLabel.classList.add(
-                "ml-2",
-                "px-2",
-                "py-0.5",
-                "rounded",
-                "bg-zinc-200",
-                "dark:bg-zinc-700",
-                "text-zinc-800",
-                "dark:text-zinc-100",
-                "font-mono",
-                "tabular-nums",
-            );
-
-            headerRow.appendChild(mainLabel);
-            headerRow.appendChild(valueLabel);
-
-            const slider = document.createElement("input");
-            slider.type = "range";
-            slider.id = uniqueInputId;
-            slider.min = min;
-            slider.max = max;
-            slider.value = value;
-            slider.classList.add(
-                "ui-range",
-                "w-full",
-                "accent-indigo-600",
-                "focus:outline-none",
-                "focus-visible:ring-2",
-                "focus-visible:ring-indigo-500/60",
-                "focus-visible:ring-offset-0",
-            );
-
-            container.appendChild(headerRow);
-            container.appendChild(slider);
-            controlsRoot.appendChild(container);
-
-            const update = () => {
-                valueLabel.textContent = slider.value;
-                // dynamic fill for the track based on current value
-                const minNum = Number(min);
-                const maxNum = Number(max);
-                const valNum = Number(slider.value);
-                const pct = ((valNum - minNum) / (maxNum - minNum)) * 100;
-                slider.style.backgroundSize = `${pct}% 100%`;
-                sectionElement.style.setProperty(
-                    cssVariable,
-                    `${slider.value}%`,
-                );
-            };
-
-            slider.addEventListener("input", update);
-            update(); // Initial update
-        }
-
-        const sliders = [
-            {
-                id: "xDisplacementInput",
-                labelText: "X-Displacement",
-                min: "0",
-                max: "100",
-                value: "0",
-                cssVariable: "--x-displacement",
-            },
-            {
-                id: "wipeAngleInput",
-                labelText: "Wipe Angle",
-                min: "0",
-                max: "100",
-                value: "40",
-                cssVariable: "--wipe-angle",
-            },
-            {
-                id: "staticXOffsetInput",
-                labelText: "Static X-Offset",
-                min: "-100",
-                max: "100",
-                value: "0",
-                cssVariable: "--static-x-offset",
-            },
-        ];
-
-        sliders.forEach(createAndSetupSlider);
-    }
-</script>
-
 <style>
     [id^="section-"] {
-        /* --- VARIABLES DE CONTROL (Sliders) --- */
-
-        /* Desplazamiento horizontal de la transición. Controla qué tan lejos se mueven los puntos derechos del polígono. */
         --x-displacement: 0%;
-        /* Desplazamiento horizontal estático. Mueve toda la forma a la izquierda o derecha. */
         --static-x-offset: 0%;
-        /* Ángulo de la transición. Controla la inclinación de los bordes superior e inferior. */
         --wipe-angle: 40%;
 
-        /* --- PUNTOS DEL POLÍGONO (clip-path) --- */
-        /* El clip-path es un polígono de 4 puntos que define el área visible. */
-        /* Estos puntos se calculan a partir de las variables de control. */
-
-        /* P1: Esquina superior izquierda del polígono. */
         --x1-position: var(--static-x-offset);
         --y1-position: 0%;
 
-        /* P2: Esquina inferior izquierda del polígono. */
         --x2-position: var(--static-x-offset);
         --y2-position: 100%;
 
-        /* Variable intermedia para el ángulo, aunque no se usa en los cálculos finales de x3/x4. */
         --wipe-angle-modified: calc(var(--wipe-angle) - var(--static-x-offset));
 
-        /* P3: Esquina inferior derecha del polígono. */
         --x3-position: calc(
             var(--wipe-angle) + var(--x2-position) + var(--x-displacement)
         );
         --y3-position: var(--y2-position);
 
-        /* P4: Esquina superior derecha del polígono. */
         --x4-position: calc(var(--x1-position) + var(--x-displacement));
         --y4-position: var(--y1-position);
     }
 
     [id^="section-"] {
-        /* 
-            Aplica el recorte a la capa #prev.
-            La forma del polígono se define por los 4 puntos (P1, P2, P3, P4) calculados arriba.
-            La sintaxis es: polygon(x1 y1, x2 y2, x3 y3, x4 y4)
-        */
         clip-path: polygon(
             var(--x1-position) var(--y1-position),
             var(--x2-position) var(--y2-position),
