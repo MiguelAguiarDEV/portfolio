@@ -24,6 +24,8 @@ const wipeId = `wipeAngleInput-${sectionId}`;
 const wipeLabelId = `${wipeId}Label`;
 const staticId = `staticXOffsetInput-${sectionId}`;
 const staticLabelId = `${staticId}Label`;
+const resetBtnId = `reset-${sectionId}`;
+const defaults = { x: 0, wipe: 40, stat: 0 };
 ---
 
 <form
@@ -40,6 +42,12 @@ const staticLabelId = `${staticId}Label`;
             <span
                 class="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-700/60"
                 >BG {bgColor}</span
+            >
+            <button
+                id={resetBtnId}
+                type="button"
+                class="ml-2 inline-flex items-center gap-1 px-2 py-1 rounded-md border border-zinc-300/70 dark:border-zinc-700/70 bg-white/70 dark:bg-zinc-800/70 text-zinc-700 dark:text-zinc-200 hover:bg-white/90 dark:hover:bg-zinc-800/90 transition text-[10px]"
+                >Reset</button
             >
         </div>
     </div>
@@ -138,8 +146,11 @@ const staticLabelId = `${staticId}Label`;
         wipeLabelId,
         staticId,
         staticLabelId,
+        resetBtnId,
+        defaults,
     }}
 >
+    // @ts-nocheck
     console.log("[SectionControls] init", { sectionId });
     const sliderForm = document.getElementById(`slider-form-${sectionId}`);
     const formContainer = document.getElementById("form-container");
@@ -216,6 +227,32 @@ const staticLabelId = `${staticId}Label`;
             staticLabelId,
             "--static-x-offset",
         );
+
+        const resetBtn = document.getElementById(resetBtnId);
+        const xEl = document.getElementById(xId);
+        const wipeEl = document.getElementById(wipeId);
+        const statEl = document.getElementById(staticId);
+        if (resetBtn) {
+            resetBtn.addEventListener("click", () => {
+                console.log("[SectionControls] reset clicked", {
+                    sectionId,
+                    defaults,
+                });
+                if (xEl) {
+                    xEl.value = String(defaults.x);
+                    xEl.dispatchEvent(new Event("input", { bubbles: true }));
+                }
+                if (wipeEl) {
+                    wipeEl.value = String(defaults.wipe);
+                    wipeEl.dispatchEvent(new Event("input", { bubbles: true }));
+                }
+                if (statEl) {
+                    statEl.value = String(defaults.stat);
+                    statEl.dispatchEvent(new Event("input", { bubbles: true }));
+                }
+                console.log("[SectionControls] reset applied", defaults);
+            });
+        }
     }
 
     if (document.readyState === "loading") {
