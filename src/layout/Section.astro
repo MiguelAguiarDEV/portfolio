@@ -1,0 +1,177 @@
+---
+interface Props {
+    bgColor?: string;
+    menuPosition?: string;
+    showMenu?: boolean;
+}
+
+const {
+    bgColor = "bg-gray-500",
+    menuPosition = "left-1/2 -translate-x-1/2",
+    showMenu = true,
+} = Astro.props;
+const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<slot name="form">
+    <div
+        class:list={[
+            "menu h-fit w-fit p-4 box-border absolute top-4 z-50 bg-white text-black flex flex-col gap-2",
+            menuPosition,
+        ]}
+    >
+        <form id={`slider-form-${uniqueId}`} class="flex flex-col gap-2"></form>
+    </div>
+</slot>
+
+<!-- STAGE -->
+
+<!-- Actual al fondo -->
+<div
+    id={uniqueId}
+    class:list={["h-full w-full absolute inset-0 z-10", bgColor]}
+>
+    <section class="grid place-items-center h-full text-5xl font-extrabold">
+        <slot />
+    </section>
+</div>
+
+<script define:vars={{ uniqueId, menuPosition, showMenu }}>
+    if (showMenu) {
+        const sliderForm = document.getElementById(`slider-form-${uniqueId}`);
+        const sectionElement = document.getElementById(uniqueId);
+
+        // Move form to form container
+        const formSlot = document.querySelector(`[name="form"]`);
+        const formContainer = document.getElementById("form-container");
+        if (formSlot && formContainer) {
+            const formContent = formSlot.firstElementChild;
+            if (formContent) {
+                formContainer.appendChild(formContent);
+            }
+        }
+
+        function createAndSetupSlider(options) {
+            if (!sliderForm || !sectionElement) return;
+
+            const { id, labelText, min, max, value, cssVariable } = options;
+            const uniqueInputId = `${id}-${uniqueId}`;
+
+            const container = document.createElement("div");
+            container.classList.add("flex", "flex-col");
+
+            const mainLabel = document.createElement("label");
+            mainLabel.htmlFor = uniqueInputId;
+            mainLabel.textContent = labelText;
+
+            const slider = document.createElement("input");
+            slider.type = "range";
+            slider.id = uniqueInputId;
+            slider.min = min;
+            slider.max = max;
+            slider.value = value;
+
+            const valueLabel = document.createElement("label");
+            valueLabel.htmlFor = uniqueInputId;
+            valueLabel.id = `${uniqueInputId}Label`;
+            valueLabel.textContent = value;
+
+            container.appendChild(mainLabel);
+            container.appendChild(slider);
+            container.appendChild(valueLabel);
+            sliderForm.appendChild(container);
+
+            const update = () => {
+                valueLabel.textContent = slider.value;
+                sectionElement.style.setProperty(
+                    cssVariable,
+                    `${slider.value}%`,
+                );
+            };
+
+            slider.addEventListener("input", update);
+            update(); // Initial update
+        }
+
+        const sliders = [
+            {
+                id: "xDisplacementInput",
+                labelText: "X-Displacement",
+                min: "0",
+                max: "100",
+                value: "0",
+                cssVariable: "--x-displacement",
+            },
+            {
+                id: "wipeAngleInput",
+                labelText: "Wipe Angle",
+                min: "0",
+                max: "100",
+                value: "40",
+                cssVariable: "--wipe-angle",
+            },
+            {
+                id: "staticXOffsetInput",
+                labelText: "Static X-Offset",
+                min: "-100",
+                max: "100",
+                value: "0",
+                cssVariable: "--static-x-offset",
+            },
+        ];
+
+        sliders.forEach(createAndSetupSlider);
+    }
+</script>
+
+<style>
+    [id^="section-"] {
+        /* --- VARIABLES DE CONTROL (Sliders) --- */
+
+        /* Desplazamiento horizontal de la transición. Controla qué tan lejos se mueven los puntos derechos del polígono. */
+        --x-displacement: 0%;
+        /* Desplazamiento horizontal estático. Mueve toda la forma a la izquierda o derecha. */
+        --static-x-offset: 0%;
+        /* Ángulo de la transición. Controla la inclinación de los bordes superior e inferior. */
+        --wipe-angle: 40%;
+
+        /* --- PUNTOS DEL POLÍGONO (clip-path) --- */
+        /* El clip-path es un polígono de 4 puntos que define el área visible. */
+        /* Estos puntos se calculan a partir de las variables de control. */
+
+        /* P1: Esquina superior izquierda del polígono. */
+        --x1-position: var(--static-x-offset);
+        --y1-position: 0%;
+
+        /* P2: Esquina inferior izquierda del polígono. */
+        --x2-position: var(--static-x-offset);
+        --y2-position: 100%;
+
+        /* Variable intermedia para el ángulo, aunque no se usa en los cálculos finales de x3/x4. */
+        --wipe-angle-modified: calc(var(--wipe-angle) - var(--static-x-offset));
+
+        /* P3: Esquina inferior derecha del polígono. */
+        --x3-position: calc(
+            var(--wipe-angle) + var(--x2-position) + var(--x-displacement)
+        );
+        --y3-position: var(--y2-position);
+
+        /* P4: Esquina superior derecha del polígono. */
+        --x4-position: calc(var(--x1-position) + var(--x-displacement));
+        --y4-position: var(--y1-position);
+    }
+
+    [id^="section-"] {
+        /* 
+            Aplica el recorte a la capa #prev.
+            La forma del polígono se define por los 4 puntos (P1, P2, P3, P4) calculados arriba.
+            La sintaxis es: polygon(x1 y1, x2 y2, x3 y3, x4 y4)
+        */
+        clip-path: polygon(
+            var(--x1-position) var(--y1-position),
+            var(--x2-position) var(--y2-position),
+            var(--x3-position) var(--y3-position),
+            var(--x4-position) var(--y4-position)
+        );
+    }
+</style>
