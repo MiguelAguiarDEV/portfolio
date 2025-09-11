@@ -26,62 +26,69 @@ import NavBar from "../components/NavBar.astro";
     <body class="bg-[#111111] m-0 overflow-hidden text-white">
         <FormContainer />
         <NavBar />
-        <main
-            id="app-main"
-            class="h-[100dvh] w-screen p-4 box-border p4 relative"
-        >
-            <Section sectionName="Home" bgColor="bg-red-500" itsFirst={true}>
-                <div>SECCIÓN 1</div>
-            </Section>
-            <Section sectionName="About" bgColor="bg-blue-500">
-                <div>SECCIÓN 2</div>
-            </Section>
-            <Section sectionName="Contact" bgColor="bg-green-500">
-                <div>SECCIÓN 3</div>
-            </Section>
+        <main id="app-main" class="h-[100dvh] w-screen p-4 box-border relative">
+            <Section sectionName="Home" bgColor="bg-red-500" itsFirst={true}
+                >Section 1</Section
+            >
+            <Section sectionName="About" bgColor="bg-blue-500"
+                >Section 2</Section
+            >
+            <Section sectionName="Contact" bgColor="bg-green-500"
+                >Section 3</Section
+            >
         </main>
+
         <script>
             // @ts-nocheck
             const sections = Array.from(
                 document.querySelectorAll('[id^="section-"]'),
             );
+            let active =
+                sections.find((s) => s.classList.contains("wiped")) || null;
+            let token = 0;
 
-            const parents = sections.map((s) => s.parentElement);
-
-            function byId(id) {
-                return document.getElementById(id);
-            }
-            function toId(name) {
-                return "section-" + name.toLowerCase();
-            }
+            const byId = (id) => document.getElementById(id);
+            const toId = (name) => "section-" + String(name).toLowerCase();
 
             function play(sectionEl) {
-                if (!sectionEl) return;
+                if (!sectionEl || sectionEl === active) return;
+                const my = ++token;
 
-                sectionEl.classList.remove("play-wipe");
-                void sectionEl.offsetWidth; // reflow
+                // z-index: sólo el target arriba
+                sections.forEach((s) => s.classList.remove("on-top"));
+                sectionEl.classList.add("on-top");
+
+                // reiniciar animación del target
+                sectionEl.classList.remove("play-wipe"); // por si estaba corriendo
+                // no quitamos 'wiped' a otras; se quedan abiertas como pediste
+                sectionEl.classList.remove("wiped");
+                void sectionEl.offsetWidth; // reflow para resetear anim
                 sectionEl.classList.add("play-wipe");
-                // sectionEl.classList.add("has-played");
+
+                const onEnd = (e) => {
+                    if (e.animationName !== "wipeAnimation" || my !== token)
+                        return;
+                    sectionEl.removeEventListener("animationend", onEnd);
+                    sectionEl.classList.remove("play-wipe");
+                    sectionEl.classList.add("wiped"); // fijar estado al terminar
+                    active = sectionEl;
+                };
+                sectionEl.addEventListener("animationend", onEnd, {
+                    once: true,
+                });
+
+                sectionEl.addEventListener(
+                    "animationcancel",
+                    () => {
+                        if (my !== token) return;
+                        sectionEl.classList.remove("play-wipe");
+                    },
+                    { once: true },
+                );
             }
 
-            window.setActiveSection = (name) => {
-                const targetId = toId(name);
-                sections.forEach((s) => {
-                    const p = s.parentElement;
-                    p.style.zIndex = s.id === targetId ? "30" : "5";
-                    console.log(
-                        "Set zIndex of Parent",
-                        s.id,
-                        "to",
-                        p.style.zIndex,
-                    );
-                });
-                play(byId(targetId));
-            };
-            document.querySelectorAll("section").forEach((section) => {
-                console.log("Playing initial animation for", section);
-            });
+            // API global para la NavBar
+            window.setActiveSection = (name) => play(byId(toId(name)));
         </script>
-        <style></style>
     </body>
 </html>

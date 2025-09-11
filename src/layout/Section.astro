@@ -1,6 +1,4 @@
 ---
-import SectionControls from "../components/SectionControls.astro";
-
 interface Props {
     bgColor?: string;
     showMenu?: boolean;
@@ -10,9 +8,9 @@ interface Props {
     defaultX?: number;
     defaultWipe?: number;
     defaultStatic?: number;
-    sectionName?: string; // nombre legible para generar un id estable
-    zIndex?: number; // índice z opcional para controlar la superposición
-    itsFirst?: boolean; // si es la primera sección, para ajustes específicos
+    sectionName?: string;
+    zIndex?: number; // z base (queda en --z)
+    itsFirst?: boolean; // si es la primera, empieza “abierta”
 }
 
 const {
@@ -28,8 +26,8 @@ const {
     zIndex = 10,
     itsFirst = false,
 } = Astro.props;
+
 const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
-// Genera un id estable a partir del nombre si se provee (slug sencillo)
 const stableId = sectionName
     ? `section-${sectionName
           .toString()
@@ -40,30 +38,14 @@ const stableId = sectionName
     : uniqueId;
 ---
 
-{
-    showMenu && (
-        <SectionControls
-            sectionId={stableId}
-            bgColor={bgColor}
-            title="Controls"
-            showXDisplacement={showXDisplacement}
-            showWipeAngle={showWipeAngle}
-            showStaticXOffset={showStaticXOffset}
-            defaultX={defaultX}
-            defaultWipe={defaultWipe}
-            defaultStatic={defaultStatic}
-        />
-    )
-}
-
 <div
     id={stableId}
     class:list={[
         "section h-full w-full absolute inset-0",
         bgColor,
-        `z-${zIndex} ${itsFirst ? "wiped" : ""}`,
+        itsFirst ? "wiped" : "",
     ]}
-    style={`--x-displacement: ${defaultX}%; --wipe-angle: ${defaultWipe}%; --static-x-offset: ${defaultStatic}%;`}
+    style={`--x-displacement:${defaultX}%; --wipe-angle:${defaultWipe}%; --static-x-offset:${defaultStatic}%; --z:${zIndex};`}
 >
     <section class="grid place-items-center h-full text-5xl font-extrabold">
         <slot />
@@ -71,8 +53,16 @@ const stableId = sectionName
 </div>
 
 <style>
-    /* Estado inicial: mostrar la sección completa antes de cualquier animación */
+    /* Posicionamiento y capa base mediante variable */
+    .section {
+        position: absolute;
+        inset: 0;
+        z-index: var(--z, 0);
+        contain: paint;
+        will-change: clip-path;
+    }
 
+    /* Variables por defecto y geometría */
     [id^="section-"] {
         --x-displacement: 0%;
         --static-x-offset: -41%;
@@ -93,8 +83,12 @@ const stableId = sectionName
 
         --x4-position: calc(var(--x1-position) + var(--x-displacement));
         --y4-position: var(--y1-position);
+
+        --wipe-duration: 4s;
+        --wipe-ease: linear;
     }
 
+    /* Estado visible según polígono actual */
     [id^="section-"] {
         clip-path: polygon(
             var(--x1-position) var(--y1-position),
@@ -103,15 +97,26 @@ const stableId = sectionName
             var(--x4-position) var(--y4-position)
         );
     }
-    /* La animación solo se activa añadiendo la clase .play-wipe */
+
+    /* Ejecuta animación sin forwards */
     .play-wipe {
-        animation: wipeAnimation 4s linear forwards;
+        animation: wipeAnimation var(--wipe-duration) var(--wipe-ease);
+    }
+
+    /* La activa sube por encima de cualquier --z */
+    .on-top {
+        z-index: 50;
+    }
+
+    /* Consolidado tras animationend */
+    .section.wiped {
+        clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0);
+        animation: none !important;
     }
 
     @keyframes wipeAnimation {
         0% {
         }
-
         100% {
             clip-path: polygon(
                 var(--x1-position) var(--y1-position),
@@ -123,7 +128,9 @@ const stableId = sectionName
         }
     }
 
-    .wiped {
-        clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0);
+    @media (prefers-reduced-motion: reduce) {
+        .play-wipe {
+            animation: none;
+        }
     }
 </style>
