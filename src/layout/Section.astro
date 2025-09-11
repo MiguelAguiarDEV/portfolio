@@ -11,6 +11,8 @@ interface Props {
     defaultWipe?: number;
     defaultStatic?: number;
     sectionName?: string; // nombre legible para generar un id estable
+    zIndex?: number; // índice z opcional para controlar la superposición
+    itsFirst?: boolean; // si es la primera sección, para ajustes específicos
 }
 
 const {
@@ -23,6 +25,8 @@ const {
     defaultWipe = 40,
     defaultStatic = -41,
     sectionName,
+    zIndex = 10,
+    itsFirst = false,
 } = Astro.props;
 const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
 // Genera un id estable a partir del nombre si se provee (slug sencillo)
@@ -54,7 +58,11 @@ const stableId = sectionName
 
 <div
     id={stableId}
-    class:list={["h-full w-full absolute inset-0 z-10", bgColor]}
+    class:list={[
+        "section h-full w-full absolute inset-0",
+        bgColor,
+        `z-${zIndex} ${itsFirst ? "wiped" : ""}`,
+    ]}
     style={`--x-displacement: ${defaultX}%; --wipe-angle: ${defaultWipe}%; --static-x-offset: ${defaultStatic}%;`}
 >
     <section class="grid place-items-center h-full text-5xl font-extrabold">
@@ -63,6 +71,8 @@ const stableId = sectionName
 </div>
 
 <style>
+    /* Estado inicial: mostrar la sección completa antes de cualquier animación */
+
     [id^="section-"] {
         --x-displacement: 0%;
         --static-x-offset: -41%;
@@ -111,5 +121,9 @@ const stableId = sectionName
                 calc(var(--x1-position) + 141%) var(--y4-position)
             );
         }
+    }
+
+    .wiped {
+        clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0);
     }
 </style>

@@ -30,15 +30,58 @@ import NavBar from "../components/NavBar.astro";
             id="app-main"
             class="h-[100dvh] w-screen p-4 box-border p4 relative"
         >
-            <Section bgColor="bg-red-500">
+            <Section sectionName="Home" bgColor="bg-red-500" itsFirst={true}>
                 <div>SECCIÓN 1</div>
             </Section>
-            <Section bgColor="bg-blue-500">
+            <Section sectionName="About" bgColor="bg-blue-500">
                 <div>SECCIÓN 2</div>
             </Section>
-            <Section bgColor="bg-green-500">
+            <Section sectionName="Contact" bgColor="bg-green-500">
                 <div>SECCIÓN 3</div>
             </Section>
         </main>
+        <script>
+            // @ts-nocheck
+            const sections = Array.from(
+                document.querySelectorAll('[id^="section-"]'),
+            );
+
+            const parents = sections.map((s) => s.parentElement);
+
+            function byId(id) {
+                return document.getElementById(id);
+            }
+            function toId(name) {
+                return "section-" + name.toLowerCase();
+            }
+
+            function play(sectionEl) {
+                if (!sectionEl) return;
+
+                sectionEl.classList.remove("play-wipe");
+                void sectionEl.offsetWidth; // reflow
+                sectionEl.classList.add("play-wipe");
+                // sectionEl.classList.add("has-played");
+            }
+
+            window.setActiveSection = (name) => {
+                const targetId = toId(name);
+                sections.forEach((s) => {
+                    const p = s.parentElement;
+                    p.style.zIndex = s.id === targetId ? "30" : "5";
+                    console.log(
+                        "Set zIndex of Parent",
+                        s.id,
+                        "to",
+                        p.style.zIndex,
+                    );
+                });
+                play(byId(targetId));
+            };
+            document.querySelectorAll("section").forEach((section) => {
+                console.log("Playing initial animation for", section);
+            });
+        </script>
+        <style></style>
     </body>
 </html>
