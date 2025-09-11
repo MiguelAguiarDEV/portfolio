@@ -93,7 +93,8 @@ const stableId = sectionName
             var(--x4-position) var(--y4-position)
         );
     }
-    [id^="section-"] {
+    /* La animación solo se activa añadiendo la clase .play-wipe */
+    .play-wipe {
         animation: wipeAnimation 4s linear forwards;
     }
 
