@@ -6,6 +6,9 @@ interface Props {
     showXDisplacement?: boolean;
     showWipeAngle?: boolean;
     showStaticXOffset?: boolean;
+    defaultX?: number;
+    defaultWipe?: number;
+    defaultStatic?: number;
 }
 
 const {
@@ -15,6 +18,9 @@ const {
     showXDisplacement = true,
     showWipeAngle = true,
     showStaticXOffset = true,
+    defaultX = 0,
+    defaultWipe = 40,
+    defaultStatic = 41,
 } = Astro.props;
 
 // Precompute unique element IDs for sliders and their value labels
@@ -26,7 +32,7 @@ const staticId = `staticXOffsetInput-${sectionId}`;
 const staticLabelId = `${staticId}Label`;
 const resetBtnId = `reset-${sectionId}`;
 // Fallback defaults aligned with Section's CSS vars; runtime will refine from actual DOM values
-const serverDefaults = { x: 0, wipe: 40, stat: 41 };
+const serverDefaults = { x: defaultX, wipe: defaultWipe, stat: defaultStatic };
 ---
 
 <form

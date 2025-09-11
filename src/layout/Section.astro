@@ -10,6 +10,7 @@ interface Props {
     defaultX?: number;
     defaultWipe?: number;
     defaultStatic?: number;
+    sectionName?: string; // nombre legible para generar un id estable
 }
 
 const {
@@ -21,14 +22,24 @@ const {
     defaultX = 0,
     defaultWipe = 40,
     defaultStatic = -41,
+    sectionName,
 } = Astro.props;
 const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
+// Genera un id estable a partir del nombre si se provee (slug sencillo)
+const stableId = sectionName
+    ? `section-${sectionName
+          .toString()
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-_]/g, "")
+          .replace(/\s+/g, "-")}`
+    : uniqueId;
 ---
 
 {
     showMenu && (
         <SectionControls
-            sectionId={uniqueId}
+            sectionId={stableId}
             bgColor={bgColor}
             title="Controls"
             showXDisplacement={showXDisplacement}
@@ -42,7 +53,7 @@ const uniqueId = `section-${Math.random().toString(36).slice(2, 9)}`;
 }
 
 <div
-    id={uniqueId}
+    id={stableId}
     class:list={["h-full w-full absolute inset-0 z-10", bgColor]}
     style={`--x-displacement: ${defaultX}%; --wipe-angle: ${defaultWipe}%; --static-x-offset: ${defaultStatic}%;`}
 >

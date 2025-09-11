@@ -1,0 +1,72 @@
+---
+interface LinkItem {
+    label: string;
+    href: string;
+    targetId?: string;
+}
+interface Props {
+    links?: LinkItem[];
+    activeId?: string;
+    sticky?: boolean;
+}
+const {
+    links = [
+        { label: "Home", href: "#home", targetId: "home" },
+        { label: "About", href: "#about", targetId: "about" },
+        { label: "Contact", href: "#contact", targetId: "contact" },
+    ],
+    activeId = "home",
+    sticky = true,
+} = Astro.props;
+---
+
+<header
+    class={`w-full top-0 left-0 z-50 ${sticky ? "fixed" : "absolute"} flex justify-center pointer-events-none`}
+>
+    <nav
+        class="pointer-events-auto mt-3 flex items-center gap-1 rounded-2xl px-3 py-1.5 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.15),0_4px_12px_-2px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] border border-white/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.25)_0%,rgba(255,255,255,0.08)_100%)] dark:bg-[linear-gradient(135deg,rgba(20,20,20,0.55)_0%,rgba(20,20,20,0.35)_100%)] text-[13px] font-medium select-none"
+    >
+        {
+            links.map((l) => (
+                <a
+                    href={l.href}
+                    data-target={l.targetId}
+                    class={`relative px-3 py-1 rounded-xl transition duration-300 outline-none focus-visible:ring-2 ring-white/60 hover:bg-white/10/40 dark:hover:bg-white/10 ${l.targetId === activeId ? "text-white" : "text-white/70"} group`}
+                >
+                    <span
+                        class="mix-blend-overlay group-hover:mix-blend-normal"
+                        aria-hidden="true"
+                    >
+                        {l.label}
+                    </span>
+                </a>
+            ))
+        }
+    </nav>
+</header>
+
+<style>
+    .glass-separator {
+        background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.4),
+            rgba(255, 255, 255, 0)
+        );
+        width: 1px;
+        height: 16px;
+        opacity: 0.4;
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    document.addEventListener("click", (e) => {
+        const a = e.target.closest("a[data-target]");
+        if (!a) return;
+        const id = a.getAttribute("data-target");
+        if (id && typeof window.setActiveSection === "function") {
+            e.preventDefault();
+            window.setActiveSection(id);
+        }
+    });
+</script>

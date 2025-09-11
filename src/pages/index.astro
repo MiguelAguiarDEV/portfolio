@@ -2,6 +2,7 @@
 import "@/styles/global.css";
 import Section from "@/layout/Section.astro";
 import FormContainer from "../components/FormContainer.astro";
+import NavBar from "../components/NavBar.astro";
 ---
 
 <!doctype html>
@@ -9,16 +10,27 @@ import FormContainer from "../components/FormContainer.astro";
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link
+            rel="icon"
+            href="/favicon-dark.svg"
+            media="(prefers-color-scheme: light)"
+        />
+        <link
+            rel="icon"
+            href="/favicon-light.svg"
+            media="(prefers-color-scheme: dark)"
+        />
         <title>Wipe con navbar</title>
     </head>
 
     <body class="bg-[#111111] m-0 overflow-hidden text-white">
         <FormContainer />
+        <NavBar />
         <main
             id="app-main"
             class="h-[100dvh] w-screen p-4 box-border p4 relative"
         >
-            <Section bgColor="bg-red-500 z-40">
+            <Section bgColor="bg-red-500">
                 <div>SECCIÓN 1</div>
             </Section>
             <Section bgColor="bg-blue-500">
