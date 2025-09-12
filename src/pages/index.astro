@@ -53,22 +53,22 @@ import NavBar from "../components/NavBar.astro";
             const sections = Array.from(
                 document.querySelectorAll('[id^="section-"]'),
             );
-            let active =
-                sections.find((s) => s.classList.contains("active")) || null;
-
-            let last = active;
-            let click = 0;
 
             function play(sectionEl) {
-                ++click;
-                console.log(`Play click #${click}`);
-
                 if (sectionEl === active) {
                     console.log("Already active");
                     return;
                 }
 
                 sections.forEach((s) => {
+                    if (s.classList.contains("play-wipe" || s !== sectionEl)) {
+                        s.classList.remove("play-wipe");
+                        s.classList.add("wiped");
+                        s.classList.add("last");
+                        s.classList.remove("active");
+                        play(sectionEl);
+                        return;
+                    }
                     if (s.classList.contains("last")) {
                         s.classList.remove("last");
                         return;
@@ -86,8 +86,8 @@ import NavBar from "../components/NavBar.astro";
 
                 sectionEl.classList.remove("wiped");
                 sectionEl.classList.add("active");
+                active = sectionEl;
                 sectionEl.classList.add("play-wipe");
-                //Verifica que la animacion termino y anade .wiped
                 sectionEl.addEventListener(
                     "animationend",
                     () => {
@@ -96,24 +96,8 @@ import NavBar from "../components/NavBar.astro";
                     },
                     { once: true },
                 );
-
-                active = sectionEl;
-
-                console.log(
-                    "Last was: ",
-                    last?.id,
-                    "Z: ",
-                    window.getComputedStyle(last).getPropertyValue("z-index"),
-                );
-                console.log(
-                    "Active is: ",
-                    active?.id,
-                    "Z: ",
-                    window.getComputedStyle(active).getPropertyValue("z-index"),
-                );
             }
 
-            // API global para la NavBar
             window.setActiveSection = (name) => play(byId(toId(name)));
         </script>
     </body>
