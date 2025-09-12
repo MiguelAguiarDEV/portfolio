@@ -40,63 +40,76 @@ import NavBar from "../components/NavBar.astro";
 
         <script>
             // @ts-nocheck
+            const toId = (name) =>
+                `section-${name
+                    .toString()
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-_]/g, "")
+                    .replace(/\s+/g, "-")}`;
+
+            const byId = (id) => document.getElementById(id);
+
             const sections = Array.from(
                 document.querySelectorAll('[id^="section-"]'),
             );
             let active =
                 sections.find((s) => s.classList.contains("active")) || null;
-            let lastActive = active;
 
-            let token = 0;
-
-            const byId = (id) => document.getElementById(id);
-            const toId = (name) => "section-" + String(name).toLowerCase();
+            let last = active;
+            let click = 0;
 
             function play(sectionEl) {
-                if (!sectionEl || sectionEl === active) return;
+                ++click;
+                console.log(`Play click #${click}`);
 
-                if (sectionEl.classList.contains("play-wipe")) return; // ya está en animación
+                if (sectionEl === active) {
+                    console.log("Already active");
+                    return;
+                }
 
-                const my = ++token;
-
-                // z-index: sólo el target arriba
                 sections.forEach((s) => {
                     if (s.classList.contains("last")) {
                         s.classList.remove("last");
+                        return;
                     }
                     if (s.classList.contains("active")) {
                         s.classList.remove("active");
-                        s.classList.add("last"); // marcar la que acaba de dejar de ser activa
-                    }
-                }); // quitar a todas
-                sectionEl.classList.add("active");
-
-                // no quitamos 'wiped' a otras; se quedan abiertas como pediste
-                sectionEl.classList.remove("wiped");
-                void sectionEl.offsetWidth; // reflow para resetear anim
-                sectionEl.classList.add("play-wipe");
-                sectionEl.classList.remove("last");
-
-                const onEnd = (e) => {
-                    if (e.animationName !== "wipeAnimation" || my !== token)
+                        s.classList.add("last");
+                        last = s;
+                        const zIndex = window
+                            .getComputedStyle(s)
+                            .getPropertyValue("z-index");
                         return;
-                    sectionEl.removeEventListener("animationend", onEnd);
-                    sectionEl.classList.remove("play-wipe");
-                    sectionEl.classList.add("wiped"); // fijar estado al terminar
-
-                    active = sectionEl;
-                };
-                sectionEl.addEventListener("animationend", onEnd, {
-                    once: true,
+                    }
                 });
 
+                sectionEl.classList.remove("wiped");
+                sectionEl.classList.add("active");
+                sectionEl.classList.add("play-wipe");
+                //Verifica que la animacion termino y anade .wiped
                 sectionEl.addEventListener(
-                    "animationcancel",
+                    "animationend",
                     () => {
-                        if (my !== token) return;
                         sectionEl.classList.remove("play-wipe");
+                        sectionEl.classList.add("wiped");
                     },
                     { once: true },
+                );
+
+                active = sectionEl;
+
+                console.log(
+                    "Last was: ",
+                    last?.id,
+                    "Z: ",
+                    window.getComputedStyle(last).getPropertyValue("z-index"),
+                );
+                console.log(
+                    "Active is: ",
+                    active?.id,
+                    "Z: ",
+                    window.getComputedStyle(active).getPropertyValue("z-index"),
                 );
             }
 

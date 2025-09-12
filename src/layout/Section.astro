@@ -1,4 +1,6 @@
 ---
+import SectionControls from "@/components/SectionControls.astro";
+
 interface Props {
     bgColor?: string;
     showMenu?: boolean;
@@ -37,6 +39,22 @@ const stableId = sectionName
           .replace(/\s+/g, "-")}`
     : uniqueId;
 ---
+
+{
+    showMenu && (
+        <SectionControls
+            sectionId={stableId}
+            bgColor={bgColor}
+            title="Controls"
+            showXDisplacement={showXDisplacement}
+            showWipeAngle={showWipeAngle}
+            showStaticXOffset={showStaticXOffset}
+            defaultX={defaultX}
+            defaultWipe={defaultWipe}
+            defaultStatic={defaultStatic}
+        />
+    )
+}
 
 <div
     id={stableId}
@@ -84,7 +102,7 @@ const stableId = sectionName
         --x4-position: calc(var(--x1-position) + var(--x-displacement));
         --y4-position: var(--y1-position);
 
-        --wipe-duration: 4s;
+        --wipe-duration: 500ms;
         --wipe-ease: linear;
     }
 
@@ -125,7 +143,7 @@ const stableId = sectionName
             clip-path: polygon(
                 var(--x1-position) var(--y1-position),
                 var(--x2-position) var(--y2-position),
-                calc(var(--wipe-angle) + var(--x2-position) + 101%)
+                calc(var(--wipe-angle) + var(--x2-position) + 141%)
                     var(--y3-position),
                 calc(var(--x1-position) + 141%) var(--y4-position)
             );
