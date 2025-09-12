@@ -55,8 +55,7 @@ import NavBar from "../components/NavBar.astro";
             );
 
             function play(sectionEl) {
-                if (sectionEl === active) {
-                    console.log("Already active");
+                if (sectionEl.classList.contains("active")) {
                     return;
                 }
 
@@ -76,7 +75,6 @@ import NavBar from "../components/NavBar.astro";
                     if (s.classList.contains("active")) {
                         s.classList.remove("active");
                         s.classList.add("last");
-                        last = s;
                         const zIndex = window
                             .getComputedStyle(s)
                             .getPropertyValue("z-index");
@@ -86,7 +84,6 @@ import NavBar from "../components/NavBar.astro";
 
                 sectionEl.classList.remove("wiped");
                 sectionEl.classList.add("active");
-                active = sectionEl;
                 sectionEl.classList.add("play-wipe");
                 sectionEl.addEventListener(
                     "animationend",
