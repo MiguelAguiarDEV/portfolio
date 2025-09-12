@@ -43,7 +43,7 @@ const stableId = sectionName
     class:list={[
         "section h-full w-full absolute inset-0",
         bgColor,
-        itsFirst ? "wiped" : "",
+        itsFirst ? "wiped active" : "",
     ]}
     style={`--x-displacement:${defaultX}%; --wipe-angle:${defaultWipe}%; --static-x-offset:${defaultStatic}%; --z:${zIndex};`}
 >
@@ -104,8 +104,12 @@ const stableId = sectionName
     }
 
     /* La activa sube por encima de cualquier --z */
-    .on-top {
+    .active {
         z-index: 50;
+    }
+
+    .last {
+        z-index: 40;
     }
 
     /* Consolidado tras animationend */
