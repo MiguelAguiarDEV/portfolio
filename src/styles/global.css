@@ -18,257 +18,40 @@ body {
     overflow: hidden;
 }
 
-#app-main {
-    background: #161616;
+header {
+    margin-top: 1rem;
 }
 
-/* paneles */
-.panel {
-    position: absolute;
-    inset: 0;
-    contain: paint;
-    will-change: opacity;
-    opacity: 0;
-    visibility: hidden;
+#nav-dynamic {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 1rem;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    gap: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.panel.is-active {
-    opacity: 1;
-    visibility: visible;
-}
 
-/* Wipe: rectángulo rotado cuyo ANCHO crece; alto fijo grande para cubrir */
-.panel .wipe {
-    position: absolute;
-    left: -12vmax;
-    top: -100vmax;
-    height: 190vmax;
-    /* grosor del “barrido” */
-    width: 0;
-    /* empieza sin ancho */
-    border-radius: 24px;
-    z-index: 20;
-
-    --wipe-color: #161616;
-    box-shadow: 0 0 800px 120px var(--wipe-color);
-    /* fallback */
-    background: var(--wipe-color);
-
-    transform-origin: 0 0;
-    transform: rotate(25deg);
-    /* diagonal sup-izq → inf-der */
-    will-change: width;
-    /* optimiza para cambiar width */
-}
-
-/* Borde/brillo del mismo color usando máscara */
-/* .panel .wipe::after {
-    content: "";
-    position: absolute;
-    inset: -10px;
-    border-radius: inherit;
-    background: var(--wipe-color);
-
-    padding: 10px;
-    background-image: url("/noiseTex.webp");
-    background-size: 1000px 1000px;
-    background-repeat: repeat;
-    pointer-events: none;
-    opacity: .5;
-} */
-
-.noise {
-    background-image: url("/noiseTex.webp");
-    background-size: 100px 100px;
-    background-repeat: repeat;
-    opacity: .5;
-}
-
-/* Animación por ancho: 0 → valor enorme para cubrir seguro */
-@keyframes wipeGrowW {
-    from {
-        width: 0;
-    }
-
-    to {
-        width: 175vmax;
-    }
-}
-
-.panel.reveal .wipe {
-    animation: wipeGrowW 810ms cubic-bezier(.2, 0, .8, 1) both;
-}
-
-:root {
-    --dot-ease: cubic-bezier(.22, .61, .36, 1);
-    --dot-pop: 160ms;
-}
-
-/* estado base del botón del dot */
-color-dot>button {
-    position: relative;
-    transition:
-        transform var(--dot-pop) var(--dot-ease),
-        box-shadow var(--dot-pop) var(--dot-ease),
-        outline-offset var(--dot-pop) var(--dot-ease);
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-    /* sin borde visible */
-    outline: 0;
-    /* no uses outline si quieres animación suave */
-}
-
-/* activo: borde blanco animado + “pop” */
-color-dot[data-active="true"]>button {
-    box-shadow: 0 0 0 2px #fff;
-    /* borde blanco animable */
-    animation: dot-pop var(--dot-pop) var(--dot-ease) 1;
-}
-
-/* anillo efímero que se expande al activarse */
-color-dot>button::after {
-    content: "";
-    position: absolute;
-    inset: -6px;
-    border-radius: 9999px;
-    border: 2px solid #fff;
-    opacity: 0;
-    transform: scale(.6);
-    pointer-events: none;
-}
-
-color-dot[data-active="true"]>button::after {
-    animation: dot-ring 360ms ease-out 1;
-}
-
-/* keyframes */
-@keyframes dot-pop {
-    0% {
-        transform: scale(.85);
-    }
-
-    60% {
-        transform: scale(1.2);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes dot-ring {
-    0% {
-        opacity: .6;
-        transform: scale(.6);
-    }
-
-    100% {
-        opacity: 0;
-        transform: scale(1.4);
-    }
-}
-
-/* accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-    color-dot>button {
-        transition: none;
-        animation: none;
-    }
-
-    color-dot>button::after {
-        animation: none;
-    }
-}
-
-/* Copia por encima con imagen */
-.panel .wipe.wipe--img {
-    z-index: 30;
-    /* encima de la wipe base */
-    background-position: center;
-    background-repeat: repeat;
-    pointer-events: none;
-    opacity: .30;
-    /* no bloquea clics */
-}
-
-/* Sin halo en la copia */
-.panel .wipe.wipe--img::after {
-    content: none;
-}
-
-/* Texto por encima si lo necesitas */
-.panel>span {
-    position: relative;
-    z-index: 40;
-}
-
-/* (opcional) explícito, misma animación */
-/* .panel.reveal .wipe.wipe--img {
-    animation: wipeGrowW 900ms linear both;
-} */
-
-/* ----- UI: Range Slider styling ----- */
-.ui-range {
-    -webkit-appearance: none;
-    appearance: none;
-    height: 0.5rem;
-    /* track height */
-    border-radius: 9999px;
-    background:
-        linear-gradient(to right, rgba(99, 102, 241, 0.7), rgba(99, 102, 241, 0.25)) left/0% 100% no-repeat,
-        rgba(24, 24, 27, 0.15);
-}
-
-.ui-range:focus {
-    outline: none;
-}
-
-/* WebKit track */
-.ui-range::-webkit-slider-runnable-track {
-    height: 0.5rem;
-    border-radius: 9999px;
+#nav-dynamic button {
     background: transparent;
-    /* we draw on input bg */
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    transition: opacity 0.15s, background 0.15s, box-shadow 0.15s;
+    opacity: 0.5;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
 }
 
-/* WebKit thumb */
-.ui-range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 1rem;
-    height: 1rem;
-    margin-top: -0.25rem;
-    /* centers on 0.5rem track */
-    border-radius: 9999px;
-    background: #6366f1;
-    /* indigo-500 */
-    border: 2px solid white;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+#nav-dynamic button:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
 }
 
-/* Firefox */
-.ui-range::-moz-range-track {
-    height: 0.5rem;
-    border-radius: 9999px;
-    background: rgba(24, 24, 27, 0.15);
+#nav-dynamic button.active {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
 }
-
-.ui-range::-moz-range-progress {
-    height: 0.5rem;
-    border-radius: 9999px;
-    background: linear-gradient(to right, rgba(99, 102, 241, 0.7), rgba(99, 102, 241, 0.25));
-}
-
-.ui-range::-moz-range-thumb {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 9999px;
-    background: #6366f1;
-    border: 2px solid white;
-}
-
-/* Dynamic fill for WebKit using CSS variables */
-.ui-range {
-    --val: 0;
-}
-
-/* Update the fill width based on value via inline style in JS if desired */
