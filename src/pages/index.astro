@@ -1,8 +1,9 @@
 ---
 import "@/styles/global.css";
 import Section from "@/layout/Section.astro";
-import FormContainer from "../components/FormContainer.astro";
-import NavBar from "../components/NavBar.astro";
+import FormContainer from "@/components/FormContainer.astro";
+import NavBar from "@/components/NavBar.astro";
+import About from "@/components/sections/About.astro";
 ---
 
 <!doctype html>
@@ -27,12 +28,9 @@ import NavBar from "../components/NavBar.astro";
         <FormContainer />
         <NavBar />
         <main id="app-main" class="h-[100dvh] w-screen p-4 box-border relative">
-            <Section sectionName="Home" bgColor="bg-red-500" itsFirst={true}
-                >SECTION 1</Section
-            >
-            <Section sectionName="About" bgColor="bg-blue-500"
-                >SECTION 2</Section
-            >
+            <About />
+
+            <Section sectionName="Gay" bgColor="bg-blue-500">SECTION 2</Section>
             <Section sectionName="Contact" bgColor="bg-green-500"
                 >SECTION 3</Section
             >
