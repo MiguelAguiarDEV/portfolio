@@ -16,7 +16,7 @@ interface Props {
 }
 
 const {
-    bgColor = "bg-gray-500",
+    bgColor = "#6b7280",
     showMenu = false,
     showXDisplacement = true,
     showWipeAngle = true,
@@ -60,10 +60,9 @@ const stableId = sectionName
     id={stableId}
     class:list={[
         "section h-full w-full absolute inset-0",
-        bgColor,
         itsFirst ? "wiped active" : "",
     ]}
-    style={`--x-displacement:${defaultX}%; --wipe-angle:${defaultWipe}%; --static-x-offset:${defaultStatic}%; --z:${zIndex};`}
+    style={`background-color: ${bgColor}; --x-displacement:${defaultX}%; --wipe-angle:${defaultWipe}%; --static-x-offset:${defaultStatic}%; --z:${zIndex};`}
 >
     <section class="grid place-items-center h-full text-5xl font-extrabold">
         <slot />
