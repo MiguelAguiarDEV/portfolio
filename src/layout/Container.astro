@@ -1,0 +1,14 @@
+---
+interface Props {
+    sticky?: boolean;
+}
+const { sticky = true } = Astro.props;
+---
+
+<div
+    class={`container w-full h-full border border-white flex justify-center pointer-events-none`}
+>
+    <div class="pointer-events-auto">
+        <slot />
+    </div>
+</div>
