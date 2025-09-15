@@ -7,25 +7,23 @@
 }
 
 
-.layout-constrained {
+/* .layout-constrained {
     border: 2px solid #ff0000 !important;
-    /* Rojo para layout-constrained */
 }
 
 #nav-dynamic {
     border: 2px solid #00ff00 !important;
-    /* Verde para navbar */
 }
 
 .container {
     border: 2px solid #0000ff !important;
-    /* Azul para container */
 }
 
 .section {
     border: 2px solid #ffff00 !important;
-    /* Amarillo para sections */
 }
+ */
+
 
 /* base */
 html {
@@ -46,12 +44,8 @@ body {
     align-items: center;
 }
 
-header {
-    /* margin-top: 1rem;
-    height: 4rem; */
-}
 
-#nav-dynamic {
+/* #nav-dynamic {
 
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -63,25 +57,27 @@ header {
     gap: 1rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     width: fit-content;
-}
+    height: 20px;
+} */
 
 
 #nav-dynamic button {
-    height: 100%;
     background: transparent;
     border: none;
     cursor: pointer;
     color: inherit;
     transition: opacity 0.15s, background 0.15s, box-shadow 0.15s;
     opacity: 0.5;
-    padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     justify-content: center;
     align-items: center;
     display: flex;
+    height: 100%;
+    padding: 0.5rem 0.5rem;
 }
 
-#nav-dynamic button:hover {
+#nav-dynamic button:hover,
+header a:hover {
     opacity: 1;
     background: rgba(255, 255, 255, 0.15);
 }
@@ -117,7 +113,6 @@ header {
     width: 100%;
     position: absolute;
     z-index: 100;
-    border: 2px solid black;
 }
 
 header a {
@@ -128,7 +123,7 @@ header a {
     color: inherit;
     transition: opacity 0.15s, background 0.15s, box-shadow 0.15s;
     opacity: 0.5;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.5rem;
     border-radius: 0.5rem;
     justify-content: center;
     align-items: center;

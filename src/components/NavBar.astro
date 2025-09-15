@@ -1,12 +1,32 @@
 ---
 import Container from "@/layout/Container.astro";
+import { Linkedin, Github, Twitter } from "lucide-astro";
 ---
 
-<header class="header-layout">
-    <div class="layout-constrained w-full flex justify-between">
-        <Container class="name"> <a href="">NAME</a> </Container>
-        <nav id="nav-dynamic" class="pointer-events-auto"></nav>
-        <Container class="socials"><a href="">SOCIALS</a> </Container>
+<header class="header-layout mt-[1rem] h-[4rem]">
+    <div class="layout-constrained w-full h-full flex">
+        <Container class="icon !w-fit ml-0 mr-auto h-full p-[0.5rem]">
+            <img
+                src="/favicon-light.svg"
+                alt="Logo"
+                class="h-full w-auto opacity-50"
+            />
+        </Container>
+        <Container
+            id="nav-dynamic"
+            class="pointer-events-auto !h-full !w-fit"
+        />
+        <Container class="socials !w-fit mr-0 ml-auto flex gap-4 h-full">
+            <a href="" class="h-full flex items-center aspect-square">
+                <Linkedin class="h-full w-auto" />
+            </a>
+            <a href="" class="h-full flex items-center aspect-square">
+                <Github class="h-full w-auto" />
+            </a>
+            <a href="" class="h-full flex items-center aspect-square">
+                <Twitter class="h-full w-auto" />
+            </a>
+        </Container>
     </div>
 </header>
 

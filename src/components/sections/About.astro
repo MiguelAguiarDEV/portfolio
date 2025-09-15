@@ -4,5 +4,46 @@ import Container from "@/layout/Container.astro";
 ---
 
 <Section sectionName="About" bgColor="#0B4F4A" itsFirst={true}>
-    <Container> HOLA </Container>
+    <!-- <Container>
+        <div></div>
+    </Container> -->
+    <div class="h-full w-full flex gap-2 items-start">
+        <!-- Left column: image on top, one container below -->
+        <div class="h-full flex flex-col items-center gap-2">
+            <Container class="p-4 !h-full !py-[7rem] !pl-[7rem]">
+                <img src="/img/foto-yo.png" class="about-photo" />
+            </Container>
+        </div>
+
+        <!-- Right column: two stacked containers -->
+        <div class="flex flex-col gap-4 flex-1">
+            <Container class="p-4">
+                HOLA
+                <!-- top right -->
+                <!-- content top right -->
+            </Container>
+            <Container class="p-4">
+                HOLA
+                <!-- bottom right -->
+                <!-- content bottom right -->
+            </Container>
+        </div>
+    </div>
 </Section>
+<style>
+    .about-photo {
+        height: 100%;
+        mask: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 1) 70%,
+            rgba(0, 0, 0, 0) 100%
+        );
+        -webkit-mask: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 1) 70%,
+            rgba(0, 0, 0, 0) 100%
+        );
+    }
+</style>

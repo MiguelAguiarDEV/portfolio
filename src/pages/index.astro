@@ -4,6 +4,10 @@ import Section from "@/layout/Section.astro";
 import FormContainer from "@/components/FormContainer.astro";
 import NavBar from "@/components/NavBar.astro";
 import About from "@/components/sections/About.astro";
+import Experience from "@/components/sections/Experience.astro";
+import Projects from "@/components/sections/Projects.astro";
+import Skills from "@/components/sections/Skills.astro";
+import Contact from "@/components/sections/Contact.astro";
 ---
 
 <!doctype html>
@@ -29,13 +33,10 @@ import About from "@/components/sections/About.astro";
         <NavBar />
         <main id="app-main" class="h-[100dvh] w-screen box-border relative">
             <About />
-
-            <Section sectionName="Projects" bgColor="#4D179A">PROJECTS</Section>
-            <Section sectionName="Skills" bgColor="#892D21">SKILLS</Section>
-            <Section sectionName="Experience" bgColor="#BE4387"
-                >EXPERIENCE</Section
-            >
-            <Section sectionName="Contact" bgColor="#306504">CONTACT</Section>
+            <Experience />
+            <Projects />
+            <Skills />
+            <Contact />
         </main>
 
         <script>
