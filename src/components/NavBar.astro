@@ -1,14 +1,13 @@
 ---
-interface Props {
-    sticky?: boolean;
-}
-const { sticky = true } = Astro.props;
+import Container from "@/layout/Container.astro";
 ---
 
-<header
-    class={`w-full top-0 left-0 z-100 ${sticky ? "fixed" : "absolute"} flex justify-center pointer-events-none`}
->
-    <nav id="nav-dynamic" class="pointer-events-auto"></nav>
+<header class="header-layout">
+    <div class="layout-constrained w-full flex justify-between">
+        <Container class="name"> <a href="">NAME</a> </Container>
+        <nav id="nav-dynamic" class="pointer-events-auto"></nav>
+        <Container class="socials"><a href="">SOCIALS</a> </Container>
+    </div>
 </header>
 
 <script>
