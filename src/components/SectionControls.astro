@@ -6,6 +6,8 @@ interface Props {
     showXDisplacement?: boolean;
     showWipeAngle?: boolean;
     showStaticXOffset?: boolean;
+    showZIndex?: boolean;
+    defaultZ?: number;
     defaultX?: number;
     defaultWipe?: number;
     defaultStatic?: number;
@@ -18,9 +20,11 @@ const {
     showXDisplacement = true,
     showWipeAngle = true,
     showStaticXOffset = true,
+    showZIndex = true,
     defaultX = 0,
     defaultWipe = 40,
     defaultStatic = 41,
+    defaultZ = 10,
 } = Astro.props;
 
 // Precompute unique element IDs for sliders and their value labels
@@ -31,8 +35,15 @@ const wipeLabelId = `${wipeId}Label`;
 const staticId = `staticXOffsetInput-${sectionId}`;
 const staticLabelId = `${staticId}Label`;
 const resetBtnId = `reset-${sectionId}`;
+const zId = `zIndexInput-${sectionId}`;
+const zLabelId = `${zId}Label`;
 // Fallback defaults aligned with Section's CSS vars; runtime will refine from actual DOM values
-const serverDefaults = { x: defaultX, wipe: defaultWipe, stat: defaultStatic };
+const serverDefaults = {
+    x: defaultX,
+    wipe: defaultWipe,
+    stat: defaultStatic,
+    z: defaultZ,
+};
 ---
 
 <form
@@ -141,6 +152,30 @@ const serverDefaults = { x: defaultX, wipe: defaultWipe, stat: defaultStatic };
                 class="ui-range w-full accent-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 focus-visible:ring-offset-0"
             />
         </div>
+
+        <!-- Z-Index -->
+        <div class="flex flex-col gap-2" class:list={{ hidden: !showZIndex }}>
+            <div class="flex items-center justify-between text-xs">
+                <label
+                    for={zId}
+                    class="font-medium text-zinc-600 dark:text-zinc-300"
+                    >Z-Index</label
+                >
+                <span
+                    id={zLabelId}
+                    class="ml-2 px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-100 font-mono tabular-nums"
+                    >{defaultZ}</span
+                >
+            </div>
+            <input
+                id={zId}
+                type="range"
+                min="-50"
+                max="200"
+                value={String(defaultZ)}
+                class="ui-range w-full accent-indigo-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 focus-visible:ring-offset-0"
+            />
+        </div>
     </div>
 </form>
 
@@ -155,6 +190,8 @@ const serverDefaults = { x: defaultX, wipe: defaultWipe, stat: defaultStatic };
         staticLabelId,
         resetBtnId,
         serverDefaults,
+        zId,
+        zLabelId,
     }}
 >
     // @ts-nocheck
@@ -234,15 +271,35 @@ const serverDefaults = { x: defaultX, wipe: defaultWipe, stat: defaultStatic };
             staticLabelId,
             "--static-x-offset",
         );
+        // Z index slider modifies the --z CSS variable but values are used as plain numbers
+        const zSlider = document.getElementById(zId);
+        const zLabel = document.getElementById(zLabelId);
+        if (zSlider && zLabel) {
+            const updateZ = () => {
+                const val = Number(zSlider.value || 0);
+                zLabel.textContent = String(val);
+                // set as integer value (no percent)
+                sectionElement.style.setProperty("--z", String(val));
+                sectionElement.style.zIndex = String(val);
+                const minNum = Number(zSlider.min ?? -50);
+                const maxNum = Number(zSlider.max ?? 200);
+                const pct = ((val - minNum) / (maxNum - minNum)) * 100;
+                zSlider.style.backgroundSize = `${pct}% 100%`;
+            };
+            zSlider.addEventListener("input", updateZ);
+            updateZ();
+        }
 
         const resetBtn = document.getElementById(resetBtnId);
         const xEl = document.getElementById(xId);
         const wipeEl = document.getElementById(wipeId);
         const statEl = document.getElementById(staticId);
+        const zEl = document.getElementById(zId);
         const runtimeDefaults = {
             x: xEl ? Number(xEl.value) : serverDefaults.x,
             wipe: wipeEl ? Number(wipeEl.value) : serverDefaults.wipe,
             stat: statEl ? Number(statEl.value) : serverDefaults.stat,
+            z: zEl ? Number(zEl.value) : serverDefaults.z,
         };
         if (resetBtn) {
             resetBtn.addEventListener("click", () => {
@@ -261,6 +318,10 @@ const serverDefaults = { x: defaultX, wipe: defaultWipe, stat: defaultStatic };
                 if (statEl) {
                     statEl.value = String(runtimeDefaults.stat);
                     statEl.dispatchEvent(new Event("input", { bubbles: true }));
+                }
+                if (zEl) {
+                    zEl.value = String(runtimeDefaults.z);
+                    zEl.dispatchEvent(new Event("input", { bubbles: true }));
                 }
                 console.log("[SectionControls] reset applied", runtimeDefaults);
             });

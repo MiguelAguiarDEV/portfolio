@@ -7,9 +7,11 @@ interface Props {
     showXDisplacement?: boolean;
     showWipeAngle?: boolean;
     showStaticXOffset?: boolean;
+    showZIndex?: boolean;
     defaultX?: number;
     defaultWipe?: number;
     defaultStatic?: number;
+    defaultZ?: number;
     sectionName?: string;
     zIndex?: number; // z base (queda en --z)
     itsFirst?: boolean; // si es la primera, empieza “abierta”
@@ -21,9 +23,11 @@ const {
     showXDisplacement = true,
     showWipeAngle = true,
     showStaticXOffset = true,
+    showZIndex = true,
     defaultX = 0,
     defaultWipe = 40,
     defaultStatic = -41,
+    defaultZ = 10,
     sectionName,
     zIndex = 10,
     itsFirst = false,
@@ -49,6 +53,8 @@ const stableId = sectionName
             showXDisplacement={showXDisplacement}
             showWipeAngle={showWipeAngle}
             showStaticXOffset={showStaticXOffset}
+            showZIndex={showZIndex}
+            defaultZ={defaultZ}
             defaultX={defaultX}
             defaultWipe={defaultWipe}
             defaultStatic={defaultStatic}
@@ -103,7 +109,7 @@ const stableId = sectionName
         --x4-position: calc(var(--x1-position) + var(--x-displacement));
         --y4-position: var(--y1-position);
 
-        --wipe-duration: 400ms;
+        --wipe-duration: 7000ms;
         --wipe-ease: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
