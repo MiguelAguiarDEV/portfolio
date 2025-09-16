@@ -56,33 +56,28 @@ import Contact from "@/components/sections/Contact.astro";
             );
 
             function play(sectionEl) {
-                if (sectionEl.classList.contains("active")) {
-                    return;
+                if (!sectionEl) return;
+                if (sectionEl.classList.contains("active")) return;
+
+                // Limpiar la clase 'last' de todas las secciones
+                sections.forEach((s) => s.classList.remove("last"));
+
+                // Encontrar la sección actualmente activa (si existe)
+                const prevActive = sections.find((s) =>
+                    s.classList.contains("active"),
+                );
+                if (prevActive) {
+                    prevActive.classList.remove("active");
+                    prevActive.classList.add("last");
                 }
 
+                // Limpiar animaciones previas y clases de transición
                 sections.forEach((s) => {
-                    if (s.classList.contains("play-wipe" || s !== sectionEl)) {
-                        s.classList.remove("play-wipe");
-                        s.classList.add("wiped");
-                        s.classList.add("last");
-                        s.classList.remove("active");
-                        play(sectionEl);
-                        return;
-                    }
-                    if (s.classList.contains("last")) {
-                        s.classList.remove("last");
-                        return;
-                    }
-                    if (s.classList.contains("active")) {
-                        s.classList.remove("active");
-                        s.classList.add("last");
-                        const zIndex = window
-                            .getComputedStyle(s)
-                            .getPropertyValue("z-index");
-                        return;
-                    }
+                    s.classList.remove("play-wipe");
+                    s.classList.add("wiped");
                 });
 
+                // Activar la nueva sección
                 sectionEl.classList.remove("wiped");
                 sectionEl.classList.add("active");
                 sectionEl.classList.add("play-wipe");
