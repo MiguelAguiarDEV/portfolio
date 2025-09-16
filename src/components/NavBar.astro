@@ -14,7 +14,7 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
         </Container>
         <Container
             id="nav-dynamic"
-            class="pointer-events-auto !h-full !w-fit"
+            class="pointer-events-auto !h-full !w-fit relative"
         />
         <Container class="socials !w-fit mr-0 ml-auto flex gap-4 h-full">
             <a href="" class="h-full flex items-center aspect-square">
@@ -41,23 +41,68 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
 
     function buildButtons() {
         nav.innerHTML = "";
+        // Highlight element
+        const highlight = document.createElement("div");
+        highlight.id = "nav-highlight";
+        highlight.style.position = "absolute";
+        // highlight.style.top = 0;
+        // highlight.style.left = 0;
+        highlight.style.height = "60%";
+        highlight.style.width = "0px";
+        highlight.style.marginTop = "0px";
+        // highlight.style.marginBottom = "4rem";
+        // Copia los estilos del botón activo
+
+        highlight.style.background = "rgba(255,255,255,0.2)"; // igual que .active
+        highlight.style.opacity = "1";
+        highlight.style.borderRadius = "0.5rem";
+        highlight.style.transition = "all 500ms cubic-bezier(.7,0,.3,1)";
+        highlight.style.pointerEvents = "none";
+        highlight.style.zIndex = 0;
+        // Sombra opcional si el botón activo la tiene
+        highlight.style.boxShadow = "0 2px 8px 0 rgba(0,0,0,0.08)";
+        nav.appendChild(highlight);
+
         document.querySelectorAll('[id^="section-"]').forEach((sec) => {
             const btn = document.createElement("button");
             btn.textContent = getName(sec.id);
-            btn.onclick = () => window.setActiveSection?.(getName(sec.id));
+            btn.style.position = "relative";
+            btn.style.zIndex = 1;
+            btn.onclick = (e) => {
+                window.setActiveSection?.(getName(sec.id));
+                moveHighlight(btn);
+            };
             nav.appendChild(btn);
         });
         highlightActive();
+        // Inicializar highlight en el activo
+        setTimeout(() => {
+            const activeBtn = nav.querySelector("button.active");
+            if (activeBtn) moveHighlight(activeBtn);
+        }, 10);
     }
 
     function highlightActive() {
         const active = document.querySelector('[id^="section-"].active');
-        [...nav.children].forEach((b) => {
+        [...nav.querySelectorAll("button")].forEach((b) => {
             b.classList.toggle(
                 "active",
                 active && getName(active.id) === b.textContent,
             );
         });
+        // Mover highlight si hay activo
+        const highlight = nav.querySelector("#nav-highlight");
+        const activeBtn = nav.querySelector("button.active");
+        if (highlight && activeBtn) moveHighlight(activeBtn);
+    }
+
+    function moveHighlight(btn) {
+        const highlight = nav.querySelector("#nav-highlight");
+        if (!highlight || !btn) return;
+        const navRect = nav.getBoundingClientRect();
+        const btnRect = btn.getBoundingClientRect();
+        highlight.style.left = btnRect.left - navRect.left + "px";
+        highlight.style.width = btnRect.width + "px";
     }
 
     buildButtons();
@@ -67,3 +112,5 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
     );
     setInterval(highlightActive, 200);
 </script>
+
+<style></style>

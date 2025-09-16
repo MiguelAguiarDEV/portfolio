@@ -46,7 +46,6 @@ body {
 
 
 /* #nav-dynamic {
-
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -59,7 +58,6 @@ body {
     width: fit-content;
     height: 20px;
 } */
-
 
 #nav-dynamic button {
     background: transparent;
@@ -83,8 +81,8 @@ header a:hover {
 }
 
 #nav-dynamic button.active {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.2);
+    /* opacity: 1; */
+    /* background: rgba(255, 255, 255, 0.2); */
 }
 
 
