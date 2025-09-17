@@ -8,6 +8,7 @@ import Experience from "@/components/sections/Experience.astro";
 import Projects from "@/components/sections/Projects.astro";
 import Skills from "@/components/sections/Skills.astro";
 import Contact from "@/components/sections/Contact.astro";
+import Analytics from "@vercel/analytics/astro";
 ---
 
 <!doctype html>
@@ -39,6 +40,7 @@ import Contact from "@/components/sections/Contact.astro";
             <Contact />
         </main>
 
+        <Analytics />
         <script>
             // @ts-nocheck
             const toId = (name) =>
