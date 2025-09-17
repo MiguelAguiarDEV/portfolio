@@ -4,8 +4,6 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'miguer': ['MiguerSans', 'Courier New', 'Courier', 'monospace'],
-        'sans': ['MiguerSans', 'ui-sans-serif', 'system-ui'],
       },
     },
   },

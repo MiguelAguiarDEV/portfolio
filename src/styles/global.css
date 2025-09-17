@@ -1,11 +1,17 @@
 @import "tailwindcss";
 
+
 /* Layout consistency variables */
 :root {
     --content-max-width: min(100vw - 40dvh, 1200px);
     --content-padding: max(20dvh, 2rem);
 }
 
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,500,700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
 
 /* .layout-constrained {
     border: 2px solid #ff0000 !important;
