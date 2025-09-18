@@ -35,8 +35,12 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
 <script>
     // @ts-nocheck
     const nav = document.getElementById("nav-dynamic");
-    const HIGHLIGHT_INSET_X = 9;
-    const HIGHLIGHT_INSET_Y = 5;
+    const getInsets = () => {
+        if (typeof window === "undefined") return { x: 9, y: 5 };
+        if (window.matchMedia("(max-width: 600px)").matches) return { x: 5.5, y: 3.5 };
+        if (window.matchMedia("(max-width: 900px)").matches) return { x: 7.5, y: 4.5 };
+        return { x: 9, y: 5 };
+    };
     const getName = (id) =>
         id
             .replace(/^section-/, "")
@@ -99,10 +103,11 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
         const highlight = nav.querySelector("#nav-highlight");
         if (!highlight || !btn) return;
         const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = btn;
-        const width = Math.max(offsetWidth - HIGHLIGHT_INSET_X * 2, 0);
-        const height = Math.max(offsetHeight - HIGHLIGHT_INSET_Y * 2, 0);
-        highlight.style.left = `${offsetLeft + HIGHLIGHT_INSET_X}px`;
-        highlight.style.top = `${offsetTop + HIGHLIGHT_INSET_Y}px`;
+        const { x, y } = getInsets();
+        const width = Math.max(offsetWidth - x * 2, 0);
+        const height = Math.max(offsetHeight - y * 2, 0);
+        highlight.style.left = `${offsetLeft + x}px`;
+        highlight.style.top = `${offsetTop + y}px`;
         highlight.style.width = `${width}px`;
         highlight.style.height = `${height}px`;
     }

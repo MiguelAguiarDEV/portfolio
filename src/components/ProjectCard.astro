@@ -230,6 +230,57 @@ const hasMedia = media.length > 0;
         gap: 0.5rem;
         margin-top: 0.4rem;
     }
+
+    @media (max-width: 1024px) {
+        .proj-card {
+            gap: 1rem;
+            padding: 1.4rem;
+        }
+        .proj-media {
+            max-height: clamp(200px, 32vw, 320px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .proj-card {
+            padding: 1.1rem;
+            gap: 0.9rem;
+        }
+        .proj-media {
+            max-height: clamp(180px, 46vw, 280px);
+            border-radius: 1rem;
+        }
+        .proj-meta {
+            gap: 0.6rem;
+        }
+        .proj-desc {
+            font-size: 0.88rem;
+        }
+        .proj-actions {
+            flex-wrap: wrap;
+        }
+        .nav {
+            width: 1.8rem;
+            height: 1.8rem;
+        }
+    }
+
+    @media (max-width: 540px) {
+        .proj-card {
+            padding: 0.9rem;
+            gap: 0.75rem;
+        }
+        .proj-media {
+            max-height: clamp(150px, 58vw, 240px);
+        }
+        .proj-tags {
+            gap: 0.3rem;
+        }
+        .proj-desc {
+            font-size: 0.84rem;
+        }
+    }
+
 </style>
 
 <script is:inline>

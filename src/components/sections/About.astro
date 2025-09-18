@@ -374,6 +374,59 @@ const CV_URL =
         }
     }
 
+    @media (max-width: 768px) {
+        .about-content {
+            gap: 0.65rem;
+        }
+        .about-section {
+            gap: 0.6rem;
+        }
+        .container.about-card {
+            padding: 1rem;
+        }
+        .container.about-tags {
+            padding: 0.75rem 0.9rem;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .chip-list {
+            gap: 0.35rem;
+        }
+        .about-projects {
+            gap: 0.6rem;
+        }
+        .about-section--intro h3,
+        .about-section--stack h3,
+        .about-section--projects h3 {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .about-layout {
+            gap: 0.65rem;
+        }
+        .container.about-photo-card {
+            min-height: clamp(200px, 48vh, 320px);
+        }
+        .about-content {
+            grid-template-rows: auto auto auto;
+        }
+    }
+
+    @media (max-height: 760px) {
+        .container.about-card {
+            padding: 0.95rem;
+        }
+        .about-projects {
+            gap: 0.6rem;
+        }
+        .about-section--projects {
+            flex: 1 1 auto;
+        }
+    }
+
     @media (max-width: 640px) {
         .about-sidebar {
             flex-direction: column;
