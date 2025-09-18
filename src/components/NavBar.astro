@@ -14,6 +14,8 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
         </Container>
         <Container
             id="nav-dynamic"
+            role="navigation"
+            aria-label="Navegacion principal"
             class="pointer-events-auto !h-full !w-fit relative"
         />
         <Container class="socials !w-fit mr-0 ml-auto flex gap-4 h-full">
@@ -33,6 +35,8 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
 <script>
     // @ts-nocheck
     const nav = document.getElementById("nav-dynamic");
+    const HIGHLIGHT_INSET_X = 9;
+    const HIGHLIGHT_INSET_Y = 5;
     const getName = (id) =>
         id
             .replace(/^section-/, "")
@@ -41,41 +45,39 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
 
     function buildButtons() {
         nav.innerHTML = "";
-        // Highlight element
         const highlight = document.createElement("div");
         highlight.id = "nav-highlight";
         highlight.style.position = "absolute";
-        // highlight.style.top = 0;
-        // highlight.style.left = 0;
-        highlight.style.height = "60%";
+        highlight.style.height = "0px";
         highlight.style.width = "0px";
-        highlight.style.marginTop = "0px";
-        // highlight.style.marginBottom = "4rem";
-        // Copia los estilos del botón activo
-
-        highlight.style.background = "rgba(255,255,255,0.2)"; // igual que .active
+        highlight.style.top = "0";
+        highlight.style.left = "0";
+        highlight.style.background = "rgba(255,255,255,0.2)";
         highlight.style.opacity = "1";
-        highlight.style.borderRadius = "0.5rem";
+        highlight.style.borderRadius = "0.45rem";
         highlight.style.transition = "all 500ms cubic-bezier(.7,0,.3,1)";
         highlight.style.pointerEvents = "none";
         highlight.style.zIndex = 0;
-        // Sombra opcional si el botón activo la tiene
         highlight.style.boxShadow = "0 2px 8px 0 rgba(0,0,0,0.08)";
         nav.appendChild(highlight);
 
         document.querySelectorAll('[id^="section-"]').forEach((sec) => {
             const btn = document.createElement("button");
-            btn.textContent = getName(sec.id);
+            const label = getName(sec.id);
+            btn.type = "button";
+            btn.dataset.section = sec.id;
+            btn.textContent = label;
+            btn.setAttribute("aria-controls", sec.id);
             btn.style.position = "relative";
             btn.style.zIndex = 1;
-            btn.onclick = (e) => {
-                window.setActiveSection?.(getName(sec.id));
+            btn.addEventListener("click", () => {
+                window.setActiveSection?.(label);
                 moveHighlight(btn);
-            };
+            });
+            btn.addEventListener("focus", () => moveHighlight(btn));
             nav.appendChild(btn);
         });
         highlightActive();
-        // Inicializar highlight en el activo
         setTimeout(() => {
             const activeBtn = nav.querySelector("button.active");
             if (activeBtn) moveHighlight(activeBtn);
@@ -84,13 +86,10 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
 
     function highlightActive() {
         const active = document.querySelector('[id^="section-"].active');
-        [...nav.querySelectorAll("button")].forEach((b) => {
-            b.classList.toggle(
-                "active",
-                active && getName(active.id) === b.textContent,
-            );
+        const activeId = active?.id;
+        nav.querySelectorAll("button").forEach((b) => {
+            b.classList.toggle("active", activeId === b.dataset.section);
         });
-        // Mover highlight si hay activo
         const highlight = nav.querySelector("#nav-highlight");
         const activeBtn = nav.querySelector("button.active");
         if (highlight && activeBtn) moveHighlight(activeBtn);
@@ -99,10 +98,13 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
     function moveHighlight(btn) {
         const highlight = nav.querySelector("#nav-highlight");
         if (!highlight || !btn) return;
-        const navRect = nav.getBoundingClientRect();
-        const btnRect = btn.getBoundingClientRect();
-        highlight.style.left = btnRect.left - navRect.left + "px";
-        highlight.style.width = btnRect.width + "px";
+        const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = btn;
+        const width = Math.max(offsetWidth - HIGHLIGHT_INSET_X * 2, 0);
+        const height = Math.max(offsetHeight - HIGHLIGHT_INSET_Y * 2, 0);
+        highlight.style.left = `${offsetLeft + HIGHLIGHT_INSET_X}px`;
+        highlight.style.top = `${offsetTop + HIGHLIGHT_INSET_Y}px`;
+        highlight.style.width = `${width}px`;
+        highlight.style.height = `${height}px`;
     }
 
     buildButtons();
@@ -111,6 +113,20 @@ import { Linkedin, Github, Twitter } from "lucide-astro";
         { childList: true, subtree: true },
     );
     setInterval(highlightActive, 200);
+    window.addEventListener("resize", () => {
+        const activeBtn = nav.querySelector("button.active");
+        if (activeBtn) moveHighlight(activeBtn);
+    });
+    nav.addEventListener("scroll", () => {
+        const activeBtn = nav.querySelector("button.active");
+        if (activeBtn) moveHighlight(activeBtn);
+    });
 </script>
 
 <style></style>
+
+
+
+
+
+

@@ -1,13 +1,17 @@
 ---
-interface Props {
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<'div'> {
     id?: string;
     class?: string;
 }
+
+const { id, class: className = "", ...rest } = Astro.props as Props;
+const baseClass =
+    "container pointer-events-auto w-full h-full border border-white flex justify-center";
+const classList = className ? `${baseClass} ${className}` : baseClass;
 ---
 
-<div
-    id={Astro.props.id}
-    class={`container pointer-events-auto w-full h-full border border-white flex justify-center ${Astro.props.class || ""}`}
->
+<div id={id} class={classList} {...rest}>
     <slot />
 </div>

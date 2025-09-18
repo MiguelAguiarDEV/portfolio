@@ -65,14 +65,12 @@ const stableId = sectionName
 <div
     id={stableId}
     class:list={[
-        "section h-full w-full absolute inset-0 flex items-center pt-[6rem] pb-[1rem] justify-center",
+        "section h-full w-full absolute inset-0 flex items-start md:items-center justify-start md:justify-center px-4 sm:px-6 lg:px-0 pt-[4.5rem] md:pt-[6rem] pb-[1rem]",
         itsFirst ? "wiped active" : "",
     ]}
     style={`background-color: ${bgColor}; --x-displacement:${defaultX}%; --wipe-angle:${defaultWipe}%; --static-x-offset:${defaultStatic}%; --z:${zIndex};`}
 >
-    <section
-        class="layout-constrained text-5xl font-extrabold text-center w-full h-full flex items-center justify-center"
-    >
+    <section class="layout-constrained w-full h-full">
         <slot />
     </section>
 </div>
@@ -163,3 +161,6 @@ const stableId = sectionName
         }
     }
 </style>
+
+
+
