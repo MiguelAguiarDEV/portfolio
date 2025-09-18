@@ -1,136 +1,227 @@
 @import "tailwindcss";
 
-
-/* Layout consistency variables */
 :root {
-    --content-max-width: min(100vw - 40dvh, 1200px);
-    --content-padding: max(20dvh, 2rem);
+    /* Tipografía fluida */
+    --fs-0: clamp(12px, 1.2vw, 14px);
+    --fs-1: clamp(14px, 1.6vw, 18px);
+    --fs-2: clamp(18px, 2.4vw, 28px);
+    --radius: 16px;
+    --gap: clamp(10px, 1.2vw, 20px);
+    --pad: clamp(10px, 1.5vw, 24px);
+    --nav-h: clamp(48px, 7vh, 64px);
+    --wipe-ms: 700ms;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,500,700&display=swap');
+* {
+    box-sizing: border-box
+}
 
+html,
 body {
-    font-family: 'Poppins', sans-serif;
-}
-
-/* .layout-constrained {
-    border: 2px solid #ff0000 !important;
-}
-
-#nav-dynamic {
-    border: 2px solid #00ff00 !important;
-}
-
-.container {
-    border: 2px solid #0000ff !important;
-}
-
-.section {
-    border: 2px solid #ffff00 !important;
-}
- */
-
-
-/* base */
-html {
     height: 100%;
-    box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
+    margin: 0
 }
 
 body {
-    height: 100dvh;
-    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, sans-serif;
+    background: #0f0f10;
+    color: #fafafa;
     overflow: hidden;
-    align-items: center;
+    /* no scroll real; lo controlamos vía JS */
 }
 
+/* Stage full-viewport */
+#stage {
+    position: relative;
+    width: 100vw;
+    height: 100dvh;
+    /* estable en móviles modernos */
+    isolation: isolate;
+    /* capas independientes */
+    background: radial-gradient(120vmax 120vmax at 10% 10%, #17181c, #0f0f10 60%);
+}
 
-/* #nav-dynamic {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 1rem;
-    padding: 0.75rem 0.75rem;
+/* Navbar flotante que no toca bordes ni otros componentes */
+.navbar {
+    position: fixed;
+    left: 50%;
+    top: 3vh;
+    transform: translateX(-50%);
+    z-index: 1000;
+    height: var(--nav-h);
     display: flex;
-    gap: 1rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    width: fit-content;
-    height: 20px;
-} */
+    align-items: center;
+    gap: var(--gap);
+    padding: 0 var(--pad);
+    border-radius: 999px;
+    background: color-mix(in oklab, #ffffff 14%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .25);
+    pointer-events: auto;
+}
 
-#nav-dynamic button {
+.navbar button {
+    appearance: none;
+    border: 0;
     background: transparent;
-    border: none;
+    color: #fff;
+    font-size: var(--fs-1);
+    padding: 8px 12px;
+    border-radius: 10px;
     cursor: pointer;
-    color: inherit;
-    transition: opacity 0.15s, background 0.15s, box-shadow 0.15s;
-    opacity: 0.5;
-    border-radius: 0.5rem;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    height: 100%;
-    padding: 0.5rem 0.5rem;
+    opacity: .75;
+    transition: opacity .2s, transform .2s, background-color .2s;
+    white-space: nowrap;
 }
 
-#nav-dynamic button:hover,
-header a:hover {
+.navbar button[aria-current="page"] {
     opacity: 1;
-    background: rgba(255, 255, 255, 0.15);
+    background: color-mix(in oklab, #ffffff 16%, transparent);
 }
 
-#nav-dynamic button.active {
-    /* opacity: 1; */
-    /* background: rgba(255, 255, 255, 0.2); */
+.navbar button:active {
+    transform: scale(.98);
 }
 
+/* En móvil: navbar abajo, scrollable, botones más grandes */
+@media (max-width: 700px) {
+    .navbar {
+        bottom: 3vh;
+        top: auto;
+        max-width: min(92vw, 680px);
+        overflow-x: auto;
+        scrollbar-width: none;
+        gap: 6px;
+    }
 
-.container {
-    width: 100%s;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 1rem;
-    padding: 0.75rem 0.75rem;
-    display: flex;
-    gap: 1rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    .navbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .navbar button {
+        font-size: var(--fs-1);
+        padding: 10px 14px;
+    }
 }
 
-/* Layout utilities for consistent widths */
-.layout-constrained {
-    max-width: var(--content-max-width);
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-}
-
-header {
-    width: 100%;
+/* Panels superpuestos */
+.panel {
     position: absolute;
-    z-index: 100;
+    inset: 0;
+    z-index: 0;
+    /* JS eleva el activo */
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    place-items: center;
+    overflow: clip;
+    /* evita fugas durante clip-path */
 }
 
-header a {
-    height: 100%;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: inherit;
-    transition: opacity 0.15s, background 0.15s, box-shadow 0.15s;
-    opacity: 0.5;
-    padding: 0.5rem 0.5rem;
-    border-radius: 0.5rem;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    text-decoration: none;
+/* Fondo padre a pantalla completa */
+.panel>.bg {
+    position: absolute;
+    inset: 0;
+    background: var(--bg, #111);
+}
+
+/* Section centrada sin bordes; actúa como “constraint” del contenido */
+.panel>section {
+    position: relative;
+    z-index: 1;
+    inline-size: min(1200px, 84vw);
+    block-size: min(72vh, 76svh);
+    display: grid;
+    place-items: center;
+    padding: var(--pad);
+    /* Sin borde; sólo sombra sutil para flotar */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
+    border-radius: var(--radius);
+    background: color-mix(in oklab, #ffffff 6%, transparent);
+    backdrop-filter: blur(6px) saturate(120%);
+}
+
+/* Contenido interno: mini contenedores flotantes */
+.cards {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+}
+
+.card {
+    padding: var(--pad);
+    border-radius: 14px;
+    background: color-mix(in oklab, #ffffff 10%, transparent);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .25);
+    font-size: var(--fs-0);
+    line-height: 1.35;
+}
+
+.card h3 {
+    margin: 0 0 6px;
+    font-size: var(--fs-1);
+}
+
+@media (max-width: 900px) {
+    .cards {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .panel>section {
+        inline-size: min(960px, 92vw);
+        block-size: min(70vh, 70svh);
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Wipe “impresora” con clip-path en el panel que entra */
+.panel.entering {
+    animation: reveal var(--wipe-ms) ease-out both;
+}
+
+/* Barrido de izquierda a derecha; puedes invertirlo con right-to-left */
+@keyframes reveal {
+    0% {
+        clip-path: inset(0 100% 0 0 round 0);
+    }
+
+    100% {
+        clip-path: inset(0 0 0 0 round 0);
+    }
+}
+
+/* Micro tipografía */
+h1 {
+    margin: 0 0 10px;
+    font-size: var(--fs-2);
+}
+
+p {
+    margin: 0;
+    font-size: var(--fs-1);
+    opacity: .9
+}
+
+/* Ayuda visual: colores de fondo por sección */
+#home {
+    --bg: radial-gradient(120vmax 120vmax at 15% 15%, #15171a, #0d0e12 60%);
+}
+
+#about {
+    --bg: linear-gradient(135deg, #0b3a36, #0b2a3a 70%);
+}
+
+#work {
+    --bg: linear-gradient(135deg, #2a143a, #0f1020 70%);
+}
+
+#contact {
+    --bg: linear-gradient(135deg, #3a1a1a, #101010 70%);
 }

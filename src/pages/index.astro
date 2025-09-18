@@ -1,13 +1,5 @@
 ---
 import "@/styles/global.css";
-import Section from "@/layout/Section.astro";
-import FormContainer from "@/components/FormContainer.astro";
-import NavBar from "@/components/NavBar.astro";
-import About from "@/components/sections/About.astro";
-import Experience from "@/components/sections/Experience.astro";
-import Projects from "@/components/sections/Projects.astro";
-import Skills from "@/components/sections/Skills.astro";
-import Contact from "@/components/sections/Contact.astro";
 import Analytics from "@vercel/analytics/astro";
 ---
 
@@ -28,72 +20,259 @@ import Analytics from "@vercel/analytics/astro";
         />
         <title>MiguelAguiarDev</title>
     </head>
+    <body>
+        <!-- NAV flotante -->
+        <nav class="navbar" aria-label="Secciones">
+            <button data-target="home" aria-current="page">Inicio</button>
+            <button data-target="about">Sobre mí</button>
+            <button data-target="work">Proyectos</button>
+            <button data-target="contact">Contacto</button>
+        </nav>
 
-    <body class="bg-[#111111] m-0 overflow-hidden text-white">
-        <FormContainer />
-        <NavBar />
-        <main id="app-main" class="h-[100dvh] w-screen box-border relative">
-            <About />
-            <Experience />
-            <Projects />
-            <Skills />
-            <Contact />
+        <!-- Escenario -->
+        <main id="stage" role="main" aria-live="polite">
+            <!-- Panel: HOME -->
+            <div class="panel" id="home" aria-hidden="false">
+                <div class="bg"></div>
+                <section aria-labelledby="h-home">
+                    <div>
+                        <h1 id="h-home">Miguel Santiesteban</h1>
+                        <p>Backend · Node · Laravel · React · Prisma</p>
+                        <div class="cards" style="margin-top: var(--gap);">
+                            <div class="card">
+                                <h3>Queater</h3>
+                                <p>
+                                    SaaS para restaurantes. Menús, stock, POS.
+                                </p>
+                            </div>
+                            <div class="card">
+                                <h3>CSV Analyzer</h3>
+                                <p>
+                                    Exploración de datos con IA. React + Node.
+                                </p>
+                            </div>
+                            <div class="card">
+                                <h3>AICLID</h3>
+                                <p>Detección celular YOLO. Investigación.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Panel: ABOUT -->
+            <div class="panel" id="about" aria-hidden="true">
+                <div class="bg"></div>
+                <section aria-labelledby="h-about">
+                    <div>
+                        <h1 id="h-about">Sobre mí</h1>
+                        <div class="cards" style="margin-top: var(--gap);">
+                            <div class="card">
+                                <h3>Perfil</h3><p>
+                                    Programador orientado a backend. Sistemas y
+                                    rendimiento.
+                                </p>
+                            </div>
+                            <div class="card">
+                                <h3>Stack</h3><p>
+                                    TS/Node, Laravel, React, Prisma, Docker,
+                                    CI/CD.
+                                </p>
+                            </div>
+                            <div class="card">
+                                <h3>Ahora</h3><p>
+                                    Buscando remoto. Enfocado en producto y DX.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Panel: WORK -->
+            <div class="panel" id="work" aria-hidden="true">
+                <div class="bg"></div>
+                <section aria-labelledby="h-work">
+                    <div>
+                        <h1 id="h-work">Proyectos</h1>
+                        <div class="cards" style="margin-top: var(--gap);">
+                            <div class="card">
+                                <h3>Queater</h3><p>
+                                    Laravel + Inertia + React. Multi-tenant.
+                                    Roles.
+                                </p>
+                            </div>
+                            <div class="card">
+                                <h3>Portfolio</h3><p>
+                                    Astro + Tailwind + animaciones clip-path.
+                                </p>
+                            </div>
+                            <div class="card">
+                                <h3>Tooling</h3><p>
+                                    Plantillas CI, lint y tests. Monorepo Bun.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Panel: CONTACT -->
+            <div class="panel" id="contact" aria-hidden="true">
+                <div class="bg"></div>
+                <section aria-labelledby="h-contact">
+                    <div>
+                        <h1 id="h-contact">Contacto</h1>
+                        <div class="cards" style="margin-top: var(--gap);">
+                            <div class="card">
+                                <h3>Email</h3><p>miguel@example.com</p>
+                            </div>
+                            <div class="card">
+                                <h3>GitHub</h3><p>@MiguelAguiarDev</p>
+                            </div>
+                            <div class="card">
+                                <h3>LinkedIn</h3><p>/in/MiguelAguiarDev</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </main>
 
-        <Analytics />
         <script>
             // @ts-nocheck
-            const toId = (name) =>
-                `section-${name
-                    .toString()
-                    .trim()
-                    .toLowerCase()
-                    .replace(/[^a-z0-9\s-_]/g, "")
-                    .replace(/\s+/g, "-")}`;
+            // Estado
+            const panels = Array.from(document.querySelectorAll(".panel"));
+            const nav = document.querySelector(".navbar");
+            const buttons = Array.from(nav.querySelectorAll("button"));
+            let zCounter = 1;
+            let current = "home";
+            let isTransitioning = false;
 
-            const byId = (id) => document.getElementById(id);
+            // Inicial
+            elevate(document.getElementById(current), true);
 
-            const sections = Array.from(
-                document.querySelectorAll('[id^="section-"]'),
+            // Click en navbar
+            buttons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const target = btn.dataset.target;
+                    if (target) goTo(target, "nav");
+                });
+            });
+
+            // Wheel para navegar
+            let wheelLock = false;
+            window.addEventListener(
+                "wheel",
+                (e) => {
+                    e.preventDefault();
+                    if (wheelLock || isTransitioning) return;
+                    wheelLock = true;
+                    const dir = Math.sign(e.deltaY);
+                    step(dir > 0 ? 1 : -1, "wheel");
+                    setTimeout(() => (wheelLock = false), 420);
+                },
+                { passive: false },
             );
 
-            function play(sectionEl) {
-                if (!sectionEl) return;
-                if (sectionEl.classList.contains("active")) return;
+            // Swipe táctil
+            let touchY = null;
+            window.addEventListener(
+                "touchstart",
+                (e) => {
+                    if (e.touches.length === 1) {
+                        touchY = e.touches[0].clientY;
+                    }
+                },
+                { passive: true },
+            );
+            window.addEventListener(
+                "touchend",
+                (e) => {
+                    if (touchY == null) return;
+                    const endY =
+                        e.changedTouches && e.changedTouches[0]
+                            ? e.changedTouches[0].clientY
+                            : touchY;
+                    const dy = endY - touchY;
+                    const threshold = 40; // píxeles
+                    if (Math.abs(dy) > threshold) {
+                        step(dy > 0 ? -1 : 1, "swipe");
+                    }
+                    touchY = null;
+                },
+                { passive: true },
+            );
 
-                // Limpiar la clase 'last' de todas las secciones
-                sections.forEach((s) => s.classList.remove("last"));
+            // Helpers
+            function ids() {
+                return panels.map((p) => p.id);
+            }
+            function idxOf(id) {
+                return ids().indexOf(id);
+            }
+            function step(delta, via) {
+                const list = ids();
+                let i = idxOf(current);
+                i = (i + delta + list.length) % list.length;
+                goTo(list[i], via);
+            }
+            function goTo(id, via) {
+                if (id === current) return;
+                const target = document.getElementById(id);
+                if (!target) return;
+                isTransitioning = true;
 
-                // Encontrar la sección actualmente activa (si existe)
-                const prevActive = sections.find((s) =>
-                    s.classList.contains("active"),
+                // Marcar botón activo
+                buttons.forEach((b) =>
+                    b.setAttribute(
+                        "aria-current",
+                        b.dataset.target === id ? "page" : "false",
+                    ),
                 );
-                if (prevActive) {
-                    prevActive.classList.remove("active");
-                    prevActive.classList.add("last");
-                }
 
-                // Limpiar animaciones previas y clases de transición
-                sections.forEach((s) => {
-                    s.classList.remove("play-wipe");
-                    s.classList.add("wiped");
-                });
+                // Elevar y animar con clip-path en el que entra
+                elevate(target, false);
 
-                // Activar la nueva sección
-                sectionEl.classList.remove("wiped");
-                sectionEl.classList.add("active");
-                sectionEl.classList.add("play-wipe");
-                sectionEl.addEventListener(
-                    "animationend",
+                // Accesibilidad
+                panels.forEach((p) =>
+                    p.setAttribute(
+                        "aria-hidden",
+                        p.id === id ? "false" : "true",
+                    ),
+                );
+
+                // Fin de transición
+                setTimeout(
                     () => {
-                        sectionEl.classList.remove("play-wipe");
-                        sectionEl.classList.add("wiped");
+                        current = id;
+                        isTransitioning = false;
                     },
-                    { once: true },
+                    ms("--wipe-ms") || 700,
                 );
             }
+            function elevate(panel, initial) {
+                zCounter++;
+                panel.style.zIndex = String(100 + zCounter);
+                if (!initial) {
+                    panel.classList.remove("entering"); // reset si ya la tenía
+                    // forzar reflow para reiniciar animación
+                    void panel.offsetWidth;
+                    panel.classList.add("entering");
+                }
+            }
+            function ms(varName) {
+                const s = getComputedStyle(document.documentElement)
+                    .getPropertyValue(varName)
+                    .trim();
+                if (!s) return null;
+                if (s.endsWith("ms")) return parseFloat(s);
+                if (s.endsWith("s")) return parseFloat(s) * 1000;
+                return parseFloat(s);
+            }
 
-            window.setActiveSection = (name) => play(byId(toId(name)));
+            // Asegurar que la navbar no colisiona visualmente con la section centrada
+            // (opcional: desplazar sección un poco si overlap; aquí mantenemos centrado puro por tu requerimiento)
         </script>
     </body>
 </html>
