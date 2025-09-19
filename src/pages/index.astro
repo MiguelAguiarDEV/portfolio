@@ -1,6 +1,113 @@
 ---
-import "@/styles/global.css";
+import FloatingNav from "@/components/FloatingNav.astro";
+import Panel from "@/components/Panel.astro";
+import CardsGrid from "@/components/CardsGrid.astro";
 import Analytics from "@vercel/analytics/astro";
+import "@/styles/global.css";
+
+type PanelCard = {
+    title: string;
+    description: string;
+};
+
+type PanelData = {
+    id: string;
+    label: string;
+    title: string;
+    lead?: string;
+    background: string;
+    cards: PanelCard[];
+};
+
+const panels: PanelData[] = [
+    {
+        id: "home",
+        label: "Inicio",
+        title: "Miguel Santiesteban",
+        lead: "Backend \u2013 Node \u2013 Laravel \u2013 React \u2013 Prisma",
+        background:
+            "radial-gradient(120vmax 120vmax at 15% 15%, #15171a, #0d0e12 60%)",
+        cards: [
+            {
+                title: "Queater",
+                description: "SaaS para restaurantes. Men\u00fas, stock y POS.",
+            },
+            {
+                title: "CSV Analyzer",
+                description: "Exploraci\u00f3n de datos con IA. React + Node.",
+            },
+            {
+                title: "AICLID",
+                description:
+                    "Detecci\u00f3n celular YOLO. Proyecto de investigaci\u00f3n.",
+            },
+        ],
+    },
+    {
+        id: "about",
+        label: "Sobre m\u00ed",
+        title: "Sobre m\u00ed",
+        background: "linear-gradient(135deg, #0b3a36, #0b2a3a 70%)",
+        cards: [
+            {
+                title: "Perfil",
+                description:
+                    "Programador orientado a backend. Sistemas y rendimiento.",
+            },
+            {
+                title: "Stack",
+                description: "TS/Node, Laravel, React, Prisma, Docker, CI/CD.",
+            },
+            {
+                title: "Ahora",
+                description: "Buscando remoto. Enfocado en producto y DX.",
+            },
+        ],
+    },
+    {
+        id: "work",
+        label: "Proyectos",
+        title: "Proyectos",
+        background: "linear-gradient(135deg, #2a143a, #0f1020 70%)",
+        cards: [
+            {
+                title: "Queater",
+                description:
+                    "Laravel + Inertia + React. Multi-tenant con roles.",
+            },
+            {
+                title: "Portfolio",
+                description: "Astro + Tailwind con animaciones de clip-path.",
+            },
+            {
+                title: "Tooling",
+                description: "Plantillas CI, lint y tests. Monorepo con Bun.",
+            },
+        ],
+    },
+    {
+        id: "contact",
+        label: "Contacto",
+        title: "Contacto",
+        background: "linear-gradient(135deg, #3a1a1a, #101010 70%)",
+        cards: [
+            {
+                title: "Email",
+                description: "miguel@example.com",
+            },
+            {
+                title: "GitHub",
+                description: "@MiguelAguiarDev",
+            },
+            {
+                title: "LinkedIn",
+                description: "/in/MiguelAguiarDev",
+            },
+        ],
+    },
+];
+
+const navItems = panels.map(({ id, label }) => ({ id, label }));
 ---
 
 <!doctype html>
@@ -21,258 +128,37 @@ import Analytics from "@vercel/analytics/astro";
         <title>MiguelAguiarDev</title>
     </head>
     <body>
-        <!-- NAV flotante -->
-        <nav class="navbar" aria-label="Secciones">
-            <button data-target="home" aria-current="page">Inicio</button>
-            <button data-target="about">Sobre mí</button>
-            <button data-target="work">Proyectos</button>
-            <button data-target="contact">Contacto</button>
-        </nav>
-
-        <!-- Escenario -->
+        <FloatingNav items={navItems} />
         <main id="stage" role="main" aria-live="polite">
-            <!-- Panel: HOME -->
-            <div class="panel" id="home" aria-hidden="false">
-                <div class="bg"></div>
-                <section aria-labelledby="h-home">
-                    <div>
-                        <h1 id="h-home">Miguel Santiesteban</h1>
-                        <p>Backend · Node · Laravel · React · Prisma</p>
-                        <div class="cards" style="margin-top: var(--gap);">
-                            <div class="card">
-                                <h3>Queater</h3>
-                                <p>
-                                    SaaS para restaurantes. Menús, stock, POS.
-                                </p>
-                            </div>
-                            <div class="card">
-                                <h3>CSV Analyzer</h3>
-                                <p>
-                                    Exploración de datos con IA. React + Node.
-                                </p>
-                            </div>
-                            <div class="card">
-                                <h3>AICLID</h3>
-                                <p>Detección celular YOLO. Investigación.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Panel: ABOUT -->
-            <div class="panel" id="about" aria-hidden="true">
-                <div class="bg"></div>
-                <section aria-labelledby="h-about">
-                    <div>
-                        <h1 id="h-about">Sobre mí</h1>
-                        <div class="cards" style="margin-top: var(--gap);">
-                            <div class="card">
-                                <h3>Perfil</h3><p>
-                                    Programador orientado a backend. Sistemas y
-                                    rendimiento.
-                                </p>
-                            </div>
-                            <div class="card">
-                                <h3>Stack</h3><p>
-                                    TS/Node, Laravel, React, Prisma, Docker,
-                                    CI/CD.
-                                </p>
-                            </div>
-                            <div class="card">
-                                <h3>Ahora</h3><p>
-                                    Buscando remoto. Enfocado en producto y DX.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Panel: WORK -->
-            <div class="panel" id="work" aria-hidden="true">
-                <div class="bg"></div>
-                <section aria-labelledby="h-work">
-                    <div>
-                        <h1 id="h-work">Proyectos</h1>
-                        <div class="cards" style="margin-top: var(--gap);">
-                            <div class="card">
-                                <h3>Queater</h3><p>
-                                    Laravel + Inertia + React. Multi-tenant.
-                                    Roles.
-                                </p>
-                            </div>
-                            <div class="card">
-                                <h3>Portfolio</h3><p>
-                                    Astro + Tailwind + animaciones clip-path.
-                                </p>
-                            </div>
-                            <div class="card">
-                                <h3>Tooling</h3><p>
-                                    Plantillas CI, lint y tests. Monorepo Bun.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Panel: CONTACT -->
-            <div class="panel" id="contact" aria-hidden="true">
-                <div class="bg"></div>
-                <section aria-labelledby="h-contact">
-                    <div>
-                        <h1 id="h-contact">Contacto</h1>
-                        <div class="cards" style="margin-top: var(--gap);">
-                            <div class="card">
-                                <h3>Email</h3><p>miguel@example.com</p>
-                            </div>
-                            <div class="card">
-                                <h3>GitHub</h3><p>@MiguelAguiarDev</p>
-                            </div>
-                            <div class="card">
-                                <h3>LinkedIn</h3><p>/in/MiguelAguiarDev</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
+            {
+                panels.map((panel, index) => (
+                    <Panel
+                        id={panel.id}
+                        title={panel.title}
+                        lead={panel.lead}
+                        initial={index === 0}
+                        background={panel.background}
+                    >
+                        <CardsGrid items={panel.cards} />
+                    </Panel>
+                ))
+            }
         </main>
-
-        <script>
-            // @ts-nocheck
-            // Estado
-            const panels = Array.from(document.querySelectorAll(".panel"));
-            const nav = document.querySelector(".navbar");
-            const buttons = Array.from(nav.querySelectorAll("button"));
-            let zCounter = 1;
-            let current = "home";
-            let isTransitioning = false;
-
-            // Inicial
-            elevate(document.getElementById(current), true);
-
-            // Click en navbar
-            buttons.forEach((btn) => {
-                btn.addEventListener("click", () => {
-                    const target = btn.dataset.target;
-                    if (target) goTo(target, "nav");
-                });
-            });
-
-            // Wheel para navegar
-            let wheelLock = false;
-            window.addEventListener(
-                "wheel",
-                (e) => {
-                    e.preventDefault();
-                    if (wheelLock || isTransitioning) return;
-                    wheelLock = true;
-                    const dir = Math.sign(e.deltaY);
-                    step(dir > 0 ? 1 : -1, "wheel");
-                    setTimeout(() => (wheelLock = false), 420);
-                },
-                { passive: false },
-            );
-
-            // Swipe táctil
-            let touchY = null;
-            window.addEventListener(
-                "touchstart",
-                (e) => {
-                    if (e.touches.length === 1) {
-                        touchY = e.touches[0].clientY;
-                    }
-                },
-                { passive: true },
-            );
-            window.addEventListener(
-                "touchend",
-                (e) => {
-                    if (touchY == null) return;
-                    const endY =
-                        e.changedTouches && e.changedTouches[0]
-                            ? e.changedTouches[0].clientY
-                            : touchY;
-                    const dy = endY - touchY;
-                    const threshold = 40; // píxeles
-                    if (Math.abs(dy) > threshold) {
-                        step(dy > 0 ? -1 : 1, "swipe");
-                    }
-                    touchY = null;
-                },
-                { passive: true },
-            );
-
-            // Helpers
-            function ids() {
-                return panels.map((p) => p.id);
-            }
-            function idxOf(id) {
-                return ids().indexOf(id);
-            }
-            function step(delta, via) {
-                const list = ids();
-                let i = idxOf(current);
-                i = (i + delta + list.length) % list.length;
-                goTo(list[i], via);
-            }
-            function goTo(id, via) {
-                if (id === current) return;
-                const target = document.getElementById(id);
-                if (!target) return;
-                isTransitioning = true;
-
-                // Marcar botón activo
-                buttons.forEach((b) =>
-                    b.setAttribute(
-                        "aria-current",
-                        b.dataset.target === id ? "page" : "false",
-                    ),
-                );
-
-                // Elevar y animar con clip-path en el que entra
-                elevate(target, false);
-
-                // Accesibilidad
-                panels.forEach((p) =>
-                    p.setAttribute(
-                        "aria-hidden",
-                        p.id === id ? "false" : "true",
-                    ),
-                );
-
-                // Fin de transición
-                setTimeout(
-                    () => {
-                        current = id;
-                        isTransitioning = false;
-                    },
-                    ms("--wipe-ms") || 700,
-                );
-            }
-            function elevate(panel, initial) {
-                zCounter++;
-                panel.style.zIndex = String(100 + zCounter);
-                if (!initial) {
-                    panel.classList.remove("entering"); // reset si ya la tenía
-                    // forzar reflow para reiniciar animación
-                    void panel.offsetWidth;
-                    panel.classList.add("entering");
-                }
-            }
-            function ms(varName) {
-                const s = getComputedStyle(document.documentElement)
-                    .getPropertyValue(varName)
-                    .trim();
-                if (!s) return null;
-                if (s.endsWith("ms")) return parseFloat(s);
-                if (s.endsWith("s")) return parseFloat(s) * 1000;
-                return parseFloat(s);
-            }
-
-            // Asegurar que la navbar no colisiona visualmente con la section centrada
-            // (opcional: desplazar sección un poco si overlap; aquí mantenemos centrado puro por tu requerimiento)
-        </script>
+        <Analytics />
+        <script type="module" src="/src/scripts/stage-navigation.ts"></script>
     </body>
 </html>
+
+<style>
+    #stage {
+        position: relative;
+        width: 100vw;
+        height: 100dvh;
+        isolation: isolate;
+        background: radial-gradient(
+            120vmax 120vmax at 10% 10%,
+            #17181c,
+            #0f0f10 60%
+        );
+    }
+</style>
