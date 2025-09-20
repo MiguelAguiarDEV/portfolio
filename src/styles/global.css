@@ -5,12 +5,15 @@
     --fs-1: clamp(14px, 1.6vw, 18px);
     --fs-2: clamp(18px, 2.4vw, 28px);
     --radius: 16px;
-    --gap: clamp(10px, 1.2vw, 20px);
-    --section-gap: calc(var(--gap) * 0.15);
+    --gap: clamp(0px, 0vw, 0px);
+    --section-gap: calc(var(--gap) * 0);
     /* gap reducido entre título y contenido */
-    --pad: clamp(10px, 1.5vw, 24px);
+    --pad: clamp(10px, 1.5vw, 10px);
     --nav-h: clamp(48px, 7vh, 64px);
     --wipe-ms: 700ms;
+
+    --avatar-max: 280px;
+    /* controla ancho en desktop */
 }
 
 *,
@@ -56,7 +59,7 @@ body {
 .cluster {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap);
+    gap: 0.3rem;
     min-width: 0;
 }
 
@@ -88,4 +91,390 @@ body {
     border: 1px solid var(--ring, rgba(255, 255, 255, 0.1));
     border-radius: var(--radius);
     box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, 0.35));
+}
+
+/* Chips */
+/* .chips heredarÃ¡ de la utilidad .cluster */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--ring);
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+    user-select: none;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.08) inset,
+        0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.chip:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--ring);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.12) inset,
+        0 8px 32px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+}
+
+.projects {
+    display: grid;
+    gap: calc(var(--gap) * 0.6);
+    grid-template-columns: repeat(var(--proj, 3), minmax(0, 1fr));
+    grid-template-rows: 1fr;
+    /* una fila que ocupa toda la altura */
+    align-items: stretch;
+    justify-items: stretch;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    overflow: auto;
+    /* permite ver el contenido si el meta ocupa mÃ¡s */
+}
+
+.project {
+    /* Grid en cuatro filas: media, titulo, descripcion y footer */
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows:
+        50% 50%;
+    gap: calc(var(--gap) * 0.2);
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+}
+
+.p-content {
+    display: grid;
+    grid-auto-rows: min-content;
+}
+
+.p-content>* {
+    height: fit-content;
+    align-self: start;
+}
+
+.carousel {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0d131d;
+    border: 1px solid var(--ring);
+    min-width: 0;
+    min-height: 0;
+    height: var(--project-media-height);
+}
+
+.slides {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    height: 100%;
+    overflow: hidden;
+    scrollbar-width: none;
+    min-width: 0;
+    min-height: 0;
+}
+
+/* Layout principal */
+.layout {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    gap: 0;
+    grid-template-columns: 360px 1fr;
+    height: 100%;
+    width: 100%;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+    grid-template-rows: 1fr;
+}
+
+.layout>* {
+    min-width: 0;
+    min-height: 0;
+}
+
+/* Columna izquierda: centro vertical del avatar */
+.col-left {
+    align-items: center;
+}
+
+.avatar-card {
+    flex: 1 1 0;
+    /* ocupa el alto restante */
+    margin-block: 0;
+    align-self: stretch;
+    /* llenar ancho de la columna */
+    width: 100%;
+    display: flex;
+    /* permite que el hijo copie 100% */
+    padding: 0;
+    /* mismo tamaÃ±o exacto que el hijo */
+    min-height: 0;
+    /* evita overflow del hijo */
+}
+
+.info-left {
+    flex: 0 0 auto;
+    /* chips segÃºn contenido */
+    min-height: 0;
+}
+
+/* Cards: definidas como utilidades globales (.card, .pad) */
+
+/* Avatar: el hijo ocupa EXACTO lo mismo que su padre directo */
+.avatar-wrap {
+    width: 100%;
+    height: 100%;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    mask: linear-gradient(to bottom,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 1) 70%,
+            rgba(0, 0, 0, 0) 100%);
+    -webkit-mask: linear-gradient(to bottom,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 1) 70%,
+            rgba(0, 0, 0, 0) 100%);
+}
+
+/* Badges eliminados: usamos .chips + .chip */
+
+/* Columna derecha usa utilidades globales */
+
+/* Secciones */
+.section {
+    /* por defecto, alto segÃºn contenido */
+    flex: 0 0 auto;
+    min-height: 0;
+}
+
+.section.fill {
+    /* solo las secciones con .fill crecen para ocupar el resto */
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.section>h3 {
+    margin: 0;
+    margin-left: var(--gap);
+    font-size: 1.15rem;
+}
+
+.prose {
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+/* La card rellena solo cuando la secciÃ³n es .fill (ej. Top projects)
+       Nota: no forzamos display aquÃ­ para no sobrescribir .projects { display: grid } */
+.section.fill>.card {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: auto;
+}
+
+/* CTA */
+.cta {
+    display: flex;
+    gap: var(--gap);
+    flex-wrap: wrap;
+    margin-top: 0;
+    min-width: 0;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid var(--ring);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* ================= Projects sin overflows ni huecos ================ */
+
+/* Reducir padding solo en la card de Projects */
+.section.fill>.card.pad {
+    padding: calc(var(--pad) * 0.6);
+}
+
+/* Reducir gaps internos del meta de cada proyecto */
+.p-title {
+    font-size: clamp(1rem, 2.1vw, 1.25rem);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-description {
+    font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.55;
+    max-height: calc(1em * 1.55 * 3);
+}
+
+.p-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: auto;
+    /* pega el footer al fondo en contenedores flex */
+    font-size: clamp(0.78rem, 1.4vw, 0.9rem);
+    min-width: 0;
+}
+
+/* En tarjetas de proyecto con grid, fuerza al footer a la última fila */
+.project>.p-footer {
+    grid-row: -2 / -1;
+}
+
+.p-tags,
+.p-links {
+    display: flex;
+    gap: calc(var(--gap) * 0.5);
+    flex-wrap: wrap;
+    align-items: center;
+    min-width: 0;
+}
+
+.slides::-webkit-scrollbar {
+    display: none;
+}
+
+.slides figure,
+.slides video {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.slides img,
+.slides video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.car-ctrl {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ring);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+}
+
+.arrow.left {
+    left: 8px;
+}
+
+.arrow.right {
+    right: 8px;
+}
+
+.dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 6px;
+    display: flex;
+    gap: var(--gap);
+    justify-content: center;
+    pointer-events: none;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.dot.is-active {
+    background: #fff;
+}
+
+.p-tags,
+.p-links {
+    display: flex;
+    gap: var(--gap);
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.p-links .btn {
+    padding: 0;
+    font-size: inherit;
+}
+
+/* ================== Responsivo ================== */
+@media (max-width: 1200px) {
+    :root {
+        --proj: 2;
+    }
+}
+
+@media (max-width: 720px) {
+    :root {
+        --proj: 1;
+    }
+}
+
+/* Colapso de layout general en mÃ³viles */
+@media (max-width: 900px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* En mÃ³vil, estira horizontal y cÃ©ntrala. Mantiene ratio 3/4. */
+    .avatar-card {
+        /* align-self: stretch; */
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
 }
