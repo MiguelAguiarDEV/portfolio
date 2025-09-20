@@ -5,7 +5,7 @@
     --fs-1: clamp(14px, 1.6vw, 18px);
     --fs-2: clamp(18px, 2.4vw, 28px);
     --radius: 16px;
-    --gap: clamp(0px, 0vw, 0px);
+    --gap: clamp(10px, 0vw, 0px);
     --section-gap: calc(var(--gap) * 0);
     /* gap reducido entre título y contenido */
     --pad: clamp(10px, 1.5vw, 10px);
@@ -130,7 +130,7 @@ body {
 
 .projects {
     display: grid;
-    gap: calc(var(--gap) * 0.6);
+    gap: calc(var(--gap) * 1);
     grid-template-columns: repeat(var(--proj, 3), minmax(0, 1fr));
     grid-template-rows: 1fr;
     /* una fila que ocupa toda la altura */
@@ -156,8 +156,9 @@ body {
 }
 
 .p-content {
-    display: grid;
-    grid-auto-rows: min-content;
+    display: flex;
+    /* grid-auto-rows: min-content; */
+    flex-direction: column;
 }
 
 .p-content>* {
@@ -304,18 +305,32 @@ body {
 .btn {
     display: inline-flex;
     align-items: center;
-    gap: 0;
-    padding: 0;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.35rem 0.6rem;
     border-radius: 10px;
     border: 1px solid var(--ring);
-    background: rgba(255, 255, 255, 0.04);
     color: var(--ink);
-    text-decoration: none;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+    user-select: none;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.08) inset,
+        0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .btn:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--ring, rgba(255, 255, 255, 0.25));
 }
+
 
 /* ================= Projects sin overflows ni huecos ================ */
 
@@ -352,6 +367,8 @@ body {
     /* pega el footer al fondo en contenedores flex */
     font-size: clamp(0.78rem, 1.4vw, 0.9rem);
     min-width: 0;
+    gap: 0.6rem;
+    margin-bottom: 0.2rem;
 }
 
 /* En tarjetas de proyecto con grid, fuerza al footer a la última fila */
@@ -359,13 +376,21 @@ body {
     grid-row: -2 / -1;
 }
 
-.p-tags,
 .p-links {
     display: flex;
     gap: calc(var(--gap) * 0.5);
     flex-wrap: wrap;
     align-items: center;
     min-width: 0;
+
+}
+
+.p-tags {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
+    min-width: 0;
+    gap: 0.3rem;
 }
 
 .slides::-webkit-scrollbar {
@@ -438,17 +463,17 @@ body {
     background: #fff;
 }
 
-.p-tags,
 .p-links {
     display: flex;
-    gap: var(--gap);
     flex-wrap: wrap;
     min-width: 0;
+    min-width: 0;
+    gap: 0.3rem;
 }
 
 .p-links .btn {
-    padding: 0;
-    font-size: inherit;
+    padding: 0.6;
+    font-size: 1.3rem;
 }
 
 /* ================== Responsivo ================== */
@@ -476,5 +501,45 @@ body {
         width: 100%;
         max-width: 420px;
         margin: 0 auto;
+    }
+}
+
+/* Mobile layout: hide left column, smaller fonts, vertical projects */
+@media (max-width: 900px) {
+
+    /* Left column hidden */
+    .layout .col-left {
+        display: none;
+    }
+
+    /* Projects grid becomes a single column with multiple rows */
+    .projects {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        grid-auto-rows: minmax(0, auto);
+    }
+
+    /* Slightly smaller typography on mobile */
+    .p-title {
+        font-size: clamp(0.95rem, 4.5vw, 1.1rem);
+    }
+
+    .project-description {
+        font-size: clamp(0.8rem, 3.8vw, 0.9rem);
+    }
+
+    .chip {
+        font-size: 0.72rem;
+    }
+
+    .btn {
+        font-size: 0.9em;
+    }
+}
+
+/* Ensure left column hides on small screens */
+@media (max-width: 900px) {
+    .layout .col-left {
+        display: none;
     }
 }
