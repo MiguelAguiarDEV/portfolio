@@ -1,0 +1,123 @@
+---
+export interface ImageSlide {
+    kind: "image";
+    src: string;
+    alt: string;
+}
+
+export interface VideoSource {
+    src: string;
+    type?: string;
+}
+
+export interface VideoSlide {
+    kind: "video";
+    sources: VideoSource[];
+    poster?: string;
+}
+
+export type Slide = ImageSlide | VideoSlide;
+
+export interface Props {
+    name: string;
+    description: string;
+    slides: Slide[];
+    stack: string[];
+    liveUrl?: string;
+    repoUrl?: string;
+}
+
+const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
+---
+
+<article class="project">
+    <div class="carousel">
+        <div class="slides">
+            {
+                slides.map((slide, index) => (
+                    <figure key={`${slide.kind}-${index}`}>
+                        {slide.kind === "image" ? (
+                            <img
+                                loading="lazy"
+                                src={slide.src}
+                                alt={slide.alt}
+                            />
+                        ) : (
+                            <video
+                                preload="none"
+                                controls
+                                playsinline
+                                muted
+                                poster={slide.poster}
+                            >
+                                {slide.sources.map((source, sourceIndex) => (
+                                    <source
+                                        src={source.src}
+                                        type={source.type}
+                                        key={`${source.src}-${sourceIndex}`}
+                                    />
+                                ))}
+                                Tu navegador no soporta video.
+                            </video>
+                        )}
+                    </figure>
+                ))
+            }
+        </div>
+        <div class="car-ctrl">
+            <button class="arrow left" aria-label="Anterior"><</button>
+            <button class="arrow right" aria-label="Siguiente">></button>
+            <div class="dots">
+                {
+                    slides.map((_, index) => (
+                        <i
+                            class={`dot ${index === 0 ? "is-active" : ""}`}
+                            key={`dot-${index}`}
+                        />
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+    <div class="p-meta">
+        <h4>{name}</h4>
+        <p class="prose">{description}</p>
+        {
+            stack.length > 0 && (
+                <div class="p-tags">
+                    {stack.map((tech) => (
+                        <span class="chip" key={tech}>
+                            {tech}
+                        </span>
+                    ))}
+                </div>
+            )
+        }
+        {
+            (liveUrl || repoUrl) && (
+                <div class="p-links">
+                    {liveUrl && (
+                        <a
+                            class="btn"
+                            href={liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Live
+                        </a>
+                    )}
+                    {repoUrl && (
+                        <a
+                            class="btn"
+                            href={repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Repo
+                        </a>
+                    )}
+                </div>
+            )
+        }
+    </div>
+</article>

@@ -1,3 +1,72 @@
+---
+import ProjectItem from "../ProjectItem.astro";
+import type { Props as ProjectItemProps } from "../ProjectItem.astro";
+
+const projects: ProjectItemProps[] = [
+    {
+        name: "[Nombre del proyecto]",
+        description:
+            "[Descripción breve. Qué resuelve, rol, impacto.]",
+        slides: [
+            {
+                kind: "image",
+                src: "/img/projects/p1-1.jpg",
+                alt: "Vista 1",
+            },
+            {
+                kind: "image",
+                src: "/img/projects/p1-2.jpg",
+                alt: "Vista 2",
+            },
+            {
+                kind: "video",
+                poster: "/img/projects/p1-cover.jpg",
+                sources: [
+                    {
+                        src: "/video/projects/p1-demo.mp4",
+                        type: "video/mp4",
+                    },
+                ],
+            },
+        ],
+        stack: ["[Stack 1]", "[Stack 2]", "[Stack 3]"],
+        liveUrl: "#",
+        repoUrl: "#",
+    },
+    {
+        name: "[Proyecto 2]",
+        description: "[Descripción breve.]",
+        slides: [
+            {
+                kind: "image",
+                src: "/img/projects/p2-1.jpg",
+                alt: "Vista 1",
+            },
+            {
+                kind: "image",
+                src: "/img/projects/p2-2.jpg",
+                alt: "Vista 2",
+            },
+        ],
+        stack: ["[Tech A]", "[Tech B]"],
+        repoUrl: "#",
+    },
+    {
+        name: "[Proyecto 3]",
+        description: "[Descripción breve.]",
+        slides: [
+            {
+                kind: "image",
+                src: "/img/projects/p3-1.jpg",
+                alt: "Vista 1",
+            },
+        ],
+        stack: ["[Tech X]", "[Tech Y]"],
+        liveUrl: "#",
+    },
+];
+---
+
 <div class="layout">
     <!-- Izquierda -->
     <aside class="col-left column pad stack">
@@ -29,7 +98,7 @@
             <h3>About me</h3>
             <div class="card pad stack">
                 <p class="prose">
-                    I’m Miguel Santiesteban, a 22-year-old Computer Science
+                    Iâ€™m Miguel Santiesteban, a 22-year-old Computer Science
                     student from the Canary Islands, Spain. I specialize in
                     backend development and love building projects from the
                     ground up, solving hard problems, and learning continuously.
@@ -42,7 +111,7 @@
                     >
                     <a
                         class="btn"
-                        href="mailto:miguel@example.com?subject=Contacto%20—%20Miguel%20Santiesteban"
+                        href="mailto:miguel@example.com?subject=Contacto%20â€”%20Miguel%20Santiesteban"
                         >Contact</a
                     >
                 </div>
@@ -70,141 +139,9 @@
         <div class="section stack fill">
             <h3>Top projects</h3>
             <div class="projects card pad">
-                <!-- Project 1 -->
-                <article class="project">
-                    <div class="carousel">
-                        <div class="slides">
-                            <figure>
-                                <img
-                                    loading="lazy"
-                                    src="/img/projects/p1-1.jpg"
-                                    alt="Vista 1"
-                                />
-                            </figure>
-                            <figure>
-                                <img
-                                    loading="lazy"
-                                    src="/img/projects/p1-2.jpg"
-                                    alt="Vista 2"
-                                />
-                            </figure>
-                            <figure>
-                                <video
-                                    preload="none"
-                                    controls
-                                    playsinline
-                                    muted
-                                    poster="/img/projects/p1-cover.jpg"
-                                >
-                                    <source
-                                        src="/video/projects/p1-demo.mp4"
-                                        type="video/mp4"
-                                    />
-                                    Tu navegador no soporta video.
-                                </video>
-                            </figure>
-                        </div>
-                        <div class="car-ctrl">
-                            <button class="arrow left" aria-label="Anterior"
-                                >‹</button
-                            >
-                            <button class="arrow right" aria-label="Siguiente"
-                                >›</button
-                            >
-                            <div class="dots">
-                                <i class="dot is-active"></i><i class="dot"
-                                ></i><i class="dot"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-meta">
-                        <h4>[Nombre del proyecto]</h4>
-                        <p class="prose">
-                            [Descripción breve. Qué resuelve, rol, impacto.]
-                        </p>
-                        <div class="p-tags">
-                            <span class="chip">[Stack 1]</span><span
-                                class="chip">[Stack 2]</span
-                            ><span class="chip">[Stack 3]</span>
-                        </div>
-                        <div class="p-links">
-                            <a class="btn" href="#">Live</a>
-                            <a class="btn" href="#">Repo</a>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Project 2 -->
-                <article class="project">
-                    <div class="carousel">
-                        <div class="slides">
-                            <figure>
-                                <img
-                                    loading="lazy"
-                                    src="/img/projects/p2-1.jpg"
-                                    alt="Vista 1"
-                                />
-                            </figure>
-                            <figure>
-                                <img
-                                    loading="lazy"
-                                    src="/img/projects/p2-2.jpg"
-                                    alt="Vista 2"
-                                />
-                            </figure>
-                        </div>
-                        <div class="car-ctrl">
-                            <button class="arrow left" aria-label="Anterior"
-                                >‹</button
-                            >
-                            <button class="arrow right" aria-label="Siguiente"
-                                >›</button
-                            >
-                            <div class="dots">
-                                <i class="dot is-active"></i><i class="dot"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-meta">
-                        <h4>[Proyecto 2]</h4>
-                        <p class="prose">[Descripción breve.]</p>
-                        <div class="p-tags">
-                            <span class="chip">[Tech A]</span><span class="chip"
-                                >[Tech B]</span
-                            >
-                        </div>
-                        <div class="p-links">
-                            <a class="btn" href="#">Repo</a>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Project 3 -->
-                <article class="project">
-                    <div class="carousel">
-                        <div class="slides">
-                            <figure>
-                                <img
-                                    loading="lazy"
-                                    src="/img/projects/p3-1.jpg"
-                                    alt="Vista 1"
-                                />
-                            </figure>
-                        </div>
-                    </div>
-                    <div class="p-meta">
-                        <h4>[Proyecto 3]</h4>
-                        <p class="prose">[Descripción breve.]</p>
-                        <div class="p-tags">
-                            <span class="chip">[Tech X]</span><span class="chip"
-                                >[Tech Y]</span
-                            >
-                        </div>
-                        <div class="p-links">
-                            <a class="btn" href="#">Live</a>
-                        </div>
-                    </div>
-                </article>
+                {projects.map((project) => (
+                    <ProjectItem {...project} />
+                ))}
             </div>
         </div>
     </section>
@@ -244,11 +181,11 @@
         align-self: stretch; /* llenar ancho de la columna */
         width: 100%;
         display: flex; /* permite que el hijo copie 100% */
-        padding: 0; /* mismo tamaño exacto que el hijo */
+        padding: 0; /* mismo tamaÃ±o exacto que el hijo */
         min-height: 0; /* evita overflow del hijo */
     }
     .info-left {
-        flex: 0 0 auto; /* chips según contenido */
+        flex: 0 0 auto; /* chips segÃºn contenido */
         min-height: 0;
     }
 
@@ -284,7 +221,7 @@
 
     /* Secciones */
     .section {
-        /* por defecto, alto según contenido */
+        /* por defecto, alto segÃºn contenido */
         flex: 0 0 auto;
         min-height: 0;
     }
@@ -303,8 +240,8 @@
         line-height: 1.55;
     }
 
-    /* La card rellena solo cuando la sección es .fill (ej. Top projects)
-       Nota: no forzamos display aquí para no sobrescribir .projects { display: grid } */
+    /* La card rellena solo cuando la secciÃ³n es .fill (ej. Top projects)
+       Nota: no forzamos display aquÃ­ para no sobrescribir .projects { display: grid } */
     .section.fill > .card {
         flex: 1 1 0;
         min-height: 0;
@@ -335,7 +272,7 @@
     }
 
     /* Chips */
-    /* .chips heredará de la utilidad .cluster */
+    /* .chips heredarÃ¡ de la utilidad .cluster */
     .chip {
         display: inline-flex;
         align-items: center;
@@ -388,7 +325,7 @@
         min-width: 0;
         min-height: 0;
         height: 100%;
-        overflow: auto; /* permite ver el contenido si el meta ocupa más */
+        overflow: auto; /* permite ver el contenido si el meta ocupa mÃ¡s */
     }
     .project {
         /* El contenido (meta) tiene prioridad; el carrusel ocupa el resto */
@@ -400,7 +337,7 @@
         overflow: hidden;
     }
     .project .p-meta {
-        flex: 0 0 auto; /* prioridad de tamaño: no se colapsa */
+        flex: 0 0 auto; /* prioridad de tamaÃ±o: no se colapsa */
     }
     .carousel {
         position: relative;
@@ -410,7 +347,7 @@
         border: 1px solid var(--ring);
         min-width: 0;
         min-height: 0;
-        flex: 1 1 auto; /* ocupa el sobrante del artículo */
+        flex: 1 1 auto; /* ocupa el sobrante del artÃ­culo */
         height: auto;   /* flex gestiona la altura */
     }
     .slides {
@@ -509,6 +446,7 @@
         text-overflow: ellipsis;
     }
     .p-meta .prose {
+        font-size: 0.9rem;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
@@ -539,13 +477,13 @@
         }
     }
 
-    /* Colapso de layout general en móviles */
+    /* Colapso de layout general en mÃ³viles */
     @media (max-width: 900px) {
         .layout {
             grid-template-columns: 1fr;
         }
 
-        /* En móvil, estira horizontal y céntrala. Mantiene ratio 3/4. */
+        /* En mÃ³vil, estira horizontal y cÃ©ntrala. Mantiene ratio 3/4. */
         .avatar-card {
             /* align-self: stretch; */
             width: 100%;
