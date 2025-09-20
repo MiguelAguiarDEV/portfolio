@@ -16,11 +16,7 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
 <div class="panel" id={id} aria-hidden={ariaHidden} style={panelStyle}>
     <div class="bg"></div>
     <section aria-labelledby={headingId}>
-        <div>
-            <h1 id={headingId}>{title}</h1>
-            {lead && <p class="lead">{lead}</p>}
-            <slot />
-        </div>
+        <slot />
     </section>
 </div>
 
@@ -49,7 +45,6 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         block-size: min(72vh, 76svh);
         display: grid;
         place-items: center;
-        padding: var(--pad);
         /* box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35); */
         border: 1px solid white;
         border-radius: var(--radius);

@@ -1,7 +1,8 @@
 ---
 import FloatingNav from "@/components/FloatingNav.astro";
 import Panel from "@/components/Panel.astro";
-import CardsGrid from "@/components/CardsGrid.astro";
+import CardsGrid from "@/components/GridCard.astro";
+import AboutPanel from "@/components/panels/AboutPanel.astro";
 import Analytics from "@vercel/analytics/astro";
 import "@/styles/global.css";
 
@@ -16,7 +17,7 @@ type PanelData = {
     title: string;
     lead?: string;
     background: string;
-    cards: PanelCard[];
+    cards?: PanelCard[];
 };
 
 const panels: PanelData[] = [
@@ -24,45 +25,30 @@ const panels: PanelData[] = [
         id: "home",
         label: "Inicio",
         title: "Miguel Santiesteban",
-        lead: "Backend \u2013 Node \u2013 Laravel \u2013 React \u2013 Prisma",
+        lead: "Backend – Node – Laravel – React – Prisma",
         background:
             "radial-gradient(120vmax 120vmax at 15% 15%, #15171a, #0d0e12 60%)",
         cards: [
             {
                 title: "Queater",
-                description: "SaaS para restaurantes. Men\u00fas, stock y POS.",
+                description: "SaaS para restaurantes. Menús, stock y POS.",
             },
             {
                 title: "CSV Analyzer",
-                description: "Exploraci\u00f3n de datos con IA. React + Node.",
+                description: "Exploración de datos con IA. React + Node.",
             },
             {
                 title: "AICLID",
                 description:
-                    "Detecci\u00f3n celular YOLO. Proyecto de investigaci\u00f3n.",
+                    "Detección celular YOLO. Proyecto de investigación.",
             },
         ],
     },
     {
         id: "about",
-        label: "Sobre m\u00ed",
-        title: "Sobre m\u00ed",
+        label: "Sobre mí",
+        title: "Sobre mí",
         background: "linear-gradient(135deg, #0b3a36, #0b2a3a 70%)",
-        cards: [
-            {
-                title: "Perfil",
-                description:
-                    "Programador orientado a backend. Sistemas y rendimiento.",
-            },
-            {
-                title: "Stack",
-                description: "TS/Node, Laravel, React, Prisma, Docker, CI/CD.",
-            },
-            {
-                title: "Ahora",
-                description: "Buscando remoto. Enfocado en producto y DX.",
-            },
-        ],
     },
     {
         id: "work",
@@ -138,8 +124,13 @@ const navItems = panels.map(({ id, label }) => ({ id, label }));
                         lead={panel.lead}
                         initial={index === 0}
                         background={panel.background}
+                        hideHeading={panel.id === "about"}
                     >
-                        <CardsGrid items={panel.cards} />
+                        {panel.id === "about" ? (
+                            <AboutPanel />
+                        ) : (
+                            panel.cards && <CardsGrid items={panel.cards} />
+                        )}
                     </Panel>
                 ))
             }

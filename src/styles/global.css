@@ -1,28 +1,29 @@
 @import "tailwindcss";
- 
+
 :root {
     --fs-0: clamp(12px, 1.2vw, 14px);
     --fs-1: clamp(14px, 1.6vw, 18px);
     --fs-2: clamp(18px, 2.4vw, 28px);
     --radius: 16px;
     --gap: clamp(10px, 1.2vw, 20px);
+    --section-gap: calc(var(--gap) * 0.75); /* gap reducido entre título y contenido */
     --pad: clamp(10px, 1.5vw, 24px);
     --nav-h: clamp(48px, 7vh, 64px);
     --wipe-ms: 700ms;
 }
- 
+
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
- 
+
 html,
 body {
     height: 100%;
     margin: 0;
 }
- 
+
 body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, sans-serif;
     background: #0f0f10;
@@ -30,3 +31,60 @@ body {
     overflow: hidden;
 }
 
+/* ---- Utilities ---- */
+.column {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    min-width: 0;
+    /* overflow: hidden; */
+}
+
+/* Gap más reducido solo para secciones (título ↔ contenido) */
+.section.stack {
+    gap: var(--section-gap);
+}
+
+.cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    min-width: 0;
+}
+
+.pad {
+    padding: var(--pad);
+}
+
+.fill {
+    flex: 1 1 0;
+}
+
+.scroll {
+    min-height: 0;
+    overflow: auto;
+}
+
+.self-center {
+    align-self: center;
+}
+
+.center {
+    display: grid;
+    place-items: center;
+}
+
+/* Card primitive */
+.card {
+    background: var(--panel, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--ring, rgba(255, 255, 255, 0.1));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, 0.35));
+}
