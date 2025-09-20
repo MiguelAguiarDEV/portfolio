@@ -391,14 +391,16 @@
         overflow: auto; /* permite ver el contenido si el meta ocupa más */
     }
     .project {
-        /* Reset básico: sin layout forzado ni alturas impuestas */
-        display: block;
-        margin: 0;
-        padding: 0;
+        /* El contenido (meta) tiene prioridad; el carrusel ocupa el resto */
+        display: flex;
+        flex-direction: column;
         min-width: 0;
         min-height: 0;
-        height: auto;
-        overflow: visible;
+        height: 100%;
+        overflow: hidden;
+    }
+    .project .p-meta {
+        flex: 0 0 auto; /* prioridad de tamaño: no se colapsa */
     }
     .carousel {
         position: relative;
@@ -408,7 +410,8 @@
         border: 1px solid var(--ring);
         min-width: 0;
         min-height: 0;
-        height: 100%;
+        flex: 1 1 auto; /* ocupa el sobrante del artículo */
+        height: auto;   /* flex gestiona la altura */
     }
     .slides {
         display: grid;
