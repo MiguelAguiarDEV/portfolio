@@ -295,6 +295,7 @@
     }
     .section > h3 {
         margin: 0;
+        margin-left: var(--gap);
         font-size: 1.15rem;
     }
     .prose {
@@ -379,7 +380,7 @@
     /* ================= Projects sin overflows ni huecos ================ */
     .projects {
         display: grid;
-        gap: var(--gap);
+        gap: calc(var(--gap) * 0.6);
         grid-template-columns: repeat(var(--proj, 3), minmax(0, 1fr));
         grid-template-rows: 1fr; /* una fila que ocupa toda la altura */
         align-items: stretch;
@@ -418,6 +419,16 @@
         scrollbar-width: none;
         min-width: 0;
         min-height: 0;
+    }
+    /* Reducir padding solo en la card de Projects */
+    .section.fill > .card.pad {
+        padding: calc(var(--pad) * 0.6);
+    }
+    /* Reducir gaps internos del meta de cada proyecto */
+    .project .p-meta,
+    .project .p-tags,
+    .project .p-links {
+        gap: calc(var(--gap) * 0.6);
     }
     .slides::-webkit-scrollbar {
         display: none;

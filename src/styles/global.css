@@ -6,7 +6,8 @@
     --fs-2: clamp(18px, 2.4vw, 28px);
     --radius: 16px;
     --gap: clamp(10px, 1.2vw, 20px);
-    --section-gap: calc(var(--gap) * 0.75); /* gap reducido entre título y contenido */
+    --section-gap: calc(var(--gap) * 0.15);
+    /* gap reducido entre título y contenido */
     --pad: clamp(10px, 1.5vw, 24px);
     --nav-h: clamp(48px, 7vh, 64px);
     --wipe-ms: 700ms;
