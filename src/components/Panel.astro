@@ -30,12 +30,15 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         grid-template-columns: 1fr;
         place-items: center;
         overflow: clip;
+        /* Deja espacio para la barra de navegación fija */
+        padding-top: var(--panel-top-offset, calc(var(--nav-h, 56px) + 3vh));
     }
 
     .panel > .bg {
         position: absolute;
         inset: 0;
         background: var(--bg, #111);
+        pointer-events: none;
     }
 
     .panel > section {
@@ -81,10 +84,11 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 900px) {
         .panel > section {
             inline-size: min(960px, 92vw);
-            block-size: min(70vh, 70svh);
+            /* Más alto en móvil para ocupar mejor la pantalla */
+            block-size: min(88vh, 88svh);
         }
     }
 </style>
