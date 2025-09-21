@@ -3,6 +3,8 @@ import FloatingNav from "@/components/FloatingNav.astro";
 import Panel from "@/components/Panel.astro";
 import CardsGrid from "@/components/GridCard.astro";
 import AboutPanel from "@/components/panels/AboutPanel.astro";
+import ProjectsPanel from "@/components/panels/ProjectsPanel.astro";
+import type { Props as ProjectItemProps } from "@/components/ProjectItem.astro";
 import Analytics from "@vercel/analytics/astro";
 import "@/styles/global.css";
 
@@ -55,21 +57,6 @@ const panels: PanelData[] = [
         label: "Proyectos",
         title: "Proyectos",
         background: "linear-gradient(135deg, #2a143a, #0f1020 70%)",
-        cards: [
-            {
-                title: "Queater",
-                description:
-                    "Laravel + Inertia + React. Multi-tenant con roles.",
-            },
-            {
-                title: "Portfolio",
-                description: "Astro + Tailwind con animaciones de clip-path.",
-            },
-            {
-                title: "Tooling",
-                description: "Plantillas CI, lint y tests. Monorepo con Bun.",
-            },
-        ],
     },
     {
         id: "contact",
@@ -81,6 +68,47 @@ const panels: PanelData[] = [
             { title: "GitHub", description: "@MiguelAguiarDev" },
             { title: "LinkedIn", description: "/in/MiguelAguiarDev" },
         ],
+    },
+];
+
+// Datos para ProjectsPanel
+const projects: ProjectItemProps[] = [
+    {
+        name: "[Nombre del proyecto]",
+        description: "[Descripción breve. Qué resuelve, rol, impacto.]",
+        slides: [
+            { kind: "image", src: "/img/projects/p1-1.jpg", alt: "Vista 1" },
+            { kind: "image", src: "/img/projects/p1-2.jpg", alt: "Vista 2" },
+            {
+                kind: "video",
+                poster: "/img/projects/p1-cover.jpg",
+                sources: [
+                    { src: "/video/projects/p1-demo.mp4", type: "video/mp4" },
+                ],
+            },
+        ],
+        stack: ["[Stack 1]", "[Stack 2]", "[Stack 3]"],
+        liveUrl: "#",
+        repoUrl: "#",
+    },
+    {
+        name: "[Proyecto 2]",
+        description: "[Descripción breve.]",
+        slides: [
+            { kind: "image", src: "/img/projects/p2-1.jpg", alt: "Vista 1" },
+            { kind: "image", src: "/img/projects/p2-2.jpg", alt: "Vista 2" },
+        ],
+        stack: ["[Tech A]", "[Tech B]"],
+        repoUrl: "#",
+    },
+    {
+        name: "[Proyecto 3]",
+        description: "[Descripción breve.]",
+        slides: [
+            { kind: "image", src: "/img/projects/p3-1.jpg", alt: "Vista 1" },
+        ],
+        stack: ["[Tech X]", "[Tech Y]"],
+        liveUrl: "#",
     },
 ];
 
@@ -119,6 +147,11 @@ const navItems = panels.map(({ id, label }) => ({ id, label }));
                     >
                         {panel.id === "about" ? (
                             <AboutPanel />
+                        ) : panel.id === "work" ? (
+                            <ProjectsPanel
+                                title="Top projects"
+                                projects={projects}
+                            />
                         ) : (
                             panel.cards && <CardsGrid items={panel.cards} />
                         )}

@@ -1,0 +1,29 @@
+---
+import ProjectItem from "../ProjectItem.astro";
+import type { Props as ProjectItemProps } from "../ProjectItem.astro";
+
+export interface Props {
+    title?: string;
+    projects: ProjectItemProps[];
+}
+
+const { title = "Top projects", projects } = Astro.props;
+---
+
+<div class="section stack fill">
+    <h3>{title}</h3>
+    <div class="projects">
+        {projects.map((p) => <ProjectItem {...p} />)}
+    </div>
+</div>
+
+<style>
+    /* Garantiza que la rejilla aprovecha el alto del panel */
+    .section.fill {
+        min-height: 0;
+    }
+    .projects {
+        min-height: 0;
+        height: 100%;
+    }
+</style>
