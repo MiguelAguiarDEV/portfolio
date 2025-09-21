@@ -349,13 +349,14 @@ body {
 }
 
 .project-description {
-    font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+    font-size: 0.85rem;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    line-height: 1.55;
+    line-height: 1;
     max-height: calc(1em * 1.55 * 3);
+    text-wrap: 
 }
 
 .p-footer {
@@ -476,21 +477,9 @@ body {
     font-size: 1.3rem;
 }
 
-/* ================== Responsivo ================== */
-@media (max-width: 1200px) {
-    :root {
-        --proj: 2;
-    }
-}
-
-@media (max-width: 720px) {
-    :root {
-        --proj: 1;
-    }
-}
 
 /* Colapso de layout general en mÃ³viles */
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
     .layout {
         grid-template-columns: 1fr;
     }
@@ -502,10 +491,7 @@ body {
         max-width: 420px;
         margin: 0 auto;
     }
-}
 
-/* Mobile layout: hide left column, smaller fonts, vertical projects */
-@media (max-width: 900px) {
 
     /* Left column hidden */
     .layout .col-left {
@@ -513,10 +499,22 @@ body {
     }
 
     /* Projects grid becomes a single column with multiple rows */
+    .project {
+        display: flex;
+    }
+
     .projects {
+        display: grid;
+        gap: calc(var(--gap) * 0);
+        grid-template-rows: repeat(var(--proj, 3), minmax(0, 1fr));
         grid-template-columns: 1fr;
-        grid-template-rows: none;
-        grid-auto-rows: minmax(0, auto);
+        /* una fila que ocupa toda la altura */
+        align-items: stretch;
+        justify-items: stretch;
+        min-width: 0;
+        min-height: 0;
+        height: 100%;
+        overflow: auto;
     }
 
     /* Slightly smaller typography on mobile */
@@ -524,22 +522,29 @@ body {
         font-size: clamp(0.95rem, 4.5vw, 1.1rem);
     }
 
-    .project-description {
-        font-size: clamp(0.8rem, 3.8vw, 0.9rem);
-    }
-
     .chip {
         font-size: 0.72rem;
     }
 
-    .btn {
-        font-size: 0.9em;
-    }
-}
-
-/* Ensure left column hides on small screens */
-@media (max-width: 900px) {
     .layout .col-left {
         display: none;
     }
+
+    .prose {
+        font-size: 0.9rem;
+    }
+
+    .carousel {
+        display: none;
+    }
+
+    .p-links .btn {
+        padding: 0.6;
+        font-size: 1.3rem;
+    }
+
+    .project-description {
+        height: 55px;
+    }
+
 }
