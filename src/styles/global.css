@@ -356,7 +356,7 @@ body {
     overflow: hidden;
     line-height: 1;
     max-height: calc(1em * 1.55 * 3);
-    text-wrap: 
+    text-wrap:
 }
 
 .p-footer {
@@ -498,14 +498,8 @@ body {
         display: none;
     }
 
-    /* Projects grid becomes a single column with multiple rows */
-    .project {
-        display: flex;
-    }
-
     .projects {
         display: grid;
-        gap: calc(var(--gap) * 0);
         grid-template-rows: repeat(var(--proj, 3), minmax(0, 1fr));
         grid-template-columns: 1fr;
         /* una fila que ocupa toda la altura */
@@ -517,10 +511,35 @@ body {
         overflow: auto;
     }
 
-    /* Slightly smaller typography on mobile */
+    .project {
+        /* display: flex; */
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 1fr;
+        gap: 1rem;
+        height: 100%;
+    }
+
     .p-title {
         font-size: clamp(0.95rem, 4.5vw, 1.1rem);
     }
+
+    .carousel {
+        height: 100%;
+    }
+
+    .project-description {
+        height: 55px;
+    }
+
+    .p-links .btn {
+        padding: 0.6;
+        font-size: 1.3rem;
+    }
+
+
+
+
+
 
     .chip {
         font-size: 0.72rem;
@@ -534,17 +553,7 @@ body {
         font-size: 0.9rem;
     }
 
-    .carousel {
-        display: none;
-    }
 
-    .p-links .btn {
-        padding: 0.6;
-        font-size: 1.3rem;
-    }
 
-    .project-description {
-        height: 55px;
-    }
 
 }
