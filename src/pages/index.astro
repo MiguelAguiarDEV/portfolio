@@ -77,18 +77,9 @@ const panels: PanelData[] = [
         title: "Contacto",
         background: "linear-gradient(135deg, #3a1a1a, #101010 70%)",
         cards: [
-            {
-                title: "Email",
-                description: "miguel@example.com",
-            },
-            {
-                title: "GitHub",
-                description: "@MiguelAguiarDev",
-            },
-            {
-                title: "LinkedIn",
-                description: "/in/MiguelAguiarDev",
-            },
+            { title: "Email", description: "miguel@example.com" },
+            { title: "GitHub", description: "@MiguelAguiarDev" },
+            { title: "LinkedIn", description: "/in/MiguelAguiarDev" },
         ],
     },
 ];
@@ -136,7 +127,7 @@ const navItems = panels.map(({ id, label }) => ({ id, label }));
             }
         </main>
         <Analytics />
-        <script type="module" src="/src/scripts/stage-navigation.ts"></script>
+        <script type="module" src="/scripts/stage-navigation.js"></script>
     </body>
 </html>
 
