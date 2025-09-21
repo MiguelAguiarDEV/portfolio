@@ -521,8 +521,17 @@ body {
 
 /* Eliminado override global: desktop mantiene 3 columnas y card vertical. */
 
-/* Ocultar stack de tecnologías en ≤700px */
-@media (max-width: 700px) {
+/* Mostrar stack en >1000px y ocultarlo en ≤1000px */
+@media (min-width: 1001px) {
+    .project .p-tags {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: .3rem;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 1000px) {
     .project .p-tags {
         display: none !important;
     }
