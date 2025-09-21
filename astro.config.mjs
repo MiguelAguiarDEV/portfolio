@@ -13,8 +13,9 @@ export default defineConfig({
         '@layout': fileURLToPath(new URL('./src/layout', import.meta.url)),
         '@styles': fileURLToPath(new URL('./src/styles', import.meta.url)),
         '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
+        '@scripts': fileURLToPath(new URL('./src/scripts', import.meta.url)),
       },
     },
-    plugins: [tailwindcss()],
+    plugins: [],
   },
 });

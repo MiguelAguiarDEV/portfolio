@@ -1,0 +1,147 @@
+---
+import ProjectItem from "../ProjectItem.astro";
+import type { Props as ProjectItemProps } from "../ProjectItem.astro";
+
+const projects: ProjectItemProps[] = [
+    {
+        name: "[Nombre del proyecto]",
+        description: "[Descripción breve. Qué resuelve, rol, impacto.]",
+        slides: [
+            {
+                kind: "image",
+                src: "/img/projects/p1-1.jpg",
+                alt: "Vista 1",
+            },
+            {
+                kind: "image",
+                src: "/img/projects/p1-2.jpg",
+                alt: "Vista 2",
+            },
+            {
+                kind: "video",
+                poster: "/img/projects/p1-cover.jpg",
+                sources: [
+                    {
+                        src: "/video/projects/p1-demo.mp4",
+                        type: "video/mp4",
+                    },
+                ],
+            },
+        ],
+        stack: ["[Stack 1]", "[Stack 2]", "[Stack 3]"],
+        liveUrl: "#",
+        repoUrl: "#",
+    },
+    {
+        name: "[Proyecto 2]",
+        description: "[Descripción breve.]",
+        slides: [
+            {
+                kind: "image",
+                src: "/img/projects/p2-1.jpg",
+                alt: "Vista 1",
+            },
+            {
+                kind: "image",
+                src: "/img/projects/p2-2.jpg",
+                alt: "Vista 2",
+            },
+        ],
+        stack: ["[Tech A]", "[Tech B]"],
+        repoUrl: "#",
+    },
+    {
+        name: "[Proyecto 3]",
+        description: "[Descripción breve.]",
+        slides: [
+            {
+                kind: "image",
+                src: "/img/projects/p3-1.jpg",
+                alt: "Vista 1",
+            },
+        ],
+        stack: ["[Tech X]", "[Tech Y]"],
+        liveUrl: "#",
+    },
+];
+---
+
+<div class="layout">
+    <!-- Izquierda -->
+    <aside class="col-left column pad stack">
+        <div class="avatar-card">
+            <div class="avatar-wrap">
+                <img
+                    class="avatar"
+                    src="/img/foto-yo.png"
+                    alt="Foto de Miguel Santiesteban"
+                />
+            </div>
+        </div>
+
+        <div class="info-left">
+            <div class="chips cluster card pad">
+                <span class="chip">Backend</span>
+                <span class="chip">Canary Islands</span>
+                <span class="chip">Remote</span>
+                <span class="chip">CS student</span>
+                <span class="chip">English / Spanish</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Derecha -->
+    <section class="col-right column pad stack">
+        <!-- About -->
+        <div class="section stack">
+            <h3>About me</h3>
+            <div class="card pad stack">
+                <p class="prose">
+                    I'm Miguel Santiesteban, a 22-year-old Computer Science
+                    student from the Canary Islands, Spain. I specialize in
+                    backend development and love building projects from the
+                    ground up, solving hard problems, and learning continuously.
+                </p>
+                <div class="cta">
+                    <a
+                        class="btn"
+                        href="/cv/Miguel_Santiesteban_CV.pdf"
+                        download>Download CV</a
+                    >
+                    <a
+                        class="btn"
+                        href="mailto:miguel@example.com?subject=Contacto%20â€”%20Miguel%20Santiesteban"
+                        >Contact</a
+                    >
+                </div>
+            </div>
+        </div>
+
+        <!-- Stack -->
+        <div class="section stack">
+            <h3>Stack</h3>
+            <div class="chips cluster card pad">
+                <span class="chip">TypeScript</span>
+                <span class="chip">Node.js</span>
+                <span class="chip">NestJS</span>
+                <span class="chip">Prisma</span>
+                <span class="chip">MySQL</span>
+                <span class="chip">React</span>
+                <span class="chip">Docker</span>
+                <span class="chip">Docker</span>
+                <span class="chip">Docker</span>
+                <span class="chip">Docker</span>
+            </div>
+        </div>
+
+        <!-- Top projects -->
+        <div class="section stack fill">
+            <h3>Top projects</h3>
+            <div class="projects">
+                {projects.map((project) => <ProjectItem {...project} />)}
+            </div>
+        </div>
+    </section>
+</div>
+
+<style></style>

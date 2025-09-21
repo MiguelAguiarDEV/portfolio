@@ -1,0 +1,19 @@
+---
+export interface Props {
+    className?: string;
+}
+
+const { className = "" } = Astro.props;
+---
+
+<div class={`grid-card ${className}`}>
+    <slot />
+</div>
+
+<style>
+    .grid-card {
+        border: 1px solid #ffffff;
+        font-size: medium;
+        height: 100%;
+    }
+</style>

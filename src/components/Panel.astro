@@ -1,0 +1,94 @@
+---
+export interface Props {
+    id: string;
+    title: string;
+    lead?: string;
+    initial?: boolean;
+    background?: string;
+}
+
+const { id, title, lead, initial = false, background } = Astro.props;
+const headingId = `h-${id}`;
+const ariaHidden = initial ? "false" : "true";
+const panelStyle = background ? `--bg: ${background}` : undefined;
+---
+
+<div class="panel" id={id} aria-hidden={ariaHidden} style={panelStyle}>
+    <div class="bg"></div>
+    <section aria-labelledby={headingId}>
+        <slot />
+    </section>
+</div>
+
+<style>
+    .panel {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
+        place-items: center;
+        overflow: clip;
+        /* Deja espacio para la barra de navegación fija */
+        padding-top: var(--panel-top-offset, calc(var(--nav-h, 56px) + 3vh));
+    }
+
+    .panel > .bg {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #111);
+        pointer-events: none;
+    }
+
+    .panel > section {
+        position: relative;
+        z-index: 1;
+        inline-size: min(1200px, 84vw);
+        block-size: min(72vh, 76svh);
+        display: grid;
+        place-items: center;
+        /* box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35); */
+        border: 1px solid white;
+        border-radius: var(--radius);
+        /* background: color-mix(in oklab, #ffffff 6%, transparent); */
+        /* backdrop-filter: blur(6px) saturate(120%); */
+    }
+
+    .panel h1 {
+        margin: 0 0 10px;
+        font-size: var(--fs-2);
+    }
+
+    .panel p {
+        margin: 0;
+        font-size: var(--fs-1);
+        opacity: 0.9;
+    }
+
+    .panel .lead {
+        margin-bottom: 16px;
+    }
+
+    .panel.entering {
+        animation: reveal var(--wipe-ms) ease-out both;
+    }
+
+    @keyframes reveal {
+        0% {
+            clip-path: inset(0 100% 0 0 round 0);
+        }
+
+        100% {
+            clip-path: inset(0 0 0 0 round 0);
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .panel > section {
+            inline-size: min(960px, 92vw);
+            /* Más alto en móvil para ocupar mejor la pantalla */
+            block-size: min(88vh, 88svh);
+        }
+    }
+</style>

@@ -1,14 +1,99 @@
 ---
-import "@/styles/global.css";
-import Section from "@/layout/Section.astro";
-import FormContainer from "@/components/FormContainer.astro";
-import NavBar from "@/components/NavBar.astro";
-import About from "@/components/sections/About.astro";
-import Experience from "@/components/sections/Experience.astro";
-import Projects from "@/components/sections/Projects.astro";
-import Skills from "@/components/sections/Skills.astro";
-import Contact from "@/components/sections/Contact.astro";
+import FloatingNav from "@/components/FloatingNav.astro";
+import Panel from "@/components/Panel.astro";
+import CardsGrid from "@/components/GridCard.astro";
+import AboutPanel from "@/components/panels/AboutPanel.astro";
 import Analytics from "@vercel/analytics/astro";
+import "@/styles/global.css";
+
+type PanelCard = {
+    title: string;
+    description: string;
+};
+
+type PanelData = {
+    id: string;
+    label: string;
+    title: string;
+    lead?: string;
+    background: string;
+    cards?: PanelCard[];
+};
+
+const panels: PanelData[] = [
+    {
+        id: "home",
+        label: "Inicio",
+        title: "Miguel Santiesteban",
+        lead: "Backend – Node – Laravel – React – Prisma",
+        background:
+            "radial-gradient(120vmax 120vmax at 15% 15%, #15171a, #0d0e12 60%)",
+        cards: [
+            {
+                title: "Queater",
+                description: "SaaS para restaurantes. Menús, stock y POS.",
+            },
+            {
+                title: "CSV Analyzer",
+                description: "Exploración de datos con IA. React + Node.",
+            },
+            {
+                title: "AICLID",
+                description:
+                    "Detección celular YOLO. Proyecto de investigación.",
+            },
+        ],
+    },
+    {
+        id: "about",
+        label: "Sobre mí",
+        title: "Sobre mí",
+        background: "linear-gradient(135deg, #0b3a36, #0b2a3a 70%)",
+    },
+    {
+        id: "work",
+        label: "Proyectos",
+        title: "Proyectos",
+        background: "linear-gradient(135deg, #2a143a, #0f1020 70%)",
+        cards: [
+            {
+                title: "Queater",
+                description:
+                    "Laravel + Inertia + React. Multi-tenant con roles.",
+            },
+            {
+                title: "Portfolio",
+                description: "Astro + Tailwind con animaciones de clip-path.",
+            },
+            {
+                title: "Tooling",
+                description: "Plantillas CI, lint y tests. Monorepo con Bun.",
+            },
+        ],
+    },
+    {
+        id: "contact",
+        label: "Contacto",
+        title: "Contacto",
+        background: "linear-gradient(135deg, #3a1a1a, #101010 70%)",
+        cards: [
+            {
+                title: "Email",
+                description: "miguel@example.com",
+            },
+            {
+                title: "GitHub",
+                description: "@MiguelAguiarDev",
+            },
+            {
+                title: "LinkedIn",
+                description: "/in/MiguelAguiarDev",
+            },
+        ],
+    },
+];
+
+const navItems = panels.map(({ id, label }) => ({ id, label }));
 ---
 
 <!doctype html>
@@ -28,72 +113,43 @@ import Analytics from "@vercel/analytics/astro";
         />
         <title>MiguelAguiarDev</title>
     </head>
-
-    <body class="bg-[#111111] m-0 overflow-hidden text-white">
-        <FormContainer />
-        <NavBar />
-        <main id="app-main" class="h-[100dvh] w-screen box-border relative">
-            <About />
-            <Experience />
-            <Projects />
-            <Skills />
-            <Contact />
-        </main>
-
-        <Analytics />
-        <script>
-            // @ts-nocheck
-            const toId = (name) =>
-                `section-${name
-                    .toString()
-                    .trim()
-                    .toLowerCase()
-                    .replace(/[^a-z0-9\s-_]/g, "")
-                    .replace(/\s+/g, "-")}`;
-
-            const byId = (id) => document.getElementById(id);
-
-            const sections = Array.from(
-                document.querySelectorAll('[id^="section-"]'),
-            );
-
-            function play(sectionEl) {
-                if (!sectionEl) return;
-                if (sectionEl.classList.contains("active")) return;
-
-                // Limpiar la clase 'last' de todas las secciones
-                sections.forEach((s) => s.classList.remove("last"));
-
-                // Encontrar la sección actualmente activa (si existe)
-                const prevActive = sections.find((s) =>
-                    s.classList.contains("active"),
-                );
-                if (prevActive) {
-                    prevActive.classList.remove("active");
-                    prevActive.classList.add("last");
-                }
-
-                // Limpiar animaciones previas y clases de transición
-                sections.forEach((s) => {
-                    s.classList.remove("play-wipe");
-                    s.classList.add("wiped");
-                });
-
-                // Activar la nueva sección
-                sectionEl.classList.remove("wiped");
-                sectionEl.classList.add("active");
-                sectionEl.classList.add("play-wipe");
-                sectionEl.addEventListener(
-                    "animationend",
-                    () => {
-                        sectionEl.classList.remove("play-wipe");
-                        sectionEl.classList.add("wiped");
-                    },
-                    { once: true },
-                );
+    <body>
+        <FloatingNav items={navItems} />
+        <main id="stage" role="main" aria-live="polite">
+            {
+                panels.map((panel, index) => (
+                    <Panel
+                        id={panel.id}
+                        title={panel.title}
+                        lead={panel.lead}
+                        initial={index === 0}
+                        background={panel.background}
+                        hideHeading={panel.id === "about"}
+                    >
+                        {panel.id === "about" ? (
+                            <AboutPanel />
+                        ) : (
+                            panel.cards && <CardsGrid items={panel.cards} />
+                        )}
+                    </Panel>
+                ))
             }
-
-            window.setActiveSection = (name) => play(byId(toId(name)));
-        </script>
+        </main>
+        <Analytics />
+        <script type="module" src="/src/scripts/stage-navigation.ts"></script>
     </body>
 </html>
+
+<style>
+    #stage {
+        position: relative;
+        width: 100vw;
+        height: 100dvh;
+        isolation: isolate;
+        background: radial-gradient(
+            120vmax 120vmax at 10% 10%,
+            #17181c,
+            #0f0f10 60%
+        );
+    }
+</style>

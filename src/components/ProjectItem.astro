@@ -1,0 +1,217 @@
+---
+export interface ImageSlide {
+    kind: "image";
+    src: string;
+    alt: string;
+}
+
+export interface VideoSource {
+    src: string;
+    type?: string;
+}
+
+export interface VideoSlide {
+    kind: "video";
+    sources: VideoSource[];
+    poster?: string;
+}
+
+export type Slide = ImageSlide | VideoSlide;
+
+export interface Props {
+    name: string;
+    description: string;
+    slides: Slide[];
+    stack: string[];
+    liveUrl?: string;
+    repoUrl?: string;
+}
+
+const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
+---
+
+<article class="project card pad">
+    <div class="carousel">
+        <div class="slides">
+            {
+                slides.map((slide, index) => (
+                    <figure
+                        class={`slide ${index === 0 ? "is-active" : ""}`}
+                        key={`${slide.kind}-${index}`}
+                    >
+                        {slide.kind === "image" ? (
+                            <img
+                                loading="lazy"
+                                src={slide.src}
+                                alt={slide.alt}
+                            />
+                        ) : (
+                            <video
+                                preload="none"
+                                controls
+                                playsinline
+                                muted
+                                poster={slide.poster}
+                            >
+                                {slide.sources.map((source, sourceIndex) => (
+                                    <source
+                                        src={source.src}
+                                        type={source.type}
+                                        key={`${source.src}-${sourceIndex}`}
+                                    />
+                                ))}
+                                Tu navegador no soporta video.
+                            </video>
+                        )}
+                    </figure>
+                ))
+            }
+        </div>
+        <div class="car-ctrl">
+            <button class="arrow left" aria-label="Anterior"><</button>
+            <button class="arrow right" aria-label="Siguiente">></button>
+            <div class="dots">
+                {
+                    slides.map((_, index) => (
+                        <i
+                            class={`dot ${index === 0 ? "is-active" : ""}`}
+                            key={`dot-${index}`}
+                            data-index={index}
+                        />
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+    <div class="p-content">
+        <h4 class="p-title">{name}</h4>
+        <p class="project-description prose">{description}</p>
+        <div class="p-footer">
+            {
+                stack.length > 0 && (
+                    <div class="p-tags">
+                        {stack.map((tech) => (
+                            <span class="chip" key={tech}>
+                                {tech}
+                            </span>
+                        ))}
+                    </div>
+                )
+            }
+            {
+                (liveUrl || repoUrl) && (
+                    <div class="p-links">
+                        {liveUrl && (
+                            <a
+                                class="btn"
+                                href={liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Live
+                            </a>
+                        )}
+                        {repoUrl && (
+                            <a
+                                class="btn"
+                                href={repoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Repo
+                            </a>
+                        )}
+                    </div>
+                )
+            }
+        </div>
+    </div>
+</article>
+
+<script>
+    (function () {
+        const root =
+            document.currentScript &&
+            document.currentScript.closest("article.project");
+        if (!root) return;
+
+        const slides = Array.from(root.querySelectorAll(".slides .slide"));
+        const dots = Array.from(root.querySelectorAll(".car-ctrl .dots .dot"));
+        const btnLeft = root.querySelector(".car-ctrl .arrow.left");
+        const btnRight = root.querySelector(".car-ctrl .arrow.right");
+        let index = 0;
+
+        function setActive(i) {
+            index = (i + slides.length) % slides.length;
+            slides.forEach((el, idx) => {
+                el.classList.toggle("is-active", idx === index);
+            });
+            dots.forEach((d, idx) =>
+                d.classList.toggle("is-active", idx === index),
+            );
+        }
+
+        btnLeft &&
+            btnLeft.addEventListener("click", () => setActive(index - 1));
+        btnRight &&
+            btnRight.addEventListener("click", () => setActive(index + 1));
+        dots.forEach((d, idx) =>
+            d.addEventListener("click", () => setActive(idx)),
+        );
+
+        if (slides.length <= 1) {
+            const ctrl = root.querySelector(".car-ctrl");
+            if (ctrl) ctrl.style.display = "none";
+        }
+
+        setActive(0);
+    })();
+</script>
+
+<style>
+    .carousel {
+        position: relative;
+    }
+    .slides {
+        position: relative;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+    }
+    .slides .slide {
+        position: absolute;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+            opacity 200ms ease-in-out,
+            visibility 200ms ease-in-out;
+        width: 100%;
+        height: 100%;
+    }
+    .slides .slide.is-active {
+        opacity: 1;
+        visibility: visible;
+    }
+    .slides img,
+    .slides video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Basic overlay controls, kept minimal to avoid conflicts */
+    .car-ctrl {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+    .car-ctrl .arrow {
+        pointer-events: auto;
+    }
+    .car-ctrl .dots {
+        pointer-events: auto;
+    }
+</style>
