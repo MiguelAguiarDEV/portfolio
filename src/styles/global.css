@@ -335,15 +335,15 @@ body {
     background: #0d131d;
     border: 1px solid var(--ring);
     min-width: 0;
-    min-height: 0;
     width: 100%;
     height: auto;
+    /* ⬅ controla la altura por el ratio */
     aspect-ratio: 16 / 9;
-    /* mantiene 16:9 por el ancho */
+    /* ⬅ 16:9 estable */
     display: grid;
     place-items: center;
-    /* centra la caja 16:9 interna */
 }
+
 
 .slides {
     display: grid;
@@ -486,15 +486,16 @@ body {
     .project>.carousel {
         grid-column: 2;
         grid-row: 1;
-        height: 100%;
-        width: auto;
-        /* derivado del aspect-ratio */
+        width: 100%;
+        /* ⬅ que no crezca más que su columna */
+        height: auto;
+        /* ⬅ evita desbordes por alto */
         aspect-ratio: 16 / 9;
-        /* ancho = alto * 16/9 */
-        display: grid;
-        place-items: center;
+        align-self: start;
         overflow: hidden;
+        min-width: 0;
     }
+
 
     .p-title {
         font-size: clamp(0.95rem, 4.5vw, 1.1rem);
