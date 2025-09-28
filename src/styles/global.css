@@ -231,12 +231,15 @@ body {
 .avatar-wrap {
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
     padding-top: var(--avatar-top-gap);
+    padding-bottom: var(--avatar-top-gap);
 }
 
 .avatar {
-    width: 100%;
-    height: calc(100% - var(--avatar-top-gap));
+    height: 90%;
     object-fit: cover;
     object-position: bottom center;
     display: block;
@@ -333,7 +336,7 @@ body {
 
 .p-title {
     font-size: var(--fs-h4);
-    margin: 0;
+    margin: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

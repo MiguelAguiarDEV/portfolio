@@ -29,7 +29,8 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         grid-template-rows: 1fr;
         grid-template-columns: 1fr;
         place-items: center;
-        overflow: clip;
+        /* Permite que sombras internas no se recorten */
+        overflow: visible;
         /* Deja espacio para la barra de navegación fija */
         padding-top: var(--panel-top-offset, calc(var(--nav-h, 56px) + 3vh));
     }
@@ -49,7 +50,7 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         display: grid;
         place-items: center;
         /* box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35); */
-        border: 1px solid white;
+        /* border: 1px solid white; */
         border-radius: var(--radius);
         /* background: color-mix(in oklab, #ffffff 6%, transparent); */
         /* backdrop-filter: blur(6px) saturate(120%); */
