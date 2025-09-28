@@ -4,22 +4,69 @@
 /* Vars y reset                 */
 /* ============================ */
 :root {
-    --fs-0: clamp(12px, 1.2vw, 14px);
-    --fs-1: clamp(14px, 1.6vw, 18px);
-    --fs-2: clamp(18px, 2.4vw, 28px);
+    /* Base type scale (responsive via clamp) */
+    --fs-0: clamp(12px, 1.1vw, 14px);
+    /* small/ui */
+    --fs-1: clamp(14px, 1.4vw, 18px);
+    /* base text */
+    --fs-2: clamp(20px, 3.2vw, 32px);
+    /* large/hero */
+
+    /* Semantic sizes mapping */
+    --fs-base: var(--fs-1);
+    --fs-h1: var(--fs-2);
+    --fs-h2: clamp(18px, 2.4vw, 26px);
+    --fs-h3: clamp(16px, 2vw, 22px);
+    --fs-h4: clamp(15px, 1.8vw, 20px);
     --radius: 16px;
-    --gap: clamp(10px, 0vw, 0px);
-    --section-gap: calc(var(--gap) * 0);
-    --pad: clamp(10px, 1.5vw, 10px);
+    --gap: clamp(6px, 1vw, 12px);
+    --section-gap: 2px;
+    --pad: clamp(8px, 1.2vw, 12px);
+    --section-pad-scale: 0.45;
+    /* reduce padding inside section cards */
     --nav-h: clamp(48px, 7vh, 64px);
     --wipe-ms: 700ms;
     --avatar-max: 280px;
+    --avatar-top-gap: clamp(8px, 4vh, 48px);
 }
 
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+}
+
+/* ============================ */
+/* Tipografía base              */
+/* ============================ */
+h1,
+h2,
+h3,
+h4 {
+    margin: 0 0 0.4em;
+    line-height: 1.15;
+    font-weight: 700;
+}
+
+h1 {
+    font-size: var(--fs-h1);
+}
+
+h2 {
+    font-size: var(--fs-h2);
+}
+
+h3 {
+    font-size: var(--fs-h3);
+}
+
+h4 {
+    font-size: var(--fs-h4);
+}
+
+p,
+li {
+    font-size: var(--fs-base);
 }
 
 html,
@@ -33,6 +80,8 @@ body {
     background: #0f0f10;
     color: #fafafa;
     overflow: hidden;
+    font-size: var(--fs-base);
+    line-height: 1.4;
 }
 
 /* ============================ */
@@ -48,12 +97,8 @@ body {
 .stack {
     display: flex;
     flex-direction: column;
-    gap: var(--gap);
-    min-width: 0;
-}
-
-.section.stack {
     gap: var(--section-gap);
+    min-width: 0;
 }
 
 .cluster {
@@ -96,7 +141,7 @@ body {
 .chip {
     display: inline-flex;
     align-items: center;
-    font-size: 0.78rem;
+    font-size: var(--fs-0);
     font-weight: 500;
     line-height: 1;
     padding: 0.35rem 0.6rem;
@@ -120,7 +165,7 @@ body {
 .btn {
     display: inline-flex;
     align-items: center;
-    font-size: 0.78rem;
+    font-size: var(--fs-0);
     font-weight: 500;
     line-height: 1;
     padding: 0.35rem 0.6rem;
@@ -160,7 +205,8 @@ body {
     width: 100%;
     min-height: 0;
     min-width: 0;
-    overflow: hidden;
+    /* Permitimos que las sombras de los hijos sobresalgan */
+    overflow: visible;
 }
 
 .layout>* {
@@ -185,12 +231,14 @@ body {
 .avatar-wrap {
     width: 100%;
     height: 100%;
+    padding-top: var(--avatar-top-gap);
 }
 
 .avatar {
     width: 100%;
-    height: 100%;
+    height: calc(100% - var(--avatar-top-gap));
     object-fit: cover;
+    object-position: bottom center;
     display: block;
     mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
     -webkit-mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
@@ -214,12 +262,14 @@ body {
 
 .section>h3 {
     margin: 0 0 0 var(--gap);
-    font-size: 1.15rem;
+    font-size: var(--fs-h3);
 }
 
 .prose {
     color: var(--muted);
     line-height: 1.55;
+    font-size: var(--fs-base);
+    margin: 0 5px 0 5px;
 }
 
 .section.fill>.card {
@@ -229,7 +279,12 @@ body {
 }
 
 .section.fill>.card.pad {
-    padding: calc(var(--pad) * 0.6);
+    padding: calc(var(--pad) * var(--section-pad-scale));
+}
+
+/* Reduce padding también en secciones no-fill */
+.section.stack>.card.pad {
+    padding: calc(var(--pad) * var(--section-pad-scale));
 }
 
 /* ============================ */
@@ -246,7 +301,8 @@ body {
     min-width: 0;
     min-height: 0;
     height: 100%;
-    overflow: auto;
+    /* Evita recortar sombras de tarjetas dentro de la rejilla */
+    overflow: visible;
 }
 
 .project {
@@ -260,6 +316,11 @@ body {
     height: 100%;
 }
 
+/* Reducir padding interno solo en las cards de proyectos */
+.projects>.project.card.pad {
+    padding: calc(var(--pad) * var(--section-pad-scale));
+}
+
 .p-content {
     display: flex;
     flex-direction: column;
@@ -271,7 +332,7 @@ body {
 }
 
 .p-title {
-    font-size: clamp(1rem, 2.1vw, 1.25rem);
+    font-size: var(--fs-h4);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -314,8 +375,9 @@ body {
 }
 
 .p-links .btn {
-    padding: 0.6rem;
-    font-size: 1.3rem;
+    /* Más compactos en pantallas normales */
+    padding: 0.4rem 0.6rem;
+    font-size: var(--fs-0);
 }
 
 .p-tags {
@@ -457,20 +519,21 @@ body {
         grid-template-rows: repeat(3, 1fr);
         gap: calc(var(--gap) * 0.8);
         height: 100%;
-        overflow: hidden;
+        /* Deja que las sombras puedan sobresalir del contenedor */
+        overflow: visible;
         min-height: 0;
     }
 
     /* Dos columnas internas: contenido | carrusel */
     .project {
         display: grid;
-        grid-template-columns: 1fr minmax(0, 40%);
-        /* sin mínimo rígido para permitir encoger */
-        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
+        grid-template-rows: min-content 1fr auto;
         gap: calc(var(--gap) * 0.6);
         height: 100%;
         min-height: 0;
-        overflow: hidden;
+        /* Permite sombras fuera del contenedor del proyecto */
+        overflow: visible;
         align-items: stretch;
     }
 
@@ -482,18 +545,41 @@ body {
         align-self: stretch;
     }
 
-    /* Carrusel en móvil: manda la altura, ancho por ratio */
-    .project>.carousel {
+    /* Texto a la izquierda y botones a la derecha */
+    .project>.p-content {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-auto-rows: min-content;
+        column-gap: calc(var(--gap) * 0.8);
+        align-items: start;
+    }
+
+    /* Aplana el footer para posicionar sus hijos en la grilla del contenedor */
+    .project>.p-content .p-footer {
+        display: contents;
+    }
+
+    /* Botones a la derecha, apilados */
+    .project>.p-content .p-links {
         grid-column: 2;
-        grid-row: 1;
-        width: 100%;
-        /* ⬅ que no crezca más que su columna */
-        height: auto;
-        /* ⬅ evita desbordes por alto */
-        aspect-ratio: 16 / 9;
+        grid-row: 1 / span 3;
         align-self: start;
-        overflow: hidden;
-        min-width: 0;
+        justify-self: end;
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--gap) * 0.6);
+    }
+
+    /* Título, descripción (y tags si aparecieran) en la izquierda */
+    .project>.p-content .p-title,
+    .project>.p-content .project-description,
+    .project>.p-content .p-tags {
+        grid-column: 1;
+    }
+
+    /* En pantallas móviles ocultamos la previsualización (carrusel) */
+    .project>.carousel {
+        display: none;
     }
 
 
@@ -532,7 +618,25 @@ body {
     }
 }
 
+/* Desktop: reducir espacios entre secciones y entre título/contenido */
+@media (min-width: 1001px) {
+
+    /* Menor separación entre About, Stack y Top projects */
+    .col-right.stack {
+        gap: clamp(6px, 0.7vw, 12px);
+    }
+
+
+    /* Texto de About más pequeño en desktop */
+    .col-right .section .prose {
+        font-size: clamp(13px, 1.1vw, 16px);
+        line-height: 1.5;
+    }
+}
+
 @media (max-width: 1000px) {
+
+    /* Ocultar el stack (tags) en móvil */
     .project .p-tags {
         display: none !important;
     }
@@ -541,7 +645,7 @@ body {
 /* Botones de enlaces más pequeños en móviles muy pequeños */
 @media (max-width: 500px) {
     .p-links .btn {
-        font-size: 0.85rem;
+        font-size: var(--fs-0);
         padding: 0.35rem 0.6rem;
     }
 }
