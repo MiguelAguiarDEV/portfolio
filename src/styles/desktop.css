@@ -276,7 +276,7 @@
 
 .avatar {
     /* Ajusta el tamaño del avatar dentro del espacio disponible */
-    height: 80%;
+    height: 100%;
     width: auto;
     /* margin-bottom: 35px; */
     mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
