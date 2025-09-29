@@ -4,14 +4,15 @@ import type { Props as ProjectItemProps } from "../ProjectItem.astro";
 
 export interface Props {
     title?: string;
+    titleKey?: string;
     projects: ProjectItemProps[];
 }
 
-const { title = "Top projects", projects } = Astro.props;
+const { title = "Proyectos destacados", titleKey, projects } = Astro.props;
 ---
 
 <div class="section stack fill">
-    <h3>{title}</h3>
+    <h3 data-i18n-key={titleKey}>{title}</h3>
     <div class="projects">
         {projects.map((p) => <ProjectItem {...p} />)}
     </div>
@@ -27,3 +28,4 @@ const { title = "Top projects", projects } = Astro.props;
         height: 100%;
     }
 </style>
+

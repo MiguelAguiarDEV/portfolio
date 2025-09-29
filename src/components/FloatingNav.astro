@@ -2,6 +2,7 @@
 export interface NavItem {
     id: string;
     label: string;
+    labelKey?: string;
 }
 
 export interface Props {
@@ -11,17 +12,31 @@ export interface Props {
 const { items } = Astro.props;
 ---
 
-<nav class="navbar" aria-label="Secciones">
+<nav
+    class="navbar"
+    aria-label="Secciones"
+    data-i18n-attr-aria-label="nav.sections"
+>
     {
         items.map((item, index) => (
             <button
                 data-target={item.id}
                 aria-current={index === 0 ? "page" : "false"}
+                data-i18n-key={item.labelKey}
             >
                 {item.label}
             </button>
         ))
     }
+    <button
+        class="lang-toggle"
+        type="button"
+        data-lang-toggle
+        aria-label="Cambiar idioma a ingles" data-i18n-attr-aria-label="lang.toggle.aria"
+        data-i18n-key="lang.toggle.label"
+    >
+        ES
+    </button>
 </nav>
 
 <style>
@@ -68,5 +83,15 @@ const { items } = Astro.props;
 
     .navbar button:active {
         transform: scale(0.98);
+    }
+
+    .navbar button:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.8);
+        outline-offset: 2px;
+    }
+
+    .lang-toggle {
+        font-weight: 600;
+        text-transform: uppercase;
     }
 </style>

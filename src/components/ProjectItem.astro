@@ -25,9 +25,20 @@ export interface Props {
     stack: string[];
     liveUrl?: string;
     repoUrl?: string;
+    nameKey?: string;
+    descriptionKey?: string;
 }
 
-const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
+const {
+    name,
+    description,
+    slides,
+    stack = [],
+    liveUrl,
+    repoUrl,
+    nameKey,
+    descriptionKey,
+} = Astro.props;
 ---
 
 <article class="project card">
@@ -60,7 +71,11 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
                                         key={`${source.src}-${sourceIndex}`}
                                     />
                                 ))}
-                                Tu navegador no soporta video.
+                                <span
+                                    data-i18n-key="project.videoFallback"
+                                >
+                                    Tu navegador no soporta video.
+                                </span>
                             </video>
                         )}
                     </figure>
@@ -68,8 +83,18 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
             }
         </div>
         <div class="car-ctrl">
-            <button class="arrow left" aria-label="Anterior"><</button>
-            <button class="arrow right" aria-label="Siguiente">></button>
+            <button
+                class="arrow left"
+                type="button"
+                aria-label="Anterior"
+                data-i18n-attr-aria-label="project.carousel.prev"
+            >&lsaquo;</button>
+            <button
+                class="arrow right"
+                type="button"
+                aria-label="Siguiente"
+                data-i18n-attr-aria-label="project.carousel.next"
+            >&rsaquo;</button>
             <div class="dots">
                 {
                     slides.map((_, index) => (
@@ -84,8 +109,13 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
         </div>
     </div>
     <div class="p-content">
-        <h4 class="p-title">{name}</h4>
-        <p class="project-description prose">{description}</p>
+        <h4 class="p-title" data-i18n-key={nameKey}>{name}</h4>
+        <p
+            class="project-description prose"
+            data-i18n-key={descriptionKey}
+        >
+            {description}
+        </p>
         <div class="p-footer">
             {
                 stack.length > 0 && (
@@ -107,9 +137,8 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
                                 href={liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                            >
-                                Live
-                            </a>
+                                data-i18n-key="project.button.live"
+                            >Ver demo</a>
                         )}
                         {repoUrl && (
                             <a
@@ -117,9 +146,8 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
                                 href={repoUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                            >
-                                Repo
-                            </a>
+                                data-i18n-key="project.button.repo"
+                            >Repositorio</a>
                         )}
                     </div>
                 )
@@ -215,3 +243,5 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
         pointer-events: auto;
     }
 </style>
+
+
