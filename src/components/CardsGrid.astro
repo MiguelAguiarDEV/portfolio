@@ -27,6 +27,9 @@ const classes = spaced ? "cards cards--spaced" : "cards";
     gap: var(--gap);
     grid-template-columns: repeat(3, 1fr);
     width: 100%;
+    /* deja aire para que no se recorten sombras en los bordes */
+    padding: var(--gap);
+    overflow: visible;
 }
  
 .cards--spaced {
