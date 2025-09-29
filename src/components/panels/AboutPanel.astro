@@ -100,7 +100,7 @@ const projects: ProjectItemProps[] = [
                     backend development and love building projects from the
                     ground up, solving hard problems, and learning continuously.
                 </p>
-                <div class="">
+                <div class="btn-ctn">
                     <a
                         class="btn btn--primary"
                         href="/cv/Miguel_Santiesteban_CV.pdf"
@@ -165,9 +165,12 @@ const projects: ProjectItemProps[] = [
         position: relative;
         display: inline-block;
         border-radius: 12px;
-        padding: 4px; /* grosor del borde arcoíris */
+        padding: 2px; /* grosor del borde arcoíris */
         isolation: isolate;
         overflow: hidden;
+        transform-origin: center;
+        transition: transform 0.25s ease;
+        will-change: transform;
     }
 
     /* Capa arcoíris animada detrás */
@@ -182,7 +185,7 @@ const projects: ProjectItemProps[] = [
         border-radius: 0; /* cuadrado (sin redondeo) */
         z-index: 0;
         filter: saturate(1.1);
-        animation: spin 1.8s linear infinite;
+        animation: spin 4s linear infinite;
     }
 
     /* Botón real */
@@ -192,11 +195,11 @@ const projects: ProjectItemProps[] = [
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 12rem; /* ajusta tamaño según diseño */
-        min-height: 3rem;
-        padding: 0.9rem 1.2rem;
+        min-width: fit-content; /* ajusta tamaño según diseño */
+        min-height: fit-content;
+        padding: 0 0;
         border-radius: 10px;
-        background: rgba(0, 0, 0, 0.3);
+        background: rgb(41, 73, 80, 0.6);
         border: 1px solid rgba(255, 255, 255, 0.18);
         color: #fff;
         text-decoration: none;
@@ -207,6 +210,25 @@ const projects: ProjectItemProps[] = [
         transition:
             transform 0.25s ease,
             box-shadow 0.25s ease;
+
+        gap: 0.35rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 1;
+        padding: calc(0.55rem - 2px) calc(0.85rem - 2px);
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+
+    /* Hover: escalar el conjunto arcoíris + botón */
+    .cta-rainbow:hover {
+        transform: scale(1.06);
+    }
+
+    /* Hover: refuerzo suave sobre el botón */
+    .cta-rainbow__btn:hover{
+        transform: scale(1.04);
+        box-shadow: 0 0.9rem 1.6rem rgba(0,0,0,.45);
     }
 
     /* Reusa la animación del snippet */
