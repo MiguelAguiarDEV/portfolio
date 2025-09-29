@@ -61,6 +61,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: min-content 1fr auto;
     height: 100%;
+    gap: 0;
 }
 
 /* Carrusel dentro de la card */
