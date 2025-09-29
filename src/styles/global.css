@@ -24,6 +24,8 @@
     --ring: rgba(255, 255, 255, 0.14);
     --ink: #fafafa;
     --panel: rgba(255, 255, 255, 0.05);
+    /* Duración global para animación de reveal */
+    --wipe-ms: 700ms;
 }
 
 *,
