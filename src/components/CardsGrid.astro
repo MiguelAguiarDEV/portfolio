@@ -3,59 +3,65 @@ export interface CardItem {
     title: string;
     description: string;
 }
- 
+
 export interface Props {
     items: CardItem[];
     spaced?: boolean;
 }
- 
+
 const { items, spaced = true } = Astro.props;
 const classes = spaced ? "cards cards--spaced" : "cards";
 ---
+
 <div class={classes}>
-    {items.map((item) => (
-        <div class="card">
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-        </div>
-    ))}
+    {
+        items.map((item) => (
+            <div class="card">
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+            </div>
+        ))
+    }
 </div>
- 
+
 <style>
-.cards {
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat(3, 1fr);
-    width: 100%;
-}
- 
-.cards--spaced {
-    margin-top: var(--gap);
-}
- 
-.card {
-    padding: var(--pad);
-    border-radius: 14px;
-    background: color-mix(in oklab, #ffffff 10%, transparent);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-    font-size: var(--fs-0);
-    line-height: 1.35;
-}
- 
-.card h3 {
-    margin: 0 0 6px;
-    font-size: var(--fs-1);
-}
- 
-@media (max-width: 900px) {
     .cards {
-        grid-template-columns: 1fr 1fr;
+        display: grid;
+        gap: var(--gap);
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        /* deja aire para que no se recorten sombras en los bordes */
+        padding: var(--gap);
+        overflow: visible;
     }
-}
- 
-@media (max-width: 560px) {
-    .cards {
-        grid-template-columns: 1fr;
+
+    .cards--spaced {
+        margin-top: var(--gap);
     }
-}
+
+    .card {
+        padding: var(--pad);
+        border-radius: 14px;
+        background: color-mix(in oklab, #ffffff 10%, transparent);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+        font-size: var(--fs-0);
+        line-height: 1.35;
+    }
+
+    .card h3 {
+        margin: 0 0 6px;
+        font-size: var(--fs-1);
+    }
+
+    @media (max-width: 900px) {
+        .cards {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .cards {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>

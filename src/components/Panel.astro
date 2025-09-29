@@ -29,10 +29,7 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         grid-template-rows: 1fr;
         grid-template-columns: 1fr;
         place-items: center;
-        /* Permite que sombras internas no se recorten */
         overflow: visible;
-        /* Deja espacio para la barra de navegación fija */
-        padding-top: var(--panel-top-offset, calc(var(--nav-h, 56px) + 3vh));
     }
 
     .panel > .bg {
@@ -49,6 +46,7 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         block-size: min(72vh, 76svh);
         display: grid;
         place-items: center;
+        transform: translateY(var(--panel-y-offset, 30px));
         /* box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35); */
         /* border: 1px solid white; */
         border-radius: var(--radius);

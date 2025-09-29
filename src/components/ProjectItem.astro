@@ -30,7 +30,7 @@ export interface Props {
 const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
 ---
 
-<article class="project card pad">
+<article class="project card">
     <div class="carousel">
         <div class="slides">
             {
@@ -91,7 +91,7 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
                 stack.length > 0 && (
                     <div class="p-tags">
                         {stack.map((tech) => (
-                            <span class="chip" key={tech}>
+                            <span class="chips" key={tech}>
                                 {tech}
                             </span>
                         ))}
@@ -103,7 +103,7 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
                     <div class="p-links">
                         {liveUrl && (
                             <a
-                                class="btn"
+                                class="btn btn--primary"
                                 href={liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -113,7 +113,7 @@ const { name, description, slides, stack = [], liveUrl, repoUrl } = Astro.props;
                         )}
                         {repoUrl && (
                             <a
-                                class="btn"
+                                class="btn btn--ghost"
                                 href={repoUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
