@@ -29,10 +29,7 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         grid-template-rows: 1fr;
         grid-template-columns: 1fr;
         place-items: center;
-        /* Permite que sombras internas no se recorten */
         overflow: visible;
-        /* Deja espacio para la barra de navegación fija */
-        padding-top: var(--panel-top-offset, calc(var(--nav-h, 56px) + 3vh));
     }
 
     .panel > .bg {

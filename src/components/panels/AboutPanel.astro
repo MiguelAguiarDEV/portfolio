@@ -68,75 +68,75 @@ const projects: ProjectItemProps[] = [
 
 <div class="layout">
     <!-- Izquierda -->
-    <aside class="col-left column pad stack">
-        <div class="avatar-card">
-            <div class="avatar-wrap">
-                <img
-                    class="avatar"
-                    src="/img/foto-yo.png"
-                    alt="Foto de Miguel Santiesteban"
-                />
-            </div>
+    <aside class="column">
+        <div class="avatar-ctn">
+            <img
+                class="avatar"
+                src="/img/foto-yo.png"
+                alt="Foto de Miguel Santiesteban"
+            />
         </div>
 
-        <div class="info-left">
-            <div class="chips cluster card pad">
-                <span class="chip">Backend</span>
-                <span class="chip">Canary Islands</span>
-                <span class="chip">Remote</span>
-                <span class="chip">CS student</span>
-                <span class="chip">English / Spanish</span>
+        <div class="card-ctn">
+            <div class="card">
+                <span class="chips">Backend</span>
+                <span class="chips">Canary Islands</span>
+                <span class="chips">Remote</span>
+                <span class="chips">CS student</span>
+                <span class="chips">English / Spanish</span>
             </div>
         </div>
     </aside>
 
     <!-- Derecha -->
-    <section class="col-right column pad stack">
+    <section class="column">
         <!-- About -->
-        <div class="section stack">
-            <h3>About me</h3>
-            <div class="card pad stack">
-                <p class="prose">
+        <div class="card-ctn">
+            <h3 class="card-title">About me</h3>
+            <div class="card">
+                <p class="">
                     I'm Miguel Santiesteban, a 22-year-old Computer Science
                     student from the Canary Islands, Spain. I specialize in
                     backend development and love building projects from the
                     ground up, solving hard problems, and learning continuously.
                 </p>
-                <div class="cta">
+                <div class="">
                     <a
-                        class="btn"
+                        class="btn btn--primary"
                         href="/cv/Miguel_Santiesteban_CV.pdf"
                         download>Download CV</a
                     >
-                    <a
-                        class="btn"
-                        href="mailto:miguel@example.com?subject=Contacto%20â€”%20Miguel%20Santiesteban"
-                        >Contact</a
-                    >
+                    <span class="cta-rainbow">
+                        <a
+                            class="cta-rainbow__btn"
+                            href="mailto:miguel@example.com?subject=Contacto%20%E2%80%94%20Miguel%20Santiesteban"
+                            aria-label="Contactar por email">Contact</a
+                        >
+                    </span>
                 </div>
             </div>
         </div>
 
         <!-- Stack -->
-        <div class="section stack">
-            <h3>Stack</h3>
-            <div class="chips cluster card pad">
-                <span class="chip">TypeScript</span>
-                <span class="chip">Node.js</span>
-                <span class="chip">NestJS</span>
-                <span class="chip">Prisma</span>
-                <span class="chip">MySQL</span>
-                <span class="chip">React</span>
-                <span class="chip">Docker</span>
-                <span class="chip">Docker</span>
-                <span class="chip">Docker</span>
-                <span class="chip">Docker</span>
+        <div class="card-ctn">
+            <h3 class="card-title">Stack</h3>
+            <div class="card">
+                <span class="chips">TypeScript</span>
+                <span class="chips">Node.js</span>
+                <span class="chips">NestJS</span>
+                <span class="chips">Prisma</span>
+                <span class="chips">MySQL</span>
+                <span class="chips">React</span>
+                <span class="chips">Docker</span>
+                <span class="chips">Docker</span>
+                <span class="chips">Docker</span>
+                <span class="chips">Docker</span>
             </div>
         </div>
 
         <!-- Top projects -->
-        <div class="section stack fill">
-            <h3>Top projects</h3>
+        <div class="card-ctn fill">
+            <h3 class="card-title">Top projects</h3>
             <div class="projects">
                 {projects.map((project) => <ProjectItem {...project} />)}
             </div>
@@ -144,4 +144,88 @@ const projects: ProjectItemProps[] = [
     </section>
 </div>
 
-<style></style>
+<style>
+    /* === Rainbow contact button (con conic-gradient animado) === */
+    /* Vars base del snippet */
+    :root {
+        --conic-gradient: conic-gradient(
+            #ff2e2e,
+            #ff831e,
+            #fcff51,
+            #58ff57,
+            #575fff,
+            #d257ff,
+            #ff57e5,
+            #ff1556
+        );
+    }
+
+    /* Contenedor del halo */
+    .cta-rainbow {
+        position: relative;
+        display: inline-block;
+        border-radius: 12px;
+        padding: 4px; /* grosor del borde arcoíris */
+        isolation: isolate;
+        overflow: hidden;
+    }
+
+    /* Capa arcoíris animada detrás */
+    .cta-rainbow::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 180%; /* lado del halo cuadrado */
+        aspect-ratio: 1 / 1; /* fuerza a ser cuadrado */
+        background: var(--conic-gradient);
+        border-radius: 0; /* cuadrado (sin redondeo) */
+        z-index: 0;
+        filter: saturate(1.1);
+        animation: spin 1.8s linear infinite;
+    }
+
+    /* Botón real */
+    .cta-rainbow__btn {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 12rem; /* ajusta tamaño según diseño */
+        min-height: 3rem;
+        padding: 0.9rem 1.2rem;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px) saturate(1.05);
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+
+    /* Reusa la animación del snippet */
+    @keyframes spin {
+        from {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+
+    /* Respeta usuarios con reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .cta-rainbow::before {
+            animation: none;
+        }
+        .cta-rainbow__btn {
+            transition: none;
+        }
+    }
+</style>

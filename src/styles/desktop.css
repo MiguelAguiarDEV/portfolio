@@ -8,14 +8,12 @@
         grid-template-rows: 1fr;
         height: 100%;
         width: 100%;
-        overflow: visible;
         gap: var(--gap-big);
     }
 
     .column {
         display: flex;
         flex-direction: column;
-        overflow: visible;
         height: 100%;
         min-height: 0;
         min-width: 0;
@@ -55,9 +53,6 @@
         min-width: 0;
         min-height: 0;
         height: 100%;
-        padding: var(--gap-mid);
-        overflow: auto;
-        scrollbar-gutter: stable;
     }
 
     /* ============================ */
@@ -129,6 +124,14 @@
         display: flex;
         flex-wrap: wrap;
         gap: 0.3rem;
+        min-width: 0;
+    }
+
+    .p-links {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
         min-width: 0;
     }
 
@@ -216,7 +219,58 @@
         backdrop-filter: blur(4px);
         transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
         box-shadow: 0 1px 0 rgba(255, 255, 255, .08) inset, 0 4px 16px rgba(0, 0, 0, .25);
+        cursor: pointer;
     }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 1;
+        padding: 0.55rem 0.85rem;
+        border-radius: 10px;
+        border: 1px solid var(--ring, rgba(255, 255, 255, 0.22));
+        color: var(--ink, #f5f5f5);
+        background: rgba(255, 255, 255, 0.06);
+        text-decoration: none;
+        backdrop-filter: blur(4px);
+        transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, .28);
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background: linear-gradient(180deg, color-mix(in oklab, var(--accent, #5dd3ff) 80%, #ffffff 0%), color-mix(in oklab, var(--accent, #5dd3ff) 65%, #000000 10%));
+        border-color: rgba(255, 255, 255, 0.28);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+    }
+
+    .btn--primary {
+        background: linear-gradient(180deg, color-mix(in oklab, var(--accent, #5dd3ff) 80%, #ffffff 0%), color-mix(in oklab, var(--accent, #5dd3ff) 65%, #000000 10%));
+        color: #0b0c10;
+        border-color: color-mix(in oklab, var(--accent, #5dd3ff) 70%, #000 20%);
+        box-shadow: 0 6px 22px color-mix(in oklab, var(--accent, #5dd3ff) 35%, #000 65%);
+    }
+
+    .btn--primary:hover {
+        filter: brightness(1.03);
+        transform: translateY(-1px);
+    }
+
+    .btn--ghost {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.22);
+        color: #f0f0f0;
+    }
+
+    .btn--ghost:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* (estilos del botón arcoíris movidos a AboutPanel.astro) */
 
     /* Secciones genéricas que llenan el alto disponible */
     .section.fill {
@@ -236,18 +290,11 @@
         align-items: end;
     }
 
-    /* Solo cuando tenga .fill se expande en la columna */
-    .avatar-ctn.fill {
-        flex: 1 1 auto;
-        min-height: 0;
-    }
-
     .avatar {
         /* Ajusta el tamaño del avatar dentro del espacio disponible */
         height: 80%;
-        max-height: 100%;
         width: auto;
-        margin-bottom: 35px;
+        /* margin-bottom: 35px; */
         mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
     }
 }
