@@ -4,7 +4,7 @@ import Panel from "@/components/Panel.astro";
 import CardsGrid from "@/components/GridCard.astro";
 import AboutPanel from "@/components/panels/AboutPanel.astro";
 import ProjectsPanel from "@/components/panels/ProjectsPanel.astro";
-import type { Props as ProjectItemProps } from "@/components/ProjectItem.astro";
+import { projects } from "@/data/projects";
 import Analytics from "@vercel/analytics/astro";
 import "@/styles/global.css";
 
@@ -16,8 +16,11 @@ type PanelCard = {
 type PanelData = {
     id: string;
     label: string;
+    labelKey: string;
     title: string;
+    titleKey: string;
     lead?: string;
+    leadKey?: string;
     background: string;
     cards?: PanelCard[];
 };
@@ -25,61 +28,27 @@ type PanelData = {
 const panels: PanelData[] = [
     {
         id: "about",
-        label: "Sobre mí",
-        title: "Sobre mí",
+        label: "Sobre mi",
+        labelKey: "nav.about",
+        title: "Sobre mi",
+        titleKey: "panel.about.title",
         background: "linear-gradient(135deg, #0b3a36, #0b2a3a 70%)",
     },
     {
         id: "work",
         label: "Proyectos",
+        labelKey: "nav.projects",
         title: "Proyectos",
+        titleKey: "panel.projects.title",
         background: "linear-gradient(135deg, #2a143a, #0f1020 70%)",
     },
-    // Solo About y Projects
 ];
 
-// Datos para ProjectsPanel
-const projects: ProjectItemProps[] = [
-    {
-        name: "[Nombre del proyecto]",
-        description: "[Descripción breve. Qué resuelve, rol, impacto.]",
-        slides: [
-            { kind: "image", src: "/img/projects/p1-1.jpg", alt: "Vista 1" },
-            { kind: "image", src: "/img/projects/p1-2.jpg", alt: "Vista 2" },
-            {
-                kind: "video",
-                poster: "/img/projects/p1-cover.jpg",
-                sources: [
-                    { src: "/video/projects/p1-demo.mp4", type: "video/mp4" },
-                ],
-            },
-        ],
-        stack: ["[Stack 1]", "[Stack 2]", "[Stack 3]"],
-        liveUrl: "#",
-        repoUrl: "#",
-    },
-    {
-        name: "[Proyecto 2]",
-        description: "[Descripción breve.]",
-        slides: [
-            { kind: "image", src: "/img/projects/p2-1.jpg", alt: "Vista 1" },
-            { kind: "image", src: "/img/projects/p2-2.jpg", alt: "Vista 2" },
-        ],
-        stack: ["[Tech A]", "[Tech B]"],
-        repoUrl: "#",
-    },
-    {
-        name: "[Proyecto 3]",
-        description: "[Descripción breve.]",
-        slides: [
-            { kind: "image", src: "/img/projects/p3-1.jpg", alt: "Vista 1" },
-        ],
-        stack: ["[Tech X]", "[Tech Y]"],
-        liveUrl: "#",
-    },
-];
-
-const navItems = panels.map(({ id, label }) => ({ id, label }));
+const navItems = panels.map(({ id, label, labelKey }) => ({
+    id,
+    label,
+    labelKey,
+}));
 ---
 
 <!doctype html>
@@ -116,7 +85,8 @@ const navItems = panels.map(({ id, label }) => ({ id, label }));
                             <AboutPanel />
                         ) : panel.id === "work" ? (
                             <ProjectsPanel
-                                title="Top projects"
+                                title="Proyectos destacados"
+                                titleKey="projects.title"
                                 projects={projects}
                             />
                         ) : (
@@ -127,6 +97,7 @@ const navItems = panels.map(({ id, label }) => ({ id, label }));
             }
         </main>
         <Analytics />
+        <script type="module" src="/scripts/i18n.js"></script>
         <script type="module" src="/scripts/stage-navigation.js"></script>
     </body>
 </html>
@@ -144,3 +115,4 @@ const navItems = panels.map(({ id, label }) => ({ id, label }));
         );
     }
 </style>
+

@@ -1,69 +1,17 @@
 ---
 import ProjectItem from "../ProjectItem.astro";
 import type { Props as ProjectItemProps } from "../ProjectItem.astro";
+import { projects } from "@/data/projects";
 
-const projects: ProjectItemProps[] = [
-    {
-        name: "[Nombre del proyecto]",
-        description: "[Descripción breve. Qué resuelve, rol, impacto.]",
-        slides: [
-            {
-                kind: "image",
-                src: "/img/projects/p1-1.jpg",
-                alt: "Vista 1",
-            },
-            {
-                kind: "image",
-                src: "/img/projects/p1-2.jpg",
-                alt: "Vista 2",
-            },
-            {
-                kind: "video",
-                poster: "/img/projects/p1-cover.jpg",
-                sources: [
-                    {
-                        src: "/video/projects/p1-demo.mp4",
-                        type: "video/mp4",
-                    },
-                ],
-            },
-        ],
-        stack: ["[Stack 1]", "[Stack 2]", "[Stack 3]"],
-        liveUrl: "#",
-        repoUrl: "#",
-    },
-    {
-        name: "[Proyecto 2]",
-        description: "[Descripción breve.]",
-        slides: [
-            {
-                kind: "image",
-                src: "/img/projects/p2-1.jpg",
-                alt: "Vista 1",
-            },
-            {
-                kind: "image",
-                src: "/img/projects/p2-2.jpg",
-                alt: "Vista 2",
-            },
-        ],
-        stack: ["[Tech A]", "[Tech B]"],
-        repoUrl: "#",
-    },
-    {
-        name: "[Proyecto 3]",
-        description: "[Descripción breve.]",
-        slides: [
-            {
-                kind: "image",
-                src: "/img/projects/p3-1.jpg",
-                alt: "Vista 1",
-            },
-        ],
-        stack: ["[Tech X]", "[Tech Y]"],
-        liveUrl: "#",
-    },
+const heroChips: { label: string; key: string }[] = [
+    { label: "Backend", key: "chip.backend" },
+    { label: "Islas Canarias", key: "chip.canary" },
+    { label: "Remoto", key: "chip.remote" },
+    { label: "Estudiante de informatica", key: "chip.csStudent" },
+    { label: "Ingles / Espanol", key: "chip.bilingual" },
 ];
+
+const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
 ---
 
 <div class="layout">
@@ -79,11 +27,11 @@ const projects: ProjectItemProps[] = [
 
         <div class="card-ctn">
             <div class="card">
-                <span class="chips">Backend</span>
-                <span class="chips">Canary Islands</span>
-                <span class="chips">Remote</span>
-                <span class="chips">CS student</span>
-                <span class="chips">English / Spanish</span>
+                {heroChips.map((chip) => (
+                    <span class="chips" data-i18n-key={chip.key}>
+                        {chip.label}
+                    </span>
+                ))}
             </div>
         </div>
     </aside>
@@ -92,34 +40,38 @@ const projects: ProjectItemProps[] = [
     <section class="column">
         <!-- About -->
         <div class="card-ctn">
-            <h3 class="card-title">About me</h3>
+            <h3 class="card-title" data-i18n-key="about.title">Sobre mi</h3>
             <div class="card">
-                <p class="">
-                    I'm Miguel Santiesteban, a 22-year-old Computer Science
-                    student from the Canary Islands, Spain. I specialize in
-                    backend development and love building projects from the
-                    ground up, solving hard problems, and learning continuously.
+                <p class="" data-i18n-key="about.description">
+                    Soy Miguel Santiesteban, un estudiante de Ingenieria Informatica de 22 anos de las Islas Canarias, Espana. Me especializo en desarrollo backend y disfruto crear proyectos desde cero, resolver problemas complejos y aprender de forma continua.
                 </p>
                 <div class="btn-ctn">
                     <a
                         class="btn btn--primary"
                         href="/cv/Miguel_Santiesteban_CV.pdf"
-                        download>Download CV</a
+                        download
+                        data-i18n-key="about.downloadCv"
                     >
+                        Descargar CV
+                    </a>
                     <span class="cta-rainbow">
                         <a
                             class="cta-rainbow__btn"
-                            href="mailto:miguel@example.com?subject=Contacto%20%E2%80%94%20Miguel%20Santiesteban"
-                            aria-label="Contactar por email">Contact</a
+                            href="mailto:miguel@example.com?subject=Hello%20%E2%80%94%20Miguel%20Santiesteban"
+                            aria-label="Contactar por correo"
+                            data-i18n-key="about.contact"
+                            data-i18n-attr-aria-label="about.contact.aria"
                         >
+                            Contacto
+                        </a>
                     </span>
                 </div>
             </div>
         </div>
 
-        <!-- Stack -->
+        <!-- Tecnologias -->
         <div class="card-ctn">
-            <h3 class="card-title">Stack</h3>
+            <h3 class="card-title" data-i18n-key="about.stack">Tecnologias</h3>
             <div class="card">
                 <span class="chips">TypeScript</span>
                 <span class="chips">Node.js</span>
@@ -128,17 +80,21 @@ const projects: ProjectItemProps[] = [
                 <span class="chips">MySQL</span>
                 <span class="chips">React</span>
                 <span class="chips">Docker</span>
-                <span class="chips">Docker</span>
-                <span class="chips">Docker</span>
-                <span class="chips">Docker</span>
+                <span class="chips">GraphQL</span>
+                <span class="chips">Astro</span>
+                <span class="chips">Redis</span>
             </div>
         </div>
 
-        <!-- Top projects -->
+        <!-- Proyectos destacados -->
         <div class="card-ctn fill">
-            <h3 class="card-title">Top projects</h3>
+            <h3 class="card-title" data-i18n-key="about.topProjects">
+                Proyectos destacados
+            </h3>
             <div class="projects">
-                {projects.map((project) => <ProjectItem {...project} />)}
+                {featuredProjects.map((project) => (
+                    <ProjectItem {...project} />
+                ))}
             </div>
         </div>
     </section>
@@ -165,7 +121,7 @@ const projects: ProjectItemProps[] = [
         position: relative;
         display: inline-block;
         border-radius: 12px;
-        padding: 2px; /* grosor del borde arcoíris */
+        padding: 2px; /* grosor del borde arcoiris */
         isolation: isolate;
         overflow: hidden;
         transform-origin: center;
@@ -173,7 +129,7 @@ const projects: ProjectItemProps[] = [
         will-change: transform;
     }
 
-    /* Capa arcoíris animada detrás */
+    /* Capa arcoiris animada detras */
     .cta-rainbow::before {
         content: "";
         position: absolute;
@@ -188,14 +144,14 @@ const projects: ProjectItemProps[] = [
         animation: spin 4s linear infinite;
     }
 
-    /* Botón real */
+    /* Boton real */
     .cta-rainbow__btn {
         position: relative;
         z-index: 1;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: fit-content; /* ajusta tamaño según diseño */
+        min-width: fit-content; /* ajusta tamano segun diseno */
         min-height: fit-content;
         padding: 0 0;
         border-radius: 10px;
@@ -220,18 +176,18 @@ const projects: ProjectItemProps[] = [
         text-transform: uppercase;
     }
 
-    /* Hover: escalar el conjunto arcoíris + botón */
+    /* Hover: escalar el conjunto arcoiris + boton */
     .cta-rainbow:hover {
         transform: scale(1.06);
     }
 
-    /* Hover: refuerzo suave sobre el botón */
-    .cta-rainbow__btn:hover{
+    /* Hover: refuerzo suave sobre el boton */
+    .cta-rainbow__btn:hover {
         transform: scale(1.04);
-        box-shadow: 0 0.9rem 1.6rem rgba(0,0,0,.45);
+        box-shadow: 0 0.9rem 1.6rem rgba(0, 0, 0, 0.45);
     }
 
-    /* Reusa la animación del snippet */
+    /* Reusa la animacion del snippet */
     @keyframes spin {
         from {
             transform: translate(-50%, -50%) rotate(0deg);
