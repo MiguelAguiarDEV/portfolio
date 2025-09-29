@@ -2,6 +2,7 @@
 @import "./desktop.css";
 @import "./tablet.css";
 @import "./mobile.css";
+/* mobile.css eliminado: estilos visuales no varían por dispositivo */
 
 
 /* ============================ */
@@ -28,6 +29,8 @@
     --panel: rgba(255, 255, 255, 0.05);
     /* Duración global para animación de reveal */
     --wipe-ms: 700ms;
+    /* Offset vertical del contenido del panel (por defecto móvil/tablet) */
+    --panel-y-offset: 30px;
 }
 
 *,
@@ -48,4 +51,11 @@ body {
     color: #fafafa;
     overflow: hidden;
     line-height: 1.4;
+}
+
+/* En desktop sube un poco el contenido (menos offset) */
+@media (min-width: 1001px) {
+    :root {
+        --panel-y-offset: -25px;
+    }
 }
