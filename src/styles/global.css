@@ -13,23 +13,15 @@
     --br-mid: 9px;
     --br-sm: 12px;
 
-    --p-big: 5px;
-    --p-mid: 5px;
-    --p-sm: 12px;
+    --gap-big: 12px;
+    --gap-mid: 8px;
+    --gap-sm: 6px;
 
-    --gap-big: 15px;
-    --gap-mid: 5px;
-    --gap-sm: 12px;
-    /* Avatar spacing */
-    --avatar-top-gap: 24px;
-    /* Accents and base colors */
     --accent: #5dd3ff;
     --ring: rgba(255, 255, 255, 0.14);
     --ink: #fafafa;
     --panel: rgba(255, 255, 255, 0.05);
-    /* Duración global para animación de reveal */
     --wipe-ms: 700ms;
-    /* Offset vertical del contenido del panel (por defecto móvil/tablet) */
     --panel-y-offset: 30px;
 }
 

@@ -2,9 +2,14 @@
 @media (max-width: 1000px) {
   .layout {
     grid-template-columns: 1fr;
+    height: 100%;
   }
 
   .layout>aside.column {
     display: none;
+  }
+
+  .column {
+    height: 100%;
   }
 }

@@ -1,30 +1,38 @@
 .layout {
-    /* max-width: 1200px; */
-    margin: auto;
+    margin: 0;
+    padding: 0;
     display: grid;
     grid-template-columns: 360px 1fr;
     grid-template-rows: 1fr;
-    /* height: 100%; */
     width: 100%;
+    height: 100%;
+    max-height: 100%;
     gap: var(--gap-big);
 }
 
 .column {
     display: flex;
     flex-direction: column;
+    width: 100%;
     height: 100%;
+    max-height: 100%;
     min-height: 0;
     min-width: 0;
     gap: var(--gap-mid);
+    overflow: hidden;
 }
 
-/* La tarjeta inferior mantiene su alto de contenido */
 .card-ctn {
     flex: 0 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+    max-width: 100%;
 }
 
 .card-title {
-    margin-left: 15px;
+    margin: 0 0 0 15px;
     font-size: 18px;
     font-weight: bold;
 }
@@ -34,18 +42,19 @@
     border: 1px solid var(--ring, rgba(255, 255, 255, 0.1));
     border-radius: var(--br-big);
     box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, 0.35));
-    padding: var(--p-mid);
-    gap: var(--gap-mid);
+    padding: 12px;
+    gap: 8px;
     display: flex;
     flex-wrap: wrap;
+    min-height: 0;
+    max-width: 100%;
 }
 
 .projects {
     display: grid;
-    gap: var(--gap-mid);
-    grid-template-columns: repeat(var(--proj, 3), minmax(0, 1fr));
+    gap: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: 1fr;
-    /* una fila que ocupa toda la altura */
     align-items: stretch;
     justify-items: stretch;
     min-width: 0;
@@ -57,34 +66,41 @@
 /* Project card (desktop)       */
 /* ============================ */
 .project {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: min-content 1fr auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     height: 100%;
-    gap: 0;
+    min-height: 0;
+    gap: 8px;
+    padding: 12px;
 }
 
 /* Carrusel dentro de la card */
 .project>.carousel {
     width: 100%;
     height: auto;
+    flex: 0 0 auto;
     aspect-ratio: 16 / 9;
     border-radius: 12px;
     overflow: hidden;
     background: #0d131d;
 }
 
+.project > .no-preview {
+    flex: 0 0 auto;
+}
+
 .p-content {
     display: flex;
     flex-direction: column;
+    flex: 1 1 auto;
     min-width: 0;
     min-height: 0;
     gap: 0.35rem;
 }
 
 .p-content>* {
-    height: fit-content;
-    align-self: start;
+    flex: 0 0 auto;
 }
 
 .p-title {
@@ -113,10 +129,7 @@
     gap: 0.5rem;
     margin-top: auto;
     min-width: 0;
-}
-
-.project>.p-footer {
-    grid-row: -2 / -1;
+    flex: 0 0 auto;
 }
 
 .p-tags {
@@ -268,18 +281,18 @@
     min-height: 0;
 }
 
-/* Base del contenedor de avatar */
 .avatar-ctn {
     display: flex;
     justify-content: center;
     align-items: end;
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .avatar {
-    /* Ajusta el tamaño del avatar dentro del espacio disponible */
     height: 100%;
     width: auto;
-    /* margin-bottom: 35px; */
+    object-fit: contain;
     mask: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
 }
 

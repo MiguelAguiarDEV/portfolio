@@ -6,15 +6,19 @@
     font-size: 80%;
   }
 
-
   /* H3 más pequeños en mobile */
   h3, .card-title {
     font-size: 0.9rem;
   }
 
+  .column {
+    height: 100%;
+  }
+
   /* Asegura que el contenedor flexible permita encoger su hijo scrollable */
   .column>.fill {
     min-height: 0;
+    flex: 1 1 auto;
   }
 
   /* La rejilla ocupa todo el alto disponible y hace scroll interno si hace falta */
@@ -30,7 +34,10 @@
     height: 100%;
     min-height: 0;
     overflow: auto;
-    /* pisa posibles overrides previos */
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr !important;
   }
 
   /* Disposición del project: preview izquierda | contenido derecha */
