@@ -15,7 +15,6 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
 ---
 
 <div class="layout">
-    <!-- Izquierda -->
     <aside class="column">
         <div class="avatar-ctn">
             <img
@@ -27,23 +26,27 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
 
         <div class="card-ctn">
             <div class="card">
-                {heroChips.map((chip) => (
-                    <span class="chips" data-i18n-key={chip.key}>
-                        {chip.label}
-                    </span>
-                ))}
+                {
+                    heroChips.map((chip) => (
+                        <span class="chips" data-i18n-key={chip.key}>
+                            {chip.label}
+                        </span>
+                    ))
+                }
             </div>
         </div>
     </aside>
 
-    <!-- Derecha -->
     <section class="column">
-        <!-- About -->
         <div class="card-ctn">
             <h3 class="card-title" data-i18n-key="about.title">Sobre mi</h3>
             <div class="card">
                 <p class="" data-i18n-key="about.description">
-                    Soy Miguel Santiesteban, un estudiante de Ingenieria Informatica de 22 anos de las Islas Canarias, Espana. Me especializo en desarrollo backend y disfruto crear proyectos desde cero, resolver problemas complejos y aprender de forma continua.
+                    Soy Miguel Santiesteban, un estudiante de Ingenieria
+                    Informatica de 22 anos de las Islas Canarias, Espana. Me
+                    especializo en desarrollo backend y disfruto crear proyectos
+                    desde cero, resolver problemas complejos y aprender de forma
+                    continua.
                 </p>
                 <div class="btn-ctn">
                     <a
@@ -69,7 +72,6 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
             </div>
         </div>
 
-        <!-- Tecnologias -->
         <div class="card-ctn">
             <h3 class="card-title" data-i18n-key="about.stack">Tecnologias</h3>
             <div class="card">
@@ -86,15 +88,16 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
             </div>
         </div>
 
-        <!-- Proyectos destacados -->
         <div class="card-ctn fill">
             <h3 class="card-title" data-i18n-key="about.topProjects">
                 Proyectos destacados
             </h3>
             <div class="projects">
-                {featuredProjects.map((project) => (
-                    <ProjectItem {...project} />
-                ))}
+                {
+                    featuredProjects.map((project) => (
+                        <ProjectItem {...project} />
+                    ))
+                }
             </div>
         </div>
     </section>
