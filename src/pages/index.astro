@@ -4,6 +4,8 @@ import Panel from "@/components/Panel.astro";
 import CardsGrid from "@/components/GridCard.astro";
 import AboutPanel from "@/components/panels/AboutPanel.astro";
 import ProjectsPanel from "@/components/panels/ProjectsPanel.astro";
+import SkillsPanel from "@/components/panels/SkillsPanel.astro";
+import ContactPanel from "@/components/panels/ContactPanel.astro";
 import { projects } from "@/data/projects";
 import Analytics from "@vercel/analytics/astro";
 import "@/styles/global.css";
@@ -41,6 +43,22 @@ const panels: PanelData[] = [
         title: "Proyectos",
         titleKey: "panel.projects.title",
         background: "linear-gradient(135deg, #2a143a, #0f1020 70%)",
+    },
+    {
+        id: "skills",
+        label: "Habilidades",
+        labelKey: "nav.skills",
+        title: "Habilidades",
+        titleKey: "panel.skills.title",
+        background: "linear-gradient(135deg, #1a2a3a, #0f1520 70%)",
+    },
+    {
+        id: "contact",
+        label: "Contacto",
+        labelKey: "nav.contact",
+        title: "Contacto",
+        titleKey: "panel.contact.title",
+        background: "linear-gradient(135deg, #1a1a2e, #0f0f1a 70%)",
     },
 ];
 
@@ -89,6 +107,10 @@ const navItems = panels.map(({ id, label, labelKey }) => ({
                                 titleKey="projects.title"
                                 projects={projects}
                             />
+                        ) : panel.id === "skills" ? (
+                            <SkillsPanel />
+                        ) : panel.id === "contact" ? (
+                            <ContactPanel />
                         ) : (
                             panel.cards && <CardsGrid items={panel.cards} />
                         )}

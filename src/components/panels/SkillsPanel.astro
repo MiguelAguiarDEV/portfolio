@@ -1,0 +1,172 @@
+---
+const skillCategories = [
+    {
+        title: "Backend",
+        titleKey: "skills.backend.title",
+        skills: [
+            { name: "Node.js", level: 90 },
+            { name: "NestJS", level: 85 },
+            { name: "TypeScript", level: 90 },
+            { name: "Prisma", level: 80 },
+            { name: "GraphQL", level: 75 },
+            { name: "REST APIs", level: 90 },
+        ],
+    },
+    {
+        title: "Frontend",
+        titleKey: "skills.frontend.title",
+        skills: [
+            { name: "React", level: 80 },
+            { name: "Astro", level: 75 },
+            { name: "HTML/CSS", level: 85 },
+            { name: "TailwindCSS", level: 80 },
+        ],
+    },
+    {
+        title: "Bases de Datos",
+        titleKey: "skills.database.title",
+        skills: [
+            { name: "MySQL", level: 85 },
+            { name: "PostgreSQL", level: 80 },
+            { name: "Redis", level: 70 },
+            { name: "MongoDB", level: 65 },
+        ],
+    },
+    {
+        title: "DevOps & Tools",
+        titleKey: "skills.devops.title",
+        skills: [
+            { name: "Docker", level: 75 },
+            { name: "Git", level: 90 },
+            { name: "Linux", level: 80 },
+            { name: "CI/CD", level: 70 },
+        ],
+    },
+];
+---
+
+<div class="skills-panel">
+    <div class="skills-grid">
+        {
+            skillCategories.map((category) => (
+                <div class="skill-category card">
+                    <h3 class="category-title" data-i18n-key={category.titleKey}>
+                        {category.title}
+                    </h3>
+                    <div class="skills-list">
+                        {category.skills.map((skill) => (
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span class="skill-name">{skill.name}</span>
+                                    <span class="skill-level">{skill.level}%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div
+                                        class="skill-progress"
+                                        style={`width: ${skill.level}%`}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</div>
+
+<style>
+    .skills-panel {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        width: 100%;
+        height: auto;
+        max-height: 100%;
+        overflow-y: auto;
+        padding: 8px;
+    }
+
+    .skill-category {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
+        background: var(--panel);
+        border: 1px solid var(--ring);
+        border-radius: var(--br-big);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .category-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--ink);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 8px;
+    }
+
+    .skills-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .skill-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .skill-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .skill-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--ink);
+    }
+
+    .skill-level {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--accent);
+    }
+
+    .skill-bar {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .skill-progress {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), #4a9eff);
+        border-radius: 999px;
+        transition: width 0.6s ease;
+        box-shadow: 0 0 10px rgba(93, 211, 255, 0.3);
+    }
+
+    @media (max-width: 900px) {
+        .skills-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+    }
+</style>
