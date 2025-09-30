@@ -42,11 +42,11 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
     .panel > section {
         position: relative;
         z-index: 1;
-        inline-size: min(1300px, 87vw);
-        block-size: min(72vh, 76svh);
+        inline-size: min(1200px, 84vw);
+        /* block-size: min(85vh, 84svh); */
         display: grid;
         place-items: center;
-        /* transform: translateY(var(--panel-y-offset, 30px)); */
+        transform: translateY(var(--panel-y-offset, 30px));
         /* box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35); */
         /* border: 1px solid white; */
         border-radius: var(--radius);

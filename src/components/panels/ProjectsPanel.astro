@@ -12,6 +12,9 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 ---
 
 <div class="projects-panel">
+    <header class="panel-header">
+        <h3 class="card-title" data-i18n-key={titleKey}>{title}</h3>
+    </header>
     <div class="projects-grid">
         {projects.map((project) => <ProjectItem {...project} />)}
     </div>
@@ -19,27 +22,28 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 
 <style>
     .projects-panel {
-        min-height: 0;
-        height: 100%;
+        display: flex;
+        flex-direction: column;
         width: 100%;
-        display: grid;
-        align-content: stretch;
-        justify-items: stretch;
-        overflow: visible;
+        height: 100%;
+        min-height: 0;
+        /* gap: var(--gap-mid); */
+        margin: 0 auto;
     }
 
-    .projects-panel > h3 {
-        margin: 0;
-        font-size: 1.75rem;
+    .panel-header {
+        flex: 0 0 auto;
     }
 
     .projects-grid {
+        flex: 1 1 auto;
         min-height: 0;
-        height: 100%;
         display: grid;
         gap: var(--gap-mid);
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        overflow: visible;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        align-content: start;
+        overflow-y: visible;
+        overflow-x: visible;
     }
 
     .projects-grid::-webkit-scrollbar {
@@ -52,11 +56,7 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
     }
 
     @media (max-width: 900px) {
-        .projects-panel {
-            gap: 16px;
-        }
-
-        .projects-panel > h3 {
+        .panel-header h3 {
             font-size: 1.5rem;
         }
     }
