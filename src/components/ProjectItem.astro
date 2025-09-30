@@ -21,7 +21,7 @@ export type Slide = ImageSlide | VideoSlide;
 export interface Props {
     name: string;
     description: string;
-    slides: Slide[];
+    slides?: Slide[];
     stack: string[];
     liveUrl?: string;
     repoUrl?: string;
@@ -32,82 +32,89 @@ export interface Props {
 const {
     name,
     description,
-    slides,
+    slides = [],
     stack = [],
     liveUrl,
     repoUrl,
     nameKey,
     descriptionKey,
 } = Astro.props;
+const hasSlides = slides.length > 0;
 ---
 
 <article class="project card">
-    <div class="carousel">
-        <div class="slides">
-            {
-                slides.map((slide, index) => (
-                    <figure
-                        class={`slide ${index === 0 ? "is-active" : ""}`}
-                        key={`${slide.kind}-${index}`}
-                    >
-                        {slide.kind === "image" ? (
-                            <img
-                                loading="lazy"
-                                src={slide.src}
-                                alt={slide.alt}
-                            />
-                        ) : (
-                            <video
-                                preload="none"
-                                controls
-                                playsinline
-                                muted
-                                poster={slide.poster}
-                            >
-                                {slide.sources.map((source, sourceIndex) => (
-                                    <source
-                                        src={source.src}
-                                        type={source.type}
-                                        key={`${source.src}-${sourceIndex}`}
-                                    />
-                                ))}
-                                <span
-                                    data-i18n-key="project.videoFallback"
-                                >
-                                    Tu navegador no soporta video.
-                                </span>
-                            </video>
-                        )}
-                    </figure>
-                ))
-            }
-        </div>
-        <div class="car-ctrl">
-            <button
-                class="arrow left"
-                type="button"
-                aria-label="Anterior"
-                data-i18n-attr-aria-label="project.carousel.prev"
-            >&lsaquo;</button>
-            <button
-                class="arrow right"
-                type="button"
-                aria-label="Siguiente"
-                data-i18n-attr-aria-label="project.carousel.next"
-            >&rsaquo;</button>
-            <div class="dots">
+    {hasSlides ? (
+        <div class="carousel">
+            <div class="slides">
                 {
-                    slides.map((_, index) => (
-                        <i
-                            class={`dot ${index === 0 ? "is-active" : ""}`}
-                            key={`dot-${index}`}
-                            data-index={index}
-                        />
+                    slides.map((slide, index) => (
+                        <figure
+                            class={`slide ${index === 0 ? "is-active" : ""}`}
+                            key={`${slide.kind}-${index}`}
+                        >
+                            {slide.kind === "image" ? (
+                                <img
+                                    loading="lazy"
+                                    src={slide.src}
+                                    alt={slide.alt}
+                                />
+                            ) : (
+                                <video
+                                    preload="none"
+                                    controls
+                                    playsinline
+                                    muted
+                                    poster={slide.poster}
+                                >
+                                    {slide.sources.map((source, sourceIndex) => (
+                                        <source
+                                            src={source.src}
+                                            type={source.type}
+                                            key={`${source.src}-${sourceIndex}`}
+                                        />
+                                    ))}
+                                    <span
+                                        data-i18n-key="project.videoFallback"
+                                    >
+                                        Tu navegador no soporta video.
+                                    </span>
+                                </video>
+                            )}
+                        </figure>
                     ))
                 }
             </div>
+            <div class="car-ctrl">
+                <button
+                    class="arrow left"
+                    type="button"
+                    aria-label="Anterior"
+                    data-i18n-attr-aria-label="project.carousel.prev"
+                >&lsaquo;</button>
+                <button
+                    class="arrow right"
+                    type="button"
+                    aria-label="Siguiente"
+                    data-i18n-attr-aria-label="project.carousel.next"
+                >&rsaquo;</button>
+                <div class="dots">
+                    {
+                        slides.map((_, index) => (
+                            <i
+                                class={`dot ${index === 0 ? "is-active" : ""}`}
+                                key={`dot-${index}`}
+                                data-index={index}
+                            />
+                        ))
+                    }
+                </div>
+            </div>
         </div>
-    </div>
+    ) : (
+        <div class="no-preview" data-i18n-key="project.noPreview">
+            Sin vista previa
+        </div>
+    )}
     <div class="p-content">
         <h4 class="p-title" data-i18n-key={nameKey}>{name}</h4>
         <p
@@ -164,6 +171,9 @@ const {
         if (!root) return;
 
         const slides = Array.from(root.querySelectorAll(".slides .slide"));
+        if (slides.length === 0) {
+            return;
+        }
         const dots = Array.from(root.querySelectorAll(".car-ctrl .dots .dot"));
         const btnLeft = root.querySelector(".car-ctrl .arrow.left");
         const btnRight = root.querySelector(".car-ctrl .arrow.right");
@@ -197,12 +207,29 @@ const {
 </script>
 
 <style>
+    .no-preview {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.75;
+    }
+
     .carousel {
         position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 12px;
+        overflow: hidden;
     }
     .slides {
-        position: relative;
-        height: 100%;
+        position: absolute;
+        inset: 0;
         min-height: 0;
         overflow: hidden;
     }
@@ -243,5 +270,8 @@ const {
         pointer-events: auto;
     }
 </style>
+
+
+
 
 

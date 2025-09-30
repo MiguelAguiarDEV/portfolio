@@ -4,38 +4,54 @@ const SUPPORTED_LANGS = ["es", "en"];
 const translations = {
     es: {
         "nav.sections": "Secciones",
-        "nav.about": "Sobre mí",
+        "nav.about": "Sobre mi",
         "nav.projects": "Proyectos",
         "lang.toggle.label": "ES",
-        "lang.toggle.aria": "Cambiar idioma a inglés",
-        "about.title": "Sobre mí",
+        "lang.toggle.aria": "Cambiar idioma a ingles",
+        "about.title": "Sobre mi",
         "about.description":
-            "Soy Miguel Santiesteban, estudiante de Ingeniería Informática de 22 años en las Islas Canarias, España. Me especializo en desarrollo backend y disfruto crear proyectos desde cero, resolver problemas complejos y aprender de forma continua.",
+            "Soy Miguel Santiesteban, un estudiante de Ingenieria Informatica de 22 anos de las Islas Canarias, Espana. Me especializo en desarrollo backend y disfruto crear proyectos desde cero, resolver problemas complejos y aprender de forma continua.",
         "about.downloadCv": "Descargar CV",
         "about.contact": "Contacto",
         "about.contact.aria": "Contactar por correo",
-        "about.stack": "Tecnologías",
+        "about.stack": "Tecnologias",
         "about.topProjects": "Proyectos destacados",
-        "projects.title": "Proyectos destacados",
+        "projects.title": "Repositorios de GitHub",
         "project.videoFallback": "Tu navegador no soporta video.",
         "project.carousel.prev": "Anterior",
         "project.carousel.next": "Siguiente",
         "project.button.live": "Ver demo",
         "project.button.repo": "Repositorio",
-        "project.taskflow.name": "TaskFlow API",
-        "project.taskflow.description":
-            "Servicio de orquestación de tareas basado en eventos, construido con TypeScript y Redis Streams.",
-        "project.shopwave.name": "ShopWave Dashboard",
-        "project.shopwave.description":
-            "Panel de ventas en tiempo real con caché adaptable y gestión granular de roles.",
-        "project.skylog.name": "SkyLog Analytics",
-        "project.skylog.description":
-            "Suite ligera de analítica para flotas IoT con sincronización offline-first.",
+        "project.noPreview": "Sin vista previa",
+        "project.battleship.name": "Battleship vs AI",
+        "project.battleship.description":
+            "Batalla de hundir la flota contra un bot en JavaScript con logica basica de IA.",
+        "project.clipsync.name": "Clip Sync",
+        "project.clipsync.description":
+            "Sincroniza el portapapeles entre dispositivos usando WebSocket y HTTP.",
+        "project.csvAnalyzer.name": "CSV Analyzer TFG",
+        "project.csvAnalyzer.description":
+            "Herramienta para analizar ficheros CSV grandes como trabajo de fin de grado.",
+        "project.profileRepo.name": "Perfil de GitHub",
+        "project.profileRepo.description":
+            "Codigo fuente del README y configuraciones de mi perfil en GitHub.",
+        "project.pdfUtility.name": "PDF Utility",
+        "project.pdfUtility.description":
+            "Coleccion de utilidades web ligeras para trabajar con documentos PDF.",
+        "project.portfolio.name": "Portfolio",
+        "project.portfolio.description":
+            "Sitio personal construido con Astro para mostrar experiencia y proyectos.",
+        "project.queater.name": "Queater",
+        "project.queater.description":
+            "Prototipo de gestion de colas y pedidos con enfoque en tiempo real.",
+        "project.vulca.name": "Vulca Torneos",
+        "project.vulca.description":
+            "Plataforma para gestionar torneos y resultados con stack TypeScript.",
         "chip.backend": "Backend",
         "chip.canary": "Islas Canarias",
         "chip.remote": "Remoto",
-        "chip.csStudent": "Estudiante de informática",
-        "chip.bilingual": "Inglés / Español",
+        "chip.csStudent": "Estudiante de informatica",
+        "chip.bilingual": "Ingles / Espanol",
     },
     en: {
         "nav.sections": "Sections",
@@ -45,27 +61,43 @@ const translations = {
         "lang.toggle.aria": "Switch language to Spanish",
         "about.title": "About me",
         "about.description":
-            "I'm Miguel Santiesteban, a 22-year-old Computer Science student from the Canary Islands, Spain. I specialize in backend development and love building projects from the ground up, solving hard problems, and learning continuously.",
+            "I am Miguel Santiesteban, a 22 year old Computer Science student from the Canary Islands, Spain. I focus on backend development and enjoy building projects from scratch, solving hard problems, and learning continuously.",
         "about.downloadCv": "Download CV",
         "about.contact": "Contact",
         "about.contact.aria": "Contact via email",
         "about.stack": "Stack",
         "about.topProjects": "Top projects",
-        "projects.title": "Top projects",
+        "projects.title": "GitHub repositories",
         "project.videoFallback": "Your browser does not support video.",
         "project.carousel.prev": "Previous",
         "project.carousel.next": "Next",
         "project.button.live": "Live",
         "project.button.repo": "Repo",
-        "project.taskflow.name": "TaskFlow API",
-        "project.taskflow.description":
-            "Event-driven task orchestration service built with TypeScript and Redis streams.",
-        "project.shopwave.name": "ShopWave Dashboard",
-        "project.shopwave.description":
-            "Realtime sales dashboard with adaptive caching and granular role management.",
-        "project.skylog.name": "SkyLog Analytics",
-        "project.skylog.description":
-            "Lightweight analytics toolkit for IoT fleets with offline-first sync.",
+        "project.noPreview": "No preview available",
+        "project.battleship.name": "Battleship vs AI",
+        "project.battleship.description":
+            "A JavaScript battleship duel against a simple AI opponent.",
+        "project.clipsync.name": "Clip Sync",
+        "project.clipsync.description":
+            "Cross device clipboard sync powered by WebSocket and HTTP.",
+        "project.csvAnalyzer.name": "CSV Analyzer TFG",
+        "project.csvAnalyzer.description":
+            "Large CSV inspection toolkit created for my final degree project.",
+        "project.profileRepo.name": "GitHub Profile",
+        "project.profileRepo.description":
+            "Source for my GitHub profile README and shared configs.",
+        "project.pdfUtility.name": "PDF Utility",
+        "project.pdfUtility.description":
+            "Lightweight web helpers to manipulate PDF documents.",
+        "project.portfolio.name": "Portfolio",
+        "project.portfolio.description":
+            "Personal site built with Astro to showcase work and skills.",
+        "project.queater.name": "Queater",
+        "project.queater.description":
+            "Queue and order management prototype focused on realtime flows.",
+        "project.vulca.name": "Vulca Torneos",
+        "project.vulca.description":
+            "Tournament management platform built with a TypeScript stack.",
         "chip.backend": "Backend",
         "chip.canary": "Canary Islands",
         "chip.remote": "Remote",

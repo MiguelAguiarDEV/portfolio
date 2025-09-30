@@ -1,5 +1,6 @@
-[ ] Save current location in localstorage.
-[ ] Download CV functionality
-[ ] Lenguage and Switch
-[ ] Others Sections
-[ ] About LIVE REPO btn links styles
+[ ] Estilar Navbar
+[ ] Previws de los proyectos. (Tengo que volver a ejecutar y arreglar algunos)
+[ ] Secciones(Inspered, Expirience, Studies...)
+[ ] Descargar CV
+[ ] Chips redirigen al stack
+[ ] Poner alerta de que esta en desarrollo

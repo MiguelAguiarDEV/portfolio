@@ -8,24 +8,56 @@ export interface Props {
     projects: ProjectItemProps[];
 }
 
-const { title = "Proyectos destacados", titleKey, projects } = Astro.props;
+const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 ---
 
-<div class="section stack fill">
-    <h3 data-i18n-key={titleKey}>{title}</h3>
-    <div class="projects">
-        {projects.map((p) => <ProjectItem {...p} />)}
+<div class="projects-panel">
+    <div class="projects-grid">
+        {projects.map((project) => <ProjectItem {...project} />)}
     </div>
 </div>
 
 <style>
-    /* Garantiza que la rejilla aprovecha el alto del panel */
-    .section.fill {
-        min-height: 0;
-    }
-    .projects {
+    .projects-panel {
         min-height: 0;
         height: 100%;
+        width: 100%;
+        display: grid;
+        align-content: stretch;
+        justify-items: stretch;
+        overflow: visible;
+    }
+
+    .projects-panel > h3 {
+        margin: 0;
+        font-size: 1.75rem;
+    }
+
+    .projects-grid {
+        min-height: 0;
+        height: 100%;
+        display: grid;
+        gap: var(--gap-mid);
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        overflow: visible;
+    }
+
+    .projects-grid::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .projects-grid::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+    }
+
+    @media (max-width: 900px) {
+        .projects-panel {
+            gap: 16px;
+        }
+
+        .projects-panel > h3 {
+            font-size: 1.5rem;
+        }
     }
 </style>
-
