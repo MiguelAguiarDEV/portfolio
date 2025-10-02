@@ -6,137 +6,295 @@ export interface Props {
     title?: string;
     titleKey?: string;
     projects: ProjectItemProps[];
-    projectsPerPage?: number;
 }
 
-const {
-    title = "Repositorios de GitHub",
-    titleKey,
-    projects,
-    projectsPerPage = 8,
-} = Astro.props;
-
-const totalPages = Math.ceil(projects.length / projectsPerPage);
-const pages = Array.from({ length: totalPages }, (_, i) => {
-    const start = i * projectsPerPage;
-    return projects.slice(start, start + projectsPerPage);
-});
+const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 ---
 
 <div class="projects-panel">
     <header class="panel-header">
         <h3 class="card-title" data-i18n-key={titleKey}>{title}</h3>
     </header>
-
-    <div class="projects-container">
-        {
-            pages.map((pageProjects, pageIndex) => (
-                <div
-                    class={`projects-grid ${pageIndex === 0 ? "active" : ""}`}
-                    data-page={pageIndex}
-                >
-                    {pageProjects.map((project) => (
-                        <ProjectItem {...project} />
-                    ))}
-                </div>
-            ))
-        }
-    </div>
-
-    {
-        totalPages > 1 && (
-            <div class="pagination-controls">
-                <button
-                    class="pagination-btn prev"
-                    aria-label="Página anterior"
-                    data-i18n-attr-aria-label="pagination.prev"
-                    disabled
-                >
-                    ‹
-                </button>
-                <div class="pagination-dots">
-                    {pages.map((_, i) => (
-                        <button
-                            class={`pagination-dot ${i === 0 ? "active" : ""}`}
-                            data-page-index={i}
-                            aria-label={`Página ${i + 1}`}
-                        />
-                    ))}
-                </div>
-                <button
-                    class="pagination-btn next"
-                    aria-label="Página siguiente"
-                    data-i18n-attr-aria-label="pagination.next"
-                >
-                    ›
-                </button>
+    <div id="pagination-ctn" data-total-projects={projects.length}>
+        <button
+            class="pagination-btn pagination-prev"
+            aria-label="Previous page"
+        >
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M12.5 15L7.5 10L12.5 5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+        </button>
+        <div class="projects-container">
+            <div class="projects-grid" id="projects-grid">
+                {projects.map((project) => <ProjectItem {...project} />)}
             </div>
-        )
-    }
+        </div>
+        <button class="pagination-btn pagination-next" aria-label="Next page">
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M7.5 15L12.5 10L7.5 5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+        </button>
+    </div>
 </div>
 
 <script>
-    (function () {
-        const container = document.currentScript?.closest(".projects-panel");
-        if (!container) return;
+    // Configuración responsive de items por página
+    const ITEMS_PER_PAGE = {
+        mobile: 4, // < 640px
+        tablet: 4, // 640px - 1024px
+        desktop: 8, // >= 1024px
+    };
 
-        const grids = Array.from(container.querySelectorAll(".projects-grid"));
-        const dots = Array.from(container.querySelectorAll(".pagination-dot"));
-        const prevBtn = container.querySelector(".pagination-btn.prev");
-        const nextBtn = container.querySelector(".pagination-btn.next");
+    class ProjectsPagination {
+        private currentPage = 0;
+        private itemsPerPage = ITEMS_PER_PAGE.desktop;
+        private totalProjects = 0;
+        private projectItems: HTMLElement[] = [];
+        private prevBtn: HTMLButtonElement | null = null;
+        private nextBtn: HTMLButtonElement | null = null;
+        private container: HTMLElement | null = null;
 
-        if (grids.length <= 1) return;
-
-        let currentPage = 0;
-
-        function updatePagination() {
-            grids.forEach((grid, i) => {
-                grid.classList.toggle("active", i === currentPage);
-            });
-
-            dots.forEach((dot, i) => {
-                dot.classList.toggle("active", i === currentPage);
-            });
-
-            if (prevBtn) prevBtn.disabled = currentPage === 0;
-            if (nextBtn) nextBtn.disabled = currentPage === grids.length - 1;
+        constructor() {
+            this.init();
         }
 
-        function goToPage(index: number) {
-            currentPage = Math.max(0, Math.min(grids.length - 1, index));
-            updatePagination();
+        private init() {
+            this.container = document.getElementById("pagination-ctn");
+            if (!this.container) return;
+
+            this.totalProjects = parseInt(
+                this.container.dataset.totalProjects || "0",
+                10,
+            );
+            this.prevBtn = this.container.querySelector(".pagination-prev");
+            this.nextBtn = this.container.querySelector(".pagination-next");
+
+            const grid = document.getElementById("projects-grid");
+            if (grid) {
+                this.projectItems = Array.from(grid.children) as HTMLElement[];
+            }
+
+            this.updateItemsPerPage();
+            this.attachEventListeners();
+            this.updateView();
+
+            // Escuchar cambios de tamaño de ventana
+            window.addEventListener("resize", () => {
+                this.updateItemsPerPage();
+                this.updateView();
+            });
         }
 
-        prevBtn?.addEventListener("click", () => goToPage(currentPage - 1));
-        nextBtn?.addEventListener("click", () => goToPage(currentPage + 1));
+        private updateItemsPerPage() {
+            const width = window.innerWidth;
+            if (width < 640) {
+                this.itemsPerPage = ITEMS_PER_PAGE.mobile;
+            } else if (width < 1024) {
+                this.itemsPerPage = ITEMS_PER_PAGE.tablet;
+            } else {
+                this.itemsPerPage = ITEMS_PER_PAGE.desktop;
+            }
 
-        dots.forEach((dot, i) => {
-            dot.addEventListener("click", () => goToPage(i));
+            // Ajustar página actual si es necesario
+            const maxPage =
+                Math.ceil(this.totalProjects / this.itemsPerPage) - 1;
+            if (this.currentPage > maxPage) {
+                this.currentPage = Math.max(0, maxPage);
+            }
+        }
+
+        private attachEventListeners() {
+            this.prevBtn?.addEventListener("click", () => this.goToPrevPage());
+            this.nextBtn?.addEventListener("click", () => this.goToNextPage());
+        }
+
+        private goToPrevPage() {
+            if (this.currentPage > 0) {
+                this.currentPage--;
+                this.updateView();
+            }
+        }
+
+        private goToNextPage() {
+            const totalPages = Math.ceil(
+                this.totalProjects / this.itemsPerPage,
+            );
+            if (this.currentPage < totalPages - 1) {
+                this.currentPage++;
+                this.updateView();
+            }
+        }
+
+        private updateView() {
+            const startIndex = this.currentPage * this.itemsPerPage;
+            const endIndex = startIndex + this.itemsPerPage;
+
+            // Remover placeholders existentes
+            document
+                .querySelectorAll(".project-placeholder")
+                .forEach((el) => el.remove());
+
+            // Mostrar/ocultar proyectos según la página actual
+            let visibleCount = 0;
+            this.projectItems.forEach((item, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    item.style.display = "";
+                    visibleCount++;
+                } else {
+                    item.style.display = "none";
+                }
+            });
+
+            // Agregar placeholders para completar el grid
+            const grid = document.getElementById("projects-grid");
+            if (grid && visibleCount < this.itemsPerPage) {
+                const placeholdersNeeded = this.itemsPerPage - visibleCount;
+                for (let i = 0; i < placeholdersNeeded; i++) {
+                    const placeholder = document.createElement("div");
+                    placeholder.className = "project-placeholder";
+                    grid.appendChild(placeholder);
+                }
+            }
+
+            // Actualizar estado de los botones
+            this.updateButtons();
+        }
+
+        private updateButtons() {
+            const totalPages = Math.ceil(
+                this.totalProjects / this.itemsPerPage,
+            );
+
+            if (this.prevBtn) {
+                this.prevBtn.disabled = this.currentPage === 0;
+                this.prevBtn.classList.toggle(
+                    "disabled",
+                    this.currentPage === 0,
+                );
+            }
+
+            if (this.nextBtn) {
+                this.nextBtn.disabled = this.currentPage >= totalPages - 1;
+                this.nextBtn.classList.toggle(
+                    "disabled",
+                    this.currentPage >= totalPages - 1,
+                );
+            }
+
+            // Ocultar botones si solo hay una página
+            if (this.container) {
+                this.container.classList.toggle("single-page", totalPages <= 1);
+            }
+        }
+    }
+
+    // Inicializar cuando el DOM esté listo
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+            new ProjectsPagination();
         });
-    })();
+    } else {
+        new ProjectsPagination();
+    }
 </script>
 
 <style>
     .projects-panel {
         display: flex;
         flex-direction: column;
-        width: 100%;
         height: 100%;
-        max-height: 100%;
+        width: 100%;
+    }
+
+    #pagination-ctn {
+        display: flex;
+        align-items: stretch;
+        gap: 12px;
+        flex: 1;
         min-height: 0;
-        margin: 0;
+        transition: gap 0.3s ease;
+    }
+
+    #pagination-ctn.single-page .pagination-btn {
+        opacity: 0;
+        pointer-events: none;
+        width: 0;
         padding: 0;
-        overflow: visible;
+        margin: 0;
+    }
+
+    .pagination-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        width: 44px;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.9);
+        transform: scale(1.05);
+    }
+
+    .pagination-btn:active:not(:disabled) {
+        transform: scale(0.95);
+    }
+
+    .pagination-btn:disabled,
+    .pagination-btn.disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .pagination-btn svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
     }
 
     .panel-header {
         flex: 0 0 auto;
         min-height: 0;
+        margin-bottom: 16px;
     }
 
     .projects-container {
         flex: 1 1 auto;
         min-height: 0;
+        min-width: 0;
+        width: 100%;
         position: relative;
         overflow: visible;
     }
@@ -147,21 +305,18 @@ const pages = Array.from({ length: totalPages }, (_, i) => {
         display: grid;
         gap: 8px;
         grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-        grid-auto-rows: minmax(0, 1fr);
+        grid-auto-rows: 1fr;
         align-content: start;
         overflow-y: auto;
         overflow-x: visible;
         padding: 2px;
-        opacity: 0;
-        visibility: hidden;
-        transition:
-            opacity 0.3s ease,
-            visibility 0.3s ease;
     }
 
-    .projects-grid.active {
-        opacity: 1;
-        visibility: visible;
+    .project-placeholder {
+        background: transparent;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        min-height: 100%;
     }
 
     .projects-grid::-webkit-scrollbar {
@@ -173,69 +328,40 @@ const pages = Array.from({ length: totalPages }, (_, i) => {
         border-radius: 999px;
     }
 
-    .pagination-controls {
-        flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        padding: 12px 0;
+    .projects-grid::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.18);
     }
 
-    .pagination-btn {
-        width: 36px;
-        height: 36px;
-        display: grid;
-        place-items: center;
-        border: 1px solid var(--ring);
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.05);
-        color: var(--ink);
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
+    @media (max-width: 1024px) {
+        #pagination-ctn {
+            gap: 10px;
+        }
 
-    .pagination-btn:hover:not(:disabled) {
-        background: rgba(255, 255, 255, 0.1);
-        transform: scale(1.05);
-    }
-
-    .pagination-btn:disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
-    }
-
-    .pagination-dots {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-    }
-
-    .pagination-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 999px;
-        border: none;
-        background: rgba(255, 255, 255, 0.25);
-        cursor: pointer;
-        transition: all 0.2s ease;
-        padding: 0;
-    }
-
-    .pagination-dot:hover {
-        background: rgba(255, 255, 255, 0.5);
-        transform: scale(1.2);
-    }
-
-    .pagination-dot.active {
-        background: var(--accent);
-        width: 24px;
+        .pagination-btn {
+            width: 40px;
+            padding: 6px;
+        }
     }
 
     @media (max-width: 900px) {
         .panel-header h3 {
             font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        #pagination-ctn {
+            gap: 8px;
+        }
+
+        .pagination-btn {
+            width: 36px;
+            padding: 4px;
+        }
+
+        .pagination-btn svg {
+            width: 18px;
+            height: 18px;
         }
     }
 </style>
