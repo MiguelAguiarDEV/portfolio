@@ -43,11 +43,11 @@ const hasSlides = slides.length > 0;
 ---
 
 <article class="project-card">
-    {hasSlides ? (
-        <div class="project-card__carousel">
-            <div class="project-card__slides">
-                {
-                    slides.map((slide, index) => (
+    {
+        hasSlides ? (
+            <div class="project-card__carousel">
+                <div class="project-card__slides">
+                    {slides.map((slide, index) => (
                         <figure
                             class={`project-card__slide ${index === 0 ? "project-card__slide--active" : ""}`}
                             key={`${slide.kind}-${index}`}
@@ -66,61 +66,63 @@ const hasSlides = slides.length > 0;
                                     muted
                                     poster={slide.poster}
                                 >
-                                    {slide.sources.map((source, sourceIndex) => (
-                                        <source
-                                            src={source.src}
-                                            type={source.type}
-                                            key={`${source.src}-${sourceIndex}`}
-                                        />
-                                    ))}
-                                    <span
-                                        data-i18n-key="project.videoFallback"
-                                    >
+                                    {slide.sources.map(
+                                        (source, sourceIndex) => (
+                                            <source
+                                                src={source.src}
+                                                type={source.type}
+                                                key={`${source.src}-${sourceIndex}`}
+                                            />
+                                        ),
+                                    )}
+                                    <span data-i18n-key="project.videoFallback">
                                         Tu navegador no soporta video.
                                     </span>
                                 </video>
                             )}
                         </figure>
-                    ))
-                }
-            </div>
-            <div class="project-card__controls">
-                <button
-                    class="project-card__arrow project-card__arrow--left"
-                    type="button"
-                    aria-label="Anterior"
-                    data-i18n-attr-aria-label="project.carousel.prev"
-                >&lsaquo;</button>
-                <button
-                    class="project-card__arrow project-card__arrow--right"
-                    type="button"
-                    aria-label="Siguiente"
-                    data-i18n-attr-aria-label="project.carousel.next"
-                >&rsaquo;</button>
-                <div class="project-card__dots">
-                    {
-                        slides.map((_, index) => (
+                    ))}
+                </div>
+                <div class="project-card__controls">
+                    <button
+                        class="project-card__arrow project-card__arrow--left"
+                        type="button"
+                        aria-label="Anterior"
+                        data-i18n-attr-aria-label="project.carousel.prev"
+                    >
+                        &lsaquo;
+                    </button>
+                    <button
+                        class="project-card__arrow project-card__arrow--right"
+                        type="button"
+                        aria-label="Siguiente"
+                        data-i18n-attr-aria-label="project.carousel.next"
+                    >
+                        &rsaquo;
+                    </button>
+                    <div class="project-card__dots">
+                        {slides.map((_, index) => (
                             <i
                                 class={`project-card__dot ${index === 0 ? "project-card__dot--active" : ""}`}
                                 key={`dot-${index}`}
                                 data-index={index}
                             />
-                        ))
-                    }
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
-    ) : (
-        <div class="project-card__no-preview" data-i18n-key="project.noPreview">
-            Sin vista previa
-        </div>
-    )}
+        ) : (
+            <div
+                class="project-card__no-preview"
+                data-i18n-key="project.noPreview"
+            >
+                Sin vista previa
+            </div>
+        )
+    }
     <div class="project-card__content">
         <h4 class="project-card__title" data-i18n-key={nameKey}>{name}</h4>
-        <p
-            class="project-card__description"
-            data-i18n-key={descriptionKey}
-        >
+        <p class="project-card__description" data-i18n-key={descriptionKey}>
             {description}
         </p>
         <div class="project-card__footer">
@@ -145,7 +147,9 @@ const hasSlides = slides.length > 0;
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 data-i18n-key="project.button.live"
-                            >Ver demo</a>
+                            >
+                                Ver demo
+                            </a>
                         )}
                         {repoUrl && (
                             <a
@@ -154,7 +158,9 @@ const hasSlides = slides.length > 0;
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 data-i18n-key="project.button.repo"
-                            >Repositorio</a>
+                            >
+                                Repositorio
+                            </a>
                         )}
                     </div>
                 )
@@ -170,7 +176,9 @@ const hasSlides = slides.length > 0;
             document.currentScript.closest("article.project-card");
         if (!root) return;
 
-        const slides = Array.from(root.querySelectorAll(".project-card__slide"));
+        const slides = Array.from(
+            root.querySelectorAll(".project-card__slide"),
+        );
         if (slides.length === 0) {
             return;
         }
@@ -182,7 +190,10 @@ const hasSlides = slides.length > 0;
         function setActive(i) {
             index = (i + slides.length) % slides.length;
             slides.forEach((el, idx) => {
-                el.classList.toggle("project-card__slide--active", idx === index);
+                el.classList.toggle(
+                    "project-card__slide--active",
+                    idx === index,
+                );
             });
             dots.forEach((d, idx) =>
                 d.classList.toggle("project-card__dot--active", idx === index),
@@ -351,7 +362,7 @@ const hasSlides = slides.length > 0;
     }
 
     .project-card__title {
-        font-size: clamp(1rem, 1.8vw, 1.2rem);
+        font-size: var(--project-title-max);
         margin: 0;
         white-space: nowrap;
         overflow: hidden;
@@ -359,7 +370,7 @@ const hasSlides = slides.length > 0;
     }
 
     .project-card__description {
-        font-size: 0.92rem;
+        font-size: var(--project-desc-max);
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
@@ -395,7 +406,9 @@ const hasSlides = slides.length > 0;
         background: rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(4px);
         transition: all 160ms ease;
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 4px 16px rgba(0, 0, 0, 0.25);
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.08) inset,
+            0 4px 16px rgba(0, 0, 0, 0.25);
     }
 
     .project-card__links {
@@ -437,8 +450,45 @@ const hasSlides = slides.length > 0;
         background: rgba(255, 255, 255, 0.08);
     }
 
-    /* Responsive */
-    @media (max-width: 640px) {
+    /* ============================ */
+    /* Responsive Breakpoints       */
+    /* ============================ */
+
+    /* Desktop Grande: >= 1200px */
+    @media (min-width: 1200px) {
+        .project-card__title {
+            font-size: 1rem;
+        }
+
+        .project-card__description {
+            font-size: 0.8rem;
+        }
+    }
+
+    /* Tablet Grande: 900px - 1199px */
+    @media (min-width: 900px) and (max-width: 1199px) {
+        .project-card__title {
+            font-size: 0.9rem;
+        }
+
+        .project-card__description {
+            font-size: 0.75rem;
+        }
+    }
+
+    /* Tablet: 640px - 899px */
+    @media (min-width: 640px) and (max-width: 899px) {
+        .project-card__title {
+            font-size: 0.85rem;
+        }
+
+        .project-card__description {
+            font-size: 0.72rem;
+        }
+    }
+
+    /* Mobile: < 640px */
+    @media (max-width: 639px) {
         .project-card {
             display: grid;
             grid-template-columns: minmax(0, 48%) 1fr;
@@ -459,13 +509,17 @@ const hasSlides = slides.length > 0;
             gap: 4px;
         }
 
+        .project-card__title {
+            font-size: 0.75rem;
+        }
+
+        .project-card__description {
+            font-size: 0.65rem;
+            -webkit-line-clamp: 2;
+        }
+
         .project-card__tags {
             display: none !important;
         }
     }
 </style>
-
-
-
-
-

@@ -480,6 +480,11 @@ body {
 /* Responsive - Tablet          */
 /* ============================ */
 @media (max-width: 1000px) {
+    :root {
+        --project-title-max: 0.85rem;
+        --project-desc-max: 0.72rem;
+    }
+
     .layout {
         grid-template-columns: 1fr;
     }
@@ -498,6 +503,8 @@ body {
         --nav-gap: 4px;
         --nav-pad: 6px;
         --nav-margin-top: 16px;
+        --project-title-max: 0.75rem;
+        --project-desc-max: 0.65rem;
     }
 
     html {

@@ -41,7 +41,7 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
         <div class="card-ctn">
             <h3 class="card-title" data-i18n-key="about.title">Sobre mi</h3>
             <div class="card">
-                <p class="" data-i18n-key="about.description">
+                <p class="about-description" data-i18n-key="about.description">
                     Soy Miguel Santiesteban, un estudiante de Ingenieria
                     Informatica de 22 anos de las Islas Canarias, Espana. Me
                     especializo en desarrollo backend y disfruto crear proyectos
@@ -207,6 +207,38 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
         }
         .cta-rainbow__btn {
             transition: none;
+        }
+    }
+
+    /* ============================ */
+    /* Responsive Breakpoints       */
+    /* ============================ */
+
+    /* Desktop Grande: >= 1200px */
+    @media (min-width: 1200px) {
+        .about-description {
+            font-size: 1rem;
+        }
+    }
+
+    /* Tablet Grande: 900px - 1199px */
+    @media (min-width: 900px) and (max-width: 1199px) {
+        .about-description {
+            font-size: 0.95rem;
+        }
+    }
+
+    /* Tablet: 640px - 899px */
+    @media (min-width: 640px) and (max-width: 899px) {
+        .about-description {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Mobile: < 640px */
+    @media (max-width: 639px) {
+        .about-description {
+            font-size: 0.9rem;
         }
     }
 </style>
