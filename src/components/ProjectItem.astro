@@ -42,14 +42,14 @@ const {
 const hasSlides = slides.length > 0;
 ---
 
-<article class="project card">
+<article class="project-card">
     {hasSlides ? (
-        <div class="carousel">
-            <div class="slides">
+        <div class="project-card__carousel">
+            <div class="project-card__slides">
                 {
                     slides.map((slide, index) => (
                         <figure
-                            class={`slide ${index === 0 ? "is-active" : ""}`}
+                            class={`project-card__slide ${index === 0 ? "project-card__slide--active" : ""}`}
                             key={`${slide.kind}-${index}`}
                         >
                             {slide.kind === "image" ? (
@@ -84,24 +84,24 @@ const hasSlides = slides.length > 0;
                     ))
                 }
             </div>
-            <div class="car-ctrl">
+            <div class="project-card__controls">
                 <button
-                    class="arrow left"
+                    class="project-card__arrow project-card__arrow--left"
                     type="button"
                     aria-label="Anterior"
                     data-i18n-attr-aria-label="project.carousel.prev"
                 >&lsaquo;</button>
                 <button
-                    class="arrow right"
+                    class="project-card__arrow project-card__arrow--right"
                     type="button"
                     aria-label="Siguiente"
                     data-i18n-attr-aria-label="project.carousel.next"
                 >&rsaquo;</button>
-                <div class="dots">
+                <div class="project-card__dots">
                     {
                         slides.map((_, index) => (
                             <i
-                                class={`dot ${index === 0 ? "is-active" : ""}`}
+                                class={`project-card__dot ${index === 0 ? "project-card__dot--active" : ""}`}
                                 key={`dot-${index}`}
                                 data-index={index}
                             />
@@ -111,24 +111,24 @@ const hasSlides = slides.length > 0;
             </div>
         </div>
     ) : (
-        <div class="no-preview" data-i18n-key="project.noPreview">
+        <div class="project-card__no-preview" data-i18n-key="project.noPreview">
             Sin vista previa
         </div>
     )}
-    <div class="p-content">
-        <h4 class="p-title" data-i18n-key={nameKey}>{name}</h4>
+    <div class="project-card__content">
+        <h4 class="project-card__title" data-i18n-key={nameKey}>{name}</h4>
         <p
-            class="project-description prose"
+            class="project-card__description"
             data-i18n-key={descriptionKey}
         >
             {description}
         </p>
-        <div class="p-footer">
+        <div class="project-card__footer">
             {
                 stack.length > 0 && (
-                    <div class="p-tags">
+                    <div class="project-card__tags">
                         {stack.map((tech) => (
-                            <span class="chips" key={tech}>
+                            <span class="project-card__tag" key={tech}>
                                 {tech}
                             </span>
                         ))}
@@ -137,10 +137,10 @@ const hasSlides = slides.length > 0;
             }
             {
                 (liveUrl || repoUrl) && (
-                    <div class="p-links">
+                    <div class="project-card__links">
                         {liveUrl && (
                             <a
-                                class="btn btn--primary"
+                                class="project-card__btn project-card__btn--primary"
                                 href={liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -149,7 +149,7 @@ const hasSlides = slides.length > 0;
                         )}
                         {repoUrl && (
                             <a
-                                class="btn btn--ghost"
+                                class="project-card__btn project-card__btn--ghost"
                                 href={repoUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -167,25 +167,25 @@ const hasSlides = slides.length > 0;
     (function () {
         const root =
             document.currentScript &&
-            document.currentScript.closest("article.project");
+            document.currentScript.closest("article.project-card");
         if (!root) return;
 
-        const slides = Array.from(root.querySelectorAll(".slides .slide"));
+        const slides = Array.from(root.querySelectorAll(".project-card__slide"));
         if (slides.length === 0) {
             return;
         }
-        const dots = Array.from(root.querySelectorAll(".car-ctrl .dots .dot"));
-        const btnLeft = root.querySelector(".car-ctrl .arrow.left");
-        const btnRight = root.querySelector(".car-ctrl .arrow.right");
+        const dots = Array.from(root.querySelectorAll(".project-card__dot"));
+        const btnLeft = root.querySelector(".project-card__arrow--left");
+        const btnRight = root.querySelector(".project-card__arrow--right");
         let index = 0;
 
         function setActive(i) {
             index = (i + slides.length) % slides.length;
             slides.forEach((el, idx) => {
-                el.classList.toggle("is-active", idx === index);
+                el.classList.toggle("project-card__slide--active", idx === index);
             });
             dots.forEach((d, idx) =>
-                d.classList.toggle("is-active", idx === index),
+                d.classList.toggle("project-card__dot--active", idx === index),
             );
         }
 
@@ -198,7 +198,7 @@ const hasSlides = slides.length > 0;
         );
 
         if (slides.length <= 1) {
-            const ctrl = root.querySelector(".car-ctrl");
+            const ctrl = root.querySelector(".project-card__controls");
             if (ctrl) ctrl.style.display = "none";
         }
 
@@ -207,7 +207,23 @@ const hasSlides = slides.length > 0;
 </script>
 
 <style>
-    .no-preview {
+    /* Card principal */
+    .project-card {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 4px;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        min-width: 0;
+    }
+
+    /* Sin preview */
+    .project-card__no-preview {
         display: grid;
         place-items: center;
         width: 100%;
@@ -220,20 +236,23 @@ const hasSlides = slides.length > 0;
         opacity: 0.75;
     }
 
-    .carousel {
+    /* Carousel */
+    .project-card__carousel {
         position: relative;
         width: 100%;
         aspect-ratio: 16 / 9;
         border-radius: 12px;
         overflow: hidden;
+        background: #0d131d;
     }
-    .slides {
+
+    .project-card__slides {
         position: absolute;
         inset: 0;
-        min-height: 0;
         overflow: hidden;
     }
-    .slides .slide {
+
+    .project-card__slide {
         position: absolute;
         inset: 0;
         margin: 0;
@@ -242,32 +261,207 @@ const hasSlides = slides.length > 0;
         transition:
             opacity 200ms ease-in-out,
             visibility 200ms ease-in-out;
-        width: 100%;
-        height: 100%;
     }
-    .slides .slide.is-active {
+
+    .project-card__slide--active {
         opacity: 1;
         visibility: visible;
     }
-    .slides img,
-    .slides video {
+
+    .project-card__slide img,
+    .project-card__slide video {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
     }
 
-    /* Basic overlay controls, kept minimal to avoid conflicts */
-    .car-ctrl {
+    /* Controles del carousel */
+    .project-card__controls {
         position: absolute;
         inset: 0;
         pointer-events: none;
     }
-    .car-ctrl .arrow {
+
+    .project-card__arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: auto;
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px);
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .project-card__arrow:hover {
+        background: rgba(0, 0, 0, 0.5);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .project-card__arrow--left {
+        left: 8px;
+    }
+
+    .project-card__arrow--right {
+        right: 8px;
+    }
+
+    .project-card__dots {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 8px;
+        display: flex;
+        gap: 8px;
+        justify-content: center;
         pointer-events: auto;
     }
-    .car-ctrl .dots {
-        pointer-events: auto;
+
+    .project-card__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.35);
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .project-card__dot:hover {
+        background: rgba(255, 255, 255, 0.6);
+    }
+
+    .project-card__dot--active {
+        background: #fff;
+    }
+
+    /* Contenido */
+    .project-card__content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        flex: 1;
+    }
+
+    .project-card__title {
+        font-size: clamp(1rem, 1.8vw, 1.2rem);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .project-card__description {
+        font-size: 0.92rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.35;
+        margin: 0;
+    }
+
+    /* Footer */
+    .project-card__footer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: auto;
+    }
+
+    .project-card__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+    }
+
+    .project-card__tag {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.78rem;
+        font-weight: 500;
+        line-height: 1;
+        padding: 0.35rem 0.6rem;
+        border-radius: 9px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: #fafafa;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(4px);
+        transition: all 160ms ease;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .project-card__links {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .project-card__btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 1;
+        padding: 0.55rem 0.85rem;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: #fafafa;
+        background: rgba(255, 255, 255, 0.08);
+        text-decoration: none;
+        backdrop-filter: blur(4px);
+        transition: all 160ms ease;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.28);
+        cursor: pointer;
+    }
+
+    .project-card__btn:hover {
+        transform: scale(1.04);
+    }
+
+    .project-card__btn--ghost {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.22);
+        color: #f0f0f0;
+    }
+
+    .project-card__btn--ghost:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .project-card {
+            display: grid;
+            grid-template-columns: minmax(0, 48%) 1fr;
+            grid-template-rows: 1fr;
+            align-items: stretch;
+            column-gap: 8px;
+        }
+
+        .project-card__carousel {
+            grid-column: 1;
+            grid-row: 1;
+            align-self: center;
+        }
+
+        .project-card__content {
+            grid-column: 2;
+            grid-row: 1;
+            gap: 4px;
+        }
+
+        .project-card__tags {
+            display: none !important;
+        }
     }
 </style>
 
