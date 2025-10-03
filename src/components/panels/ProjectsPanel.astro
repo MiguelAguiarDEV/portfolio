@@ -12,10 +12,18 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 ---
 
 <div class="panel-projects">
-    <header class="panel-projects__header">
-        <h3 class="panel-projects__title" data-i18n-key={titleKey}>{title}</h3>
-    </header>
-    <div class="panel-projects__pagination" id="pagination-ctn" data-total-projects={projects.length}>
+    <div class="panel-projects__header">
+        <span></span>
+        <h3 class="card-title" data-i18n-key={titleKey}>
+            {title}
+        </h3>
+        <span></span>
+    </div>
+    <div
+        class="panel-projects__pagination"
+        id="pagination-ctn"
+        data-total-projects={projects.length}
+    >
         <button
             class="panel-projects__nav-btn panel-projects__nav-btn--prev"
             aria-label="Previous page"
@@ -40,7 +48,10 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
                 {projects.map((project) => <ProjectItem {...project} />)}
             </div>
         </div>
-        <button class="panel-projects__nav-btn panel-projects__nav-btn--next" aria-label="Next page">
+        <button
+            class="panel-projects__nav-btn panel-projects__nav-btn--next"
+            aria-label="Next page"
+        >
             <svg
                 width="20"
                 height="20"
@@ -62,10 +73,10 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 <script>
     // Configuración responsive de items por página y layout
     const LAYOUT_CONFIG = {
-        mobile: { items: 4, cols: 1, rows: 4 },      // < 640px: 1 col x 4 filas
-        tablet: { items: 4, cols: 2, rows: 2 },      // 640px - 900px: 2 cols x 2 filas
+        mobile: { items: 4, cols: 1, rows: 4 }, // < 640px: 1 col x 4 filas
+        tablet: { items: 4, cols: 2, rows: 2 }, // 640px - 900px: 2 cols x 2 filas
         tabletLarge: { items: 6, cols: 3, rows: 2 }, // 900px - 1200px: 3 cols x 2 filas
-        desktop: { items: 8, cols: 4, rows: 2 },     // >= 1200px: 4 cols x 2 filas
+        desktop: { items: 8, cols: 4, rows: 2 }, // >= 1200px: 4 cols x 2 filas
     };
 
     class ProjectsPagination {
@@ -90,12 +101,18 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
                 this.container.dataset.totalProjects || "0",
                 10,
             );
-            this.prevBtn = this.container.querySelector(".panel-projects__nav-btn--prev");
-            this.nextBtn = this.container.querySelector(".panel-projects__nav-btn--next");
+            this.prevBtn = this.container.querySelector(
+                ".panel-projects__nav-btn--prev",
+            );
+            this.nextBtn = this.container.querySelector(
+                ".panel-projects__nav-btn--next",
+            );
 
             this.grid = document.getElementById("projects-grid");
             if (this.grid) {
-                this.projectItems = Array.from(this.grid.children) as HTMLElement[];
+                this.projectItems = Array.from(
+                    this.grid.children,
+                ) as HTMLElement[];
             }
 
             this.updateLayout();
@@ -136,7 +153,8 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
             }
 
             // Ajustar página actual si es necesario
-            const maxPage = Math.ceil(this.totalProjects / this.itemsPerPage) - 1;
+            const maxPage =
+                Math.ceil(this.totalProjects / this.itemsPerPage) - 1;
             if (this.currentPage > maxPage) {
                 this.currentPage = Math.max(0, maxPage);
             }
@@ -238,6 +256,10 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 </script>
 
 <style>
+    .card-title {
+        width: 100%;
+    }
+
     /* Panel principal */
     .panel-projects {
         display: flex;
@@ -248,9 +270,23 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 
     /* Header */
     .panel-projects__header {
-        flex: 0 0 auto;
-        min-height: 0;
-        margin-bottom: 16px;
+        display: flex;
+        align-items: stretch;
+        gap: 12px;
+        transition: gap 0.3s ease;
+    }
+
+    .panel-projects__header span {
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        width: 44px;
     }
 
     .panel-projects__title {
