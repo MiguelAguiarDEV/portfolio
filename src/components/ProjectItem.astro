@@ -379,7 +379,7 @@ const hasSlides = slides.length > 0;
     .project-card__footer {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 4px;
         margin-top: auto;
     }
 
@@ -496,7 +496,9 @@ const hasSlides = slides.length > 0;
         .project-card__carousel {
             grid-column: 1;
             grid-row: 1;
-            align-self: center;
+            align-self: stretch;
+            aspect-ratio: unset;
+            height: 100%;
         }
 
         .project-card__content {

@@ -106,7 +106,7 @@ body {
     border-radius: var(--br-big);
     /* box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); */
     padding: 4px;
-    gap: 8px;
+    gap: 4px;
     display: flex;
     flex-wrap: wrap;
     min-height: 0;
