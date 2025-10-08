@@ -1,0 +1,204 @@
+---
+import ContactForm from "./ContactForm.astro";
+---
+
+<div id="contact-modal" class="modal" aria-hidden="true" role="dialog">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" data-i18n-key="contact.title">Contacto</h3>
+            <button
+                type="button"
+                class="modal-close"
+                aria-label="Cerrar modal"
+                data-i18n-attr-aria-label="contact.modal.close"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <ContactForm />
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById("contact-modal");
+    const backdrop = modal?.querySelector(".modal-backdrop");
+    const closeBtn = modal?.querySelector(".modal-close");
+    const openBtn = document.querySelector("[data-contact-modal-trigger]");
+
+    function openModal() {
+        if (!modal) return;
+        modal.setAttribute("aria-hidden", "false");
+        modal.classList.add("modal--open");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+        if (!modal) return;
+        modal.setAttribute("aria-hidden", "true");
+        modal.classList.remove("modal--open");
+        document.body.style.overflow = "";
+    }
+
+    openBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        openModal();
+    });
+
+    closeBtn?.addEventListener("click", closeModal);
+    backdrop?.addEventListener("click", closeModal);
+
+    // Cerrar con ESC
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal?.classList.contains("modal--open")) {
+            closeModal();
+        }
+    });
+</script>
+
+<style>
+    .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease;
+    }
+
+    .modal--open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+        position: relative;
+        z-index: 1;
+        background: linear-gradient(135deg, #0b3a36 0%, #0b2a3a 100%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: var(--br-big);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
+        max-width: 90vw;
+        width: 550px;
+        max-height: 90vh;
+        overflow: hidden;
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+    }
+
+    .modal--open .modal-content {
+        transform: scale(1);
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: var(--ink);
+    }
+
+    .modal-close {
+        appearance: none;
+        border: none;
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: var(--br-mid);
+        display: grid;
+        place-items: center;
+        transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.1);
+    }
+
+    .modal-close:active {
+        transform: scale(0.95);
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+        max-height: calc(90vh - 100px);
+    }
+
+    /* Scrollbar personalizado */
+    .modal-body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .modal-body::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 639px) {
+        .modal-content {
+            width: 95vw;
+            max-height: 95vh;
+        }
+
+        .modal-header {
+            padding: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+        }
+
+        .modal-body {
+            padding: 1rem;
+            max-height: calc(95vh - 80px);
+        }
+    }
+</style>

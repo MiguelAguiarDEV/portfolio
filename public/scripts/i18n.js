@@ -14,7 +14,16 @@ const translations = {
         "about.downloadCv": "Descargar CV",
         "about.downloadCv.href": "/cv-miguel-santiesteban-aguiar-esp.pdf",
         "about.contact": "Contacto",
-        "about.contact.aria": "Contactar por correo",
+        "contact.title": "Contacto",
+        "contact.modal.open": "Abrir formulario de contacto",
+        "contact.modal.close": "Cerrar modal",
+        "contact.form.name.label": "Nombre",
+        "contact.form.name.placeholder": "Tu nombre",
+        "contact.form.email.label": "Email",
+        "contact.form.email.placeholder": "tu@email.com",
+        "contact.form.message.label": "Mensaje",
+        "contact.form.message.placeholder": "Tu mensaje...",
+        "contact.form.submit": "Enviar mensaje",
         "about.stack": "Tecnologias",
         "about.topProjects": "Proyectos destacados",
         "projects.title": "Repositorios de GitHub",
@@ -66,7 +75,16 @@ const translations = {
         "about.downloadCv": "Download CV",
         "about.downloadCv.href": "/cv-miguel-santiesteban-aguiar-eng.pdf",
         "about.contact": "Contact",
-        "about.contact.aria": "Contact via email",
+        "contact.title": "Contact",
+        "contact.modal.open": "Open contact form",
+        "contact.modal.close": "Close modal",
+        "contact.form.name.label": "Name",
+        "contact.form.name.placeholder": "Your name",
+        "contact.form.email.label": "Email",
+        "contact.form.email.placeholder": "your@email.com",
+        "contact.form.message.label": "Message",
+        "contact.form.message.placeholder": "Your message...",
+        "contact.form.submit": "Send message",
         "about.stack": "Stack",
         "about.topProjects": "Top projects",
         "projects.title": "GitHub repositories",
@@ -184,6 +202,14 @@ const applyTranslations = (lang) => {
         const value = dictionary[key];
         if (typeof value === "undefined") return;
         element.setAttribute("href", value);
+    });
+
+    document.querySelectorAll("[data-i18n-attr-placeholder]").forEach((element) => {
+        const key = element.dataset.i18nAttrPlaceholder;
+        if (!key) return;
+        const value = dictionary[key];
+        if (typeof value === "undefined") return;
+        element.setAttribute("placeholder", value);
     });
 
     const toggle = document.querySelector("[data-lang-toggle]");

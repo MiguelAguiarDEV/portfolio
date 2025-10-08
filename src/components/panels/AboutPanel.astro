@@ -1,6 +1,7 @@
 ---
 import ProjectItem from "../ProjectItem.astro";
 import type { Props as ProjectItemProps } from "../ProjectItem.astro";
+import ContactModal from "../ContactModal.astro";
 import { projects } from "@/data/projects";
 
 const heroChips: { label: string; key: string }[] = [
@@ -59,15 +60,16 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
                         Descargar CV
                     </a>
                     <span class="cta-rainbow">
-                        <a
+                        <button
                             class="cta-rainbow__btn"
-                            href="mailto:miguel@example.com?subject=Hello%20%E2%80%94%20Miguel%20Santiesteban"
-                            aria-label="Contactar por correo"
+                            type="button"
+                            data-contact-modal-trigger
+                            aria-label="Abrir formulario de contacto"
                             data-i18n-key="about.contact"
-                            data-i18n-attr-aria-label="about.contact.aria"
+                            data-i18n-attr-aria-label="contact.modal.open"
                         >
                             Contacto
-                        </a>
+                        </button>
                     </span>
                 </div>
             </div>
@@ -103,6 +105,8 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
         </div>
     </section>
 </div>
+
+<ContactModal />
 
 <style>
     /* === Rainbow contact button (con conic-gradient animado) === */
@@ -205,6 +209,14 @@ const featuredProjects: ProjectItemProps[] = projects.slice(0, 3);
         to {
             transform: translate(-50%, -50%) rotate(360deg);
         }
+    }
+
+    /* Estilos para el botón dentro del rainbow */
+    .cta-rainbow__btn[type="button"] {
+        appearance: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
     }
 
     /* Respeta usuarios con reduced motion */

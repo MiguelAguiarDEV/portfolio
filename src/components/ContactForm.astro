@@ -1,0 +1,249 @@
+---
+---
+
+<form id="contact-form" class="contact-form">
+    <div class="form-group">
+        <label for="name" data-i18n-key="contact.form.name.label">
+            Nombre
+        </label>
+        <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            maxlength="100"
+            placeholder="Tu nombre"
+            data-i18n-attr-placeholder="contact.form.name.placeholder"
+        />
+    </div>
+
+    <div class="form-group">
+        <label for="email" data-i18n-key="contact.form.email.label">
+            Email
+        </label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="tu@email.com"
+            data-i18n-attr-placeholder="contact.form.email.placeholder"
+        />
+    </div>
+
+    <div class="form-group">
+        <label for="message" data-i18n-key="contact.form.message.label">
+            Mensaje
+        </label>
+        <textarea
+            id="message"
+            name="message"
+            required
+            maxlength="2000"
+            rows="5"
+            placeholder="Tu mensaje..."
+            data-i18n-attr-placeholder="contact.form.message.placeholder"
+        ></textarea>
+    </div>
+
+    <div class="form-status" id="form-status"></div>
+
+    <button type="submit" class="btn btn--primary" id="submit-btn">
+        <span data-i18n-key="contact.form.submit">Enviar mensaje</span>
+    </button>
+</form>
+
+<script>
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+    const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+    const statusDiv = document.getElementById("form-status") as HTMLDivElement;
+
+    if (form && submitBtn && statusDiv) {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get("name") as string,
+                email: formData.get("email") as string,
+                message: formData.get("message") as string,
+            };
+
+            // Deshabilitar botón y mostrar loading
+            submitBtn.disabled = true;
+            const originalText = submitBtn.querySelector("span")?.textContent;
+            const lang = document.documentElement.dataset.lang || "es";
+            const loadingText = lang === "es" ? "Enviando..." : "Sending...";
+            if (submitBtn.querySelector("span")) {
+                submitBtn.querySelector("span")!.textContent = loadingText;
+            }
+            statusDiv.textContent = "";
+            statusDiv.className = "form-status";
+
+            try {
+                const response = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    statusDiv.textContent =
+                        lang === "es"
+                            ? "¡Mensaje enviado con éxito!"
+                            : "Message sent successfully!";
+                    statusDiv.className = "form-status form-status--success";
+                    form.reset();
+                } else {
+                    statusDiv.textContent =
+                        result.error ||
+                        (lang === "es"
+                            ? "Error al enviar el mensaje"
+                            : "Error sending message");
+                    statusDiv.className = "form-status form-status--error";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                statusDiv.textContent =
+                    lang === "es"
+                        ? "Error de conexión. Inténtalo de nuevo."
+                        : "Connection error. Please try again.";
+                statusDiv.className = "form-status form-status--error";
+            } finally {
+                submitBtn.disabled = false;
+                if (submitBtn.querySelector("span")) {
+                    submitBtn.querySelector("span")!.textContent =
+                        originalText || (lang === "es" ? "Enviar mensaje" : "Send message");
+                }
+            }
+        });
+    }
+</script>
+
+<style>
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 100%;
+        padding: 0.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin-left: 4px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.65rem 0.75rem;
+        border-radius: var(--br-mid);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: rgba(93, 211, 255, 0.5);
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 0 0 3px rgba(93, 211, 255, 0.1);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .form-status {
+        padding: 0.65rem;
+        border-radius: var(--br-mid);
+        font-size: 0.85rem;
+        text-align: center;
+        display: none;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-status:not(:empty) {
+        display: block;
+    }
+
+    .form-status--success {
+        background: rgba(87, 255, 87, 0.1);
+        border: 1px solid rgba(87, 255, 87, 0.25);
+        color: #58ff57;
+    }
+
+    .form-status--error {
+        background: rgba(255, 46, 46, 0.1);
+        border: 1px solid rgba(255, 46, 46, 0.25);
+        color: #ff5757;
+    }
+
+    button[type="submit"] {
+        margin-top: 0.5rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    button[type="submit"]:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+        filter: grayscale(0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 639px) {
+        .contact-form {
+            padding: 0.25rem;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            font-size: 0.85rem;
+            padding: 0.6rem 0.7rem;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+        }
+    }
+</style>
