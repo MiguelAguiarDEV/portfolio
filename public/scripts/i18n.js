@@ -12,6 +12,7 @@ const translations = {
         "about.description":
             "Soy Miguel Santiesteban, un estudiante de Ingenieria Informatica de 22 anos de las Islas Canarias, Espana. Me especializo en desarrollo backend y disfruto crear proyectos desde cero, resolver problemas complejos y aprender de forma continua.",
         "about.downloadCv": "Descargar CV",
+        "about.downloadCv.href": "/cv-miguel-santiesteban-aguiar-esp.pdf",
         "about.contact": "Contacto",
         "about.contact.aria": "Contactar por correo",
         "about.stack": "Tecnologias",
@@ -63,6 +64,7 @@ const translations = {
         "about.description":
             "I am Miguel Santiesteban, a 22 year old Computer Science student from the Canary Islands, Spain. I focus on backend development and enjoy building projects from scratch, solving hard problems, and learning continuously.",
         "about.downloadCv": "Download CV",
+        "about.downloadCv.href": "/cv-miguel-santiesteban-aguiar-eng.pdf",
         "about.contact": "Contact",
         "about.contact.aria": "Contact via email",
         "about.stack": "Stack",
@@ -174,6 +176,14 @@ const applyTranslations = (lang) => {
         const value = dictionary[key];
         if (typeof value === "undefined") return;
         element.setAttribute("aria-label", value);
+    });
+
+    document.querySelectorAll("[data-i18n-attr-href]").forEach((element) => {
+        const key = element.dataset.i18nAttrHref;
+        if (!key) return;
+        const value = dictionary[key];
+        if (typeof value === "undefined") return;
+        element.setAttribute("href", value);
     });
 
     const toggle = document.querySelector("[data-lang-toggle]");
