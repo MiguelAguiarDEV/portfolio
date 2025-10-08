@@ -195,7 +195,9 @@ body {
     gap: 0.5rem;
     margin-top: auto;
     min-width: 0;
+    max-width: 100%;
     flex: 0 0 auto;
+    overflow: hidden;
 }
 
 .p-tags {
@@ -203,6 +205,8 @@ body {
     flex-wrap: wrap;
     gap: 0.3rem;
     min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .p-links {
@@ -211,6 +215,7 @@ body {
     flex-wrap: wrap;
     align-items: center;
     min-width: 0;
+    max-width: 100%;
 }
 
 /* ============================ */
@@ -286,6 +291,11 @@ body {
     transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 4px 16px rgba(0, 0, 0, 0.25);
     cursor: pointer;
+    flex-shrink: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .btn {
@@ -305,6 +315,9 @@ body {
     transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
     box-shadow: 0 2px 18px rgba(0, 0, 0, 0.28);
     cursor: pointer;
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .btn:hover {
@@ -341,6 +354,7 @@ body {
 
 .avatar {
     width: auto;
+    max-height: 100%;
     object-fit: contain;
 
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
