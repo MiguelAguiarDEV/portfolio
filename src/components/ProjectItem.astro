@@ -45,7 +45,11 @@ const hasSlides = slides.length > 0;
 <article class="project-card" role="listitem">
     {
         hasSlides ? (
-            <div class="project-card__carousel" role="region" aria-label={`Galería de ${name}`}>
+            <div
+                class="project-card__carousel"
+                role="region"
+                aria-label={`Galería de ${name}`}
+            >
                 <div class="project-card__slides">
                     {slides.map((slide, index) => (
                         <figure
@@ -83,7 +87,10 @@ const hasSlides = slides.length > 0;
                         </figure>
                     ))}
                 </div>
-                <div class="project-card__controls" aria-label="Controles del carrusel">
+                <div
+                    class="project-card__controls"
+                    aria-label="Controles del carrusel"
+                >
                     <button
                         class="project-card__arrow project-card__arrow--left"
                         type="button"
@@ -100,7 +107,11 @@ const hasSlides = slides.length > 0;
                     >
                         <span aria-hidden="true">&rsaquo;</span>
                     </button>
-                    <div class="project-card__dots" role="tablist" aria-label="Indicadores de diapositivas">
+                    <div
+                        class="project-card__dots"
+                        role="tablist"
+                        aria-label="Indicadores de diapositivas"
+                    >
                         {slides.map((_, index) => (
                             <button
                                 class={`project-card__dot ${index === 0 ? "project-card__dot--active" : ""}`}
@@ -133,9 +144,17 @@ const hasSlides = slides.length > 0;
         <footer class="project-card__footer">
             {
                 stack.length > 0 && (
-                    <div class="project-card__tags" role="list" aria-label="Tecnologías utilizadas">
+                    <div
+                        class="project-card__tags"
+                        role="list"
+                        aria-label="Tecnologías utilizadas"
+                    >
                         {stack.map((tech) => (
-                            <span class="project-card__tag" role="listitem" key={tech}>
+                            <span
+                                class="project-card__tag"
+                                role="listitem"
+                                key={tech}
+                            >
                                 {tech}
                             </span>
                         ))}
@@ -144,7 +163,10 @@ const hasSlides = slides.length > 0;
             }
             {
                 (liveUrl || repoUrl) && (
-                    <nav class="project-card__links" aria-label="Enlaces del proyecto">
+                    <nav
+                        class="project-card__links"
+                        aria-label="Enlaces del proyecto"
+                    >
                         {liveUrl && (
                             <a
                                 class="project-card__btn project-card__btn--primary"
@@ -202,7 +224,10 @@ const hasSlides = slides.length > 0;
             });
             dots.forEach((d, idx) => {
                 d.classList.toggle("project-card__dot--active", idx === index);
-                d.setAttribute("aria-selected", idx === index ? "true" : "false");
+                d.setAttribute(
+                    "aria-selected",
+                    idx === index ? "true" : "false",
+                );
             });
         }
 
@@ -374,7 +399,7 @@ const hasSlides = slides.length > 0;
     .project-card__content {
         display: flex;
         flex-direction: column;
-        gap: clamp(8px, 1.5vh, 12px);
+        gap: clamp(4px, 0.75vh, 6px);
         flex: 1;
         min-width: 0;
         max-width: 100%;
@@ -391,7 +416,7 @@ const hasSlides = slides.length > 0;
 
     .project-card__description {
         font-size: var(--project-desc-max);
-        line-height: 1.35;
+        line-height: 1.1;
         padding: 0;
     }
 
@@ -404,6 +429,7 @@ const hasSlides = slides.length > 0;
         min-width: 0;
         max-width: 100%;
         overflow: hidden;
+        margin-top: auto;
     }
 
     .project-card__tags {

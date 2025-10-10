@@ -36,38 +36,49 @@ const {
             {description}
         </p>
         <footer class="project-card__footer">
-            {stack.length > 0 && (
-                <div class="project-card__tags" role="list" aria-label="Tecnologías utilizadas">
-                    {stack.map((tech) => (
-                        <Chip role="listitem">{tech}</Chip>
-                    ))}
-                </div>
-            )}
-            {(liveUrl || repoUrl) && (
-                <nav class="project-card__links" aria-label="Enlaces del proyecto">
-                    {liveUrl && (
-                        <Button
-                            href={liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            data-i18n-key="project.button.live"
-                        >
-                            Ver demo
-                        </Button>
-                    )}
-                    {repoUrl && (
-                        <Button
-                            variant="ghost"
-                            href={repoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            data-i18n-key="project.button.repo"
-                        >
-                            Repositorio
-                        </Button>
-                    )}
-                </nav>
-            )}
+            {
+                stack.length > 0 && (
+                    <div
+                        class="project-card__tags"
+                        role="list"
+                        aria-label="Tecnologías utilizadas"
+                    >
+                        {stack.map((tech) => (
+                            <Chip role="listitem">{tech}</Chip>
+                        ))}
+                    </div>
+                )
+            }
+            {
+                (liveUrl || repoUrl) && (
+                    <nav
+                        class="project-card__links"
+                        aria-label="Enlaces del proyecto"
+                    >
+                        {liveUrl && (
+                            <Button
+                                href={liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-i18n-key="project.button.live"
+                            >
+                                Ver demo
+                            </Button>
+                        )}
+                        {repoUrl && (
+                            <Button
+                                variant="ghost"
+                                href={repoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-i18n-key="project.button.repo"
+                            >
+                                Repositorio
+                            </Button>
+                        )}
+                    </nav>
+                )
+            }
         </footer>
     </div>
 </article>
@@ -93,7 +104,7 @@ const {
     .project-card__content {
         display: flex;
         flex-direction: column;
-        gap: clamp(8px, 1.5vh, 12px);
+        gap: 4px;
         flex: 1;
         min-width: 0;
         max-width: 100%;
@@ -110,7 +121,7 @@ const {
 
     .project-card__description {
         font-size: var(--project-desc-max, 0.92rem);
-        line-height: 1.35;
+        line-height: 1.1;
         padding: 0;
     }
 
@@ -122,6 +133,7 @@ const {
         min-width: 0;
         max-width: 100%;
         overflow: hidden;
+        margin-top: auto;
     }
 
     .project-card__tags {

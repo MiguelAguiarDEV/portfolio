@@ -33,12 +33,18 @@ const featuredProjects = projects.slice(0, 3);
 
         <Card>
             <h2 class="visually-hidden">Especialidades</h2>
-            <div role="list" aria-label="Especialidades y ubicación" style="display: contents;">
-                {heroChips.map((chip) => (
-                    <Chip data-i18n-key={chip.key} role="listitem">
-                        {chip.label}
-                    </Chip>
-                ))}
+            <div
+                role="list"
+                aria-label="Especialidades y ubicación"
+                style="display: contents;"
+            >
+                {
+                    heroChips.map((chip) => (
+                        <Chip data-i18n-key={chip.key} role="listitem">
+                            {chip.label}
+                        </Chip>
+                    ))
+                }
             </div>
         </Card>
     </Container>
@@ -84,7 +90,11 @@ const featuredProjects = projects.slice(0, 3);
                 Tecnologias
             </SectionTitle>
             <Card>
-                <div role="list" aria-label="Tecnologías que manejo" style="display: contents;">
+                <div
+                    role="list"
+                    aria-label="Tecnologías que manejo"
+                    style="display: contents;"
+                >
                     <Chip role="listitem">TypeScript</Chip>
                     <Chip role="listitem">Node.js</Chip>
                     <Chip role="listitem">NestJS</Chip>
@@ -100,13 +110,18 @@ const featuredProjects = projects.slice(0, 3);
         </Section>
 
         <Section gap="xs" fill aria-labelledby="featured-heading">
-            <SectionTitle id="featured-heading" data-i18n-key="about.topProjects">
+            <SectionTitle
+                id="featured-heading"
+                data-i18n-key="about.topProjects"
+            >
                 Proyectos destacados
             </SectionTitle>
             <ProjectGrid>
-                {featuredProjects.map((project) => (
-                    <ProjectCard {...project} />
-                ))}
+                {
+                    featuredProjects.map((project) => (
+                        <ProjectCard {...project} />
+                    ))
+                }
             </ProjectGrid>
         </Section>
     </Container>
@@ -117,9 +132,8 @@ const featuredProjects = projects.slice(0, 3);
 <style>
     .about-description {
         padding-left: var(--space-xs);
-        line-height: 1.6;
+        line-height: 1.2;
     }
-
 
     .visually-hidden {
         position: absolute;
@@ -157,8 +171,18 @@ const featuredProjects = projects.slice(0, 3);
         max-height: 100%;
         object-fit: contain;
         padding: 0;
-        -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
-        mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
+        -webkit-mask-image: linear-gradient(
+            to bottom,
+            #000 0%,
+            #000 75%,
+            transparent 100%
+        );
+        mask-image: linear-gradient(
+            to bottom,
+            #000 0%,
+            #000 75%,
+            transparent 100%
+        );
     }
 
     /* Responsive */
