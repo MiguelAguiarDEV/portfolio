@@ -33,13 +33,16 @@
     --wipe-ms: 700ms;
 
     /* Layout */
-    --panel-y-offset: 30px;
+    --edge-margin: var(--space-xl);
+    /* Margen desde los bordes superior e inferior */
+    --nav-panel-gap: var(--space-md);
+    /* Gap entre navbar y paneles */
 
     /* Navbar variables */
     --nav-h: 48px;
     --nav-gap: var(--space-sm);
     --nav-pad: var(--space-sm);
-    --nav-margin-top: var(--space-xl);
+    --nav-margin-top: var(--edge-margin);
     --nav-margin-inline: var(--space-xl);
 }
 
@@ -597,7 +600,6 @@ a:hover {
 /* ============================ */
 @media (min-width: 1001px) {
     :root {
-        --panel-y-offset: -25px;
         --nav-gap: 8px;
         --nav-pad: 10px;
     }
@@ -627,10 +629,11 @@ a:hover {
 /* ============================ */
 @media (max-width: 640px) {
     :root {
+        --edge-margin: var(--space-sm);
+        --nav-panel-gap: var(--space-xs);
         --nav-h: 44px;
         --nav-gap: 4px;
         --nav-pad: 6px;
-        --nav-margin-top: 16px;
         --project-title-max: 0.75rem;
         --project-desc-max: 0.65rem;
     }

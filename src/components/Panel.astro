@@ -16,7 +16,11 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
 <div class="panel" id={id} aria-hidden={ariaHidden} style={panelStyle}>
     <div class="bg"></div>
     <section aria-labelledby={headingId}>
-        <h1 id={headingId} class="visually-hidden" data-i18n-key={`panel.${id}.title`}>
+        <h1
+            id={headingId}
+            class="visually-hidden"
+            data-i18n-key={`panel.${id}.title`}
+        >
             {title}
         </h1>
         <slot />
@@ -44,14 +48,26 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
     }
 
     .panel > section {
-        padding-top: clamp(20px, 3vh, 30px);
         position: relative;
         z-index: 1;
         width: min(1200px, 84vw);
         max-width: 100%;
-        height: min(85vh, 85svh);
-        max-height: min(85vh, 85svh);
-        min-height: min(85vh, 85svh);
+        margin-top: calc(
+            var(--nav-margin-top) + var(--nav-h) + var(--nav-panel-gap)
+        );
+        margin-bottom: var(--edge-margin);
+        height: calc(
+            100vh - var(--nav-margin-top) - var(--nav-h) - var(--nav-panel-gap) -
+                var(--edge-margin)
+        );
+        max-height: calc(
+            100vh - var(--nav-margin-top) - var(--nav-h) - var(--nav-panel-gap) -
+                var(--edge-margin)
+        );
+        min-height: calc(
+            100vh - var(--nav-margin-top) - var(--nav-h) - var(--nav-panel-gap) -
+                var(--edge-margin)
+        );
         display: flex;
         align-items: center;
         justify-content: center;
