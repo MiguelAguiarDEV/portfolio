@@ -138,12 +138,16 @@ const {
 
     .project-card__tags {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: var(--space-xs);
         min-width: 0;
         max-width: 100%;
         overflow: hidden;
         padding: 0;
+    }
+
+    .project-card__tags > * {
+        flex-shrink: 0;
     }
 
     .project-card__links {
