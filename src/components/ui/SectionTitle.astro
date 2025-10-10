@@ -1,0 +1,31 @@
+---
+export interface Props {
+    id?: string;
+    level?: 1 | 2 | 3 | 4 | 5 | 6;
+    "data-i18n-key"?: string;
+    class?: string;
+}
+
+const {
+    id,
+    level = 2,
+    "data-i18n-key": i18nKey,
+    class: className,
+} = Astro.props;
+
+const Tag = `h${level}` as any;
+---
+
+<Tag id={id} class:list={["section-title", className]} data-i18n-key={i18nKey}>
+    <slot />
+</Tag>
+
+<style>
+    .section-title {
+        padding: 0 0 0 var(--space-lg);
+        font-size: clamp(1rem, 2vw, 1.125rem);
+        font-weight: 700;
+        line-height: 1;
+        margin: 0;
+    }
+</style>

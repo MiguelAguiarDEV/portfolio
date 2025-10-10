@@ -44,10 +44,11 @@ const { items } = Astro.props;
     .navbar {
         position: fixed;
         left: 50%;
-        top: 1vh;
+        top: var(--nav-margin-top);
         transform: translateX(-50%);
         z-index: 1000;
         height: var(--nav-h);
+        max-width: calc(100vw - 2rem);
         display: flex;
         align-items: center;
         gap: 2px;
@@ -58,6 +59,7 @@ const { items } = Astro.props;
         /* -webkit-backdrop-filter: blur(14px) saturate(140%); */
         /* box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25); */
         pointer-events: auto;
+        box-sizing: border-box;
     }
 
     .navbar button {
@@ -65,8 +67,8 @@ const { items } = Astro.props;
         border: 0;
         background: transparent;
         color: #fff;
-        font-size: var(--fs-1);
-        padding: 8px 12px;
+        font-size: clamp(0.75rem, var(--fs-1), 0.9rem);
+        padding: clamp(6px, 1vh, 8px) clamp(8px, 1.5vw, 12px);
         border-radius: 10px;
         cursor: pointer;
         opacity: 0.75;
@@ -75,6 +77,8 @@ const { items } = Astro.props;
             transform 0.2s,
             background-color 0.2s;
         white-space: nowrap;
+        flex-shrink: 1;
+        min-width: 0;
     }
 
     .navbar button[aria-current="page"] {
@@ -94,5 +98,8 @@ const { items } = Astro.props;
     .lang-toggle {
         font-weight: 600;
         text-transform: uppercase;
+        padding-left: var(--space-md);
+        margin-left: var(--space-xs);
+        border-left: 1px solid rgba(255, 255, 255, 0.15);
     }
 </style>

@@ -1,0 +1,176 @@
+---
+export interface Props {
+    variant?: 'primary' | 'ghost' | 'rainbow';
+    href?: string;
+    type?: 'button' | 'submit' | 'reset';
+    target?: '_blank' | '_self';
+    rel?: string;
+    download?: boolean | string;
+    class?: string;
+    'data-i18n-key'?: string;
+    'data-i18n-attr-href'?: string;
+    'aria-label'?: string;
+}
+
+const {
+    variant = 'primary',
+    href,
+    type = 'button',
+    target,
+    rel,
+    download,
+    class: className,
+    'data-i18n-key': i18nKey,
+    'data-i18n-attr-href': i18nAttrHref,
+    'aria-label': ariaLabel,
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+const isRainbow = variant === 'rainbow';
+---
+
+{isRainbow ? (
+    <span class="btn-rainbow">
+        <Tag
+            class:list={['btn', `btn--${variant}`, className]}
+            href={href}
+            type={!href ? type : undefined}
+            target={target}
+            rel={rel}
+            download={download}
+            data-i18n-key={i18nKey}
+            data-i18n-attr-href={i18nAttrHref}
+            aria-label={ariaLabel}
+        >
+            <slot />
+        </Tag>
+    </span>
+) : (
+    <Tag
+        class:list={['btn', `btn--${variant}`, className]}
+        href={href}
+        type={!href ? type : undefined}
+        target={target}
+        rel={rel}
+        download={download}
+        data-i18n-key={i18nKey}
+        data-i18n-attr-href={i18nAttrHref}
+        aria-label={ariaLabel}
+    >
+        <slot />
+    </Tag>
+)}
+
+<style>
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: clamp(0.8rem, 0.9rem, 1rem);
+        font-weight: 600;
+        line-height: 1;
+        padding: clamp(0.45rem, 0.55rem, 0.65rem) clamp(0.7rem, 0.85rem, 1rem);
+        border-radius: 10px;
+        border: 1px solid var(--ring);
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.08);
+        text-decoration: none;
+        backdrop-filter: blur(4px);
+        transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.28);
+        cursor: pointer;
+        flex-shrink: 1;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .btn:hover {
+        transform: scale(1.04);
+    }
+
+    .btn--ghost {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.22);
+        color: #f0f0f0;
+    }
+
+    .btn--ghost:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Rainbow variant wrapper */
+    .btn-rainbow {
+        position: relative;
+        display: inline-block;
+        border-radius: var(--br-mid);
+        padding: 2px;
+        isolation: isolate;
+        overflow: hidden;
+        transform-origin: center;
+        transition: transform 0.25s ease;
+        will-change: transform;
+    }
+
+    .btn-rainbow::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 180%;
+        aspect-ratio: 1 / 1;
+        background: conic-gradient(
+            #ff2e2e,
+            #ff831e,
+            #fcff51,
+            #58ff57,
+            #575fff,
+            #d257ff,
+            #ff57e5,
+            #ff1556
+        );
+        border-radius: 0;
+        z-index: 0;
+        filter: saturate(1.1);
+        animation: spin 4s linear infinite;
+    }
+
+    .btn-rainbow .btn {
+        position: relative;
+        z-index: 1;
+        background: rgb(41, 73, 80, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        text-transform: uppercase;
+        letter-spacing: 0.2px;
+        box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px) saturate(1.05);
+        padding: calc(0.55rem - 2px) calc(0.85rem - 2px);
+    }
+
+    .btn-rainbow:hover {
+        transform: scale(1.06);
+    }
+
+    .btn-rainbow .btn:hover {
+        transform: scale(1.04);
+        box-shadow: 0 0.9rem 1.6rem rgba(0, 0, 0, 0.45);
+    }
+
+    @keyframes spin {
+        from {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .btn-rainbow::before {
+            animation: none;
+        }
+        .btn-rainbow .btn {
+            transition: none;
+        }
+    }
+</style>

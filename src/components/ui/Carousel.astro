@@ -1,0 +1,270 @@
+---
+export interface ImageSlide {
+    kind: "image";
+    src: string;
+    alt: string;
+}
+
+export interface VideoSource {
+    src: string;
+    type?: string;
+}
+
+export interface VideoSlide {
+    kind: "video";
+    sources: VideoSource[];
+    poster?: string;
+}
+
+export type Slide = ImageSlide | VideoSlide;
+
+export interface Props {
+    slides: Slide[];
+    ariaLabel?: string;
+}
+
+const { slides, ariaLabel } = Astro.props;
+const hasSlides = slides.length > 0;
+const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+{hasSlides ? (
+    <div class="carousel" role="region" aria-label={ariaLabel} data-carousel-id={carouselId}>
+        <div class="carousel__slides">
+            {slides.map((slide, index) => (
+                <figure
+                    class:list={['carousel__slide', { 'carousel__slide--active': index === 0 }]}
+                    key={`${slide.kind}-${index}`}
+                >
+                    {slide.kind === "image" ? (
+                        <img
+                            loading="lazy"
+                            src={slide.src}
+                            alt={slide.alt}
+                        />
+                    ) : (
+                        <video
+                            preload="none"
+                            controls
+                            playsinline
+                            muted
+                            poster={slide.poster}
+                        >
+                            {slide.sources.map((source, sourceIndex) => (
+                                <source
+                                    src={source.src}
+                                    type={source.type}
+                                    key={`${source.src}-${sourceIndex}`}
+                                />
+                            ))}
+                            <span data-i18n-key="project.videoFallback">
+                                Tu navegador no soporta video.
+                            </span>
+                        </video>
+                    )}
+                </figure>
+            ))}
+        </div>
+        <div class="carousel__controls" aria-label="Controles del carrusel">
+            <button
+                class="carousel__arrow carousel__arrow--left"
+                type="button"
+                aria-label="Anterior"
+                data-i18n-attr-aria-label="project.carousel.prev"
+            >
+                <span aria-hidden="true">&lsaquo;</span>
+            </button>
+            <button
+                class="carousel__arrow carousel__arrow--right"
+                type="button"
+                aria-label="Siguiente"
+                data-i18n-attr-aria-label="project.carousel.next"
+            >
+                <span aria-hidden="true">&rsaquo;</span>
+            </button>
+            <div class="carousel__dots" role="tablist" aria-label="Indicadores de diapositivas">
+                {slides.map((_, index) => (
+                    <button
+                        class:list={['carousel__dot', { 'carousel__dot--active': index === 0 }]}
+                        key={`dot-${index}`}
+                        data-index={index}
+                        role="tab"
+                        aria-selected={index === 0 ? "true" : "false"}
+                        aria-label={`Diapositiva ${index + 1}`}
+                    />
+                ))}
+            </div>
+        </div>
+    </div>
+) : (
+    <div
+        class="carousel__no-preview"
+        data-i18n-key="project.noPreview"
+        role="img"
+        aria-label="Sin vista previa disponible"
+    >
+        Sin vista previa
+    </div>
+)}
+
+<script>
+    document.querySelectorAll('[data-carousel-id]').forEach((carouselEl) => {
+        const slides = Array.from(carouselEl.querySelectorAll('.carousel__slide'));
+        if (slides.length === 0) return;
+
+        const dots = Array.from(carouselEl.querySelectorAll('.carousel__dot'));
+        const btnLeft = carouselEl.querySelector('.carousel__arrow--left');
+        const btnRight = carouselEl.querySelector('.carousel__arrow--right');
+        let index = 0;
+
+        function setActive(i) {
+            index = (i + slides.length) % slides.length;
+            slides.forEach((el, idx) => {
+                el.classList.toggle('carousel__slide--active', idx === index);
+            });
+            dots.forEach((d, idx) => {
+                d.classList.toggle('carousel__dot--active', idx === index);
+                d.setAttribute('aria-selected', idx === index ? 'true' : 'false');
+            });
+        }
+
+        btnLeft?.addEventListener('click', () => setActive(index - 1));
+        btnRight?.addEventListener('click', () => setActive(index + 1));
+        dots.forEach((d, idx) => d.addEventListener('click', () => setActive(idx)));
+
+        if (slides.length <= 1) {
+            const ctrl = carouselEl.querySelector('.carousel__controls');
+            if (ctrl) ctrl.style.display = 'none';
+        }
+
+        setActive(0);
+    });
+</script>
+
+<style>
+    .carousel {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: var(--br-mid);
+        overflow: hidden;
+        background: #0d131d;
+        padding: 0;
+    }
+
+    .carousel__no-preview {
+        display: grid;
+        place-items: center;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: var(--br-mid);
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.75;
+        padding: var(--space-md);
+    }
+
+    .carousel__slides {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .carousel__slide {
+        position: absolute;
+        inset: 0;
+        padding: 0;
+        margin: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+            opacity 200ms ease-in-out,
+            visibility 200ms ease-in-out;
+    }
+
+    .carousel__slide--active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .carousel__slide img,
+    .carousel__slide video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .carousel__controls {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        padding: 0;
+    }
+
+    .carousel__arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: auto;
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px);
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 0;
+    }
+
+    .carousel__arrow:hover {
+        background: rgba(0, 0, 0, 0.5);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel__arrow--left {
+        left: var(--space-sm);
+    }
+
+    .carousel__arrow--right {
+        right: var(--space-sm);
+    }
+
+    .carousel__dots {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: var(--space-sm);
+        display: flex;
+        gap: var(--space-sm);
+        justify-content: center;
+        pointer-events: auto;
+        padding: 0;
+    }
+
+    .carousel__dot {
+        width: var(--space-sm);
+        height: var(--space-sm);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.35);
+        cursor: pointer;
+        transition: background 0.2s ease;
+        border: none;
+        padding: 0;
+    }
+
+    .carousel__dot:hover {
+        background: rgba(255, 255, 255, 0.6);
+    }
+
+    .carousel__dot--active {
+        background: #fff;
+    }
+</style>

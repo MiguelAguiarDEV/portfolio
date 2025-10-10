@@ -1,0 +1,40 @@
+---
+export interface Props {
+    variant?: 'default' | 'socials';
+    class?: string;
+}
+
+const {
+    variant = 'default',
+    class: className,
+} = Astro.props;
+
+const isSocials = variant === 'socials';
+---
+
+<div class:list={['card', { 'card--socials': isSocials }, className]}>
+    <slot />
+</div>
+
+<style>
+    .card {
+        background: var(--panel);
+        border: 1px solid var(--ring);
+        border-radius: var(--br-big);
+        padding: var(--space-xs);
+        gap: var(--space-xs);
+        display: flex;
+        flex-wrap: wrap;
+        min-height: 0;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        height: fit-content;
+    }
+
+    .card--socials {
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+    }
+</style>
