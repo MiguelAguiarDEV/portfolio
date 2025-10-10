@@ -34,7 +34,8 @@ const panels: PanelData[] = [
         labelKey: "nav.about",
         title: "Sobre mi",
         titleKey: "panel.about.title",
-        background: "linear-gradient(135deg, #0b3a36, #0b2a3a 70%)",
+        // background: "linear-gradient(135deg, #0b3a36, #0b2a3a 70%)",
+        background: "#1a5b56",
     },
     {
         id: "work",
@@ -42,7 +43,8 @@ const panels: PanelData[] = [
         labelKey: "nav.projects",
         title: "Proyectos",
         titleKey: "panel.projects.title",
-        background: "linear-gradient(135deg, #2a143a, #0f1020 70%)",
+        // background: "linear-gradient(135deg, #2a143a, #0f1020 70%)",
+        background: "#492b5f",
     },
 ];
 
@@ -81,7 +83,6 @@ const navItems = panels.map(({ id, label, labelKey }) => ({
                         lead={panel.lead}
                         initial={index === 0}
                         background={panel.background}
-                        hideHeading={panel.id === "about"}
                     >
                         {panel.id === "about" ? (
                             <AboutPanel />
@@ -117,6 +118,3 @@ const navItems = panels.map(({ id, label, labelKey }) => ({
         );
     }
 </style>
-
-
-
