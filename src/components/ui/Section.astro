@@ -1,0 +1,65 @@
+---
+export interface Props {
+    as?: 'div' | 'section' | 'article';
+    layout?: 'flex' | 'grid';
+    direction?: 'row' | 'column';
+    gap?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    align?: 'start' | 'center' | 'end' | 'stretch';
+    justify?: 'start' | 'center' | 'end' | 'between' | 'around';
+    class?: string;
+    'aria-labelledby'?: string;
+    'aria-label'?: string;
+    fill?: boolean;
+}
+
+const {
+    as: Tag = 'div',
+    layout = 'flex',
+    direction = 'column',
+    gap = 'sm',
+    align,
+    justify,
+    class: className,
+    'aria-labelledby': ariaLabelledby,
+    'aria-label': ariaLabel,
+    fill = false,
+} = Astro.props;
+
+const gapMap = {
+    xs: 'var(--space-xs)',
+    sm: 'var(--space-sm)',
+    md: 'var(--space-md)',
+    lg: 'var(--space-lg)',
+    xl: 'var(--space-xl)',
+};
+---
+
+<Tag
+    class:list={['section', { 'section--fill': fill }, className]}
+    style={{
+        display: layout,
+        flexDirection: layout === 'flex' ? direction : undefined,
+        gap: gapMap[gap],
+        alignItems: align,
+        justifyContent: justify,
+    }}
+    aria-labelledby={ariaLabelledby}
+    aria-label={ariaLabel}
+>
+    <slot />
+</Tag>
+
+<style>
+    .section {
+        width: 100%;
+        min-width: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .section--fill {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: 100%;
+    }
+</style>

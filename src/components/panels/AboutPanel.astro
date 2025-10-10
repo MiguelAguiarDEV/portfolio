@@ -7,6 +7,8 @@ import Card from "@/components/ui/Card.astro";
 import Container from "@/components/ui/Container.astro";
 import ProjectGrid from "@/components/ui/ProjectGrid.astro";
 import ProjectCard from "@/components/ui/ProjectCard.astro";
+import Section from "@/components/ui/Section.astro";
+import SectionTitle from "@/components/ui/SectionTitle.astro";
 
 const heroChips: { label: string; key: string }[] = [
     { label: "Backend", key: "chip.backend" },
@@ -42,71 +44,71 @@ const featuredProjects = projects.slice(0, 3);
     </Container>
 
     <Container>
-        <Card
-            title="Sobre mi"
-            titleKey="about.title"
-            titleId="about-heading"
-        >
-            <p class="about-description" data-i18n-key="about.description">
-                Soy Miguel Santiesteban, un estudiante de Ingenieria
-                Informatica de 22 anos de las Islas Canarias, Espana. Me
-                especializo en desarrollo backend y disfruto crear proyectos
-                desde cero, resolver problemas complejos y aprender de forma
-                continua.
-            </p>
-            <div class="btn-ctn">
-                <Button
-                    href="/cv-miguel-santiesteban-aguiar-esp.pdf"
-                    download
-                    data-i18n-key="about.downloadCv"
-                    data-i18n-attr-href="about.downloadCv.href"
-                >
-                    Descargar CV
-                </Button>
-                <Button
-                    variant="rainbow"
-                    type="button"
-                    data-contact-modal-trigger
-                    aria-label="Abrir formulario de contacto"
-                    data-i18n-key="about.contact"
-                    data-i18n-attr-aria-label="contact.modal.open"
-                >
-                    Contacto
-                </Button>
-            </div>
-        </Card>
+        <Section gap="xs" aria-labelledby="about-heading">
+            <SectionTitle id="about-heading" data-i18n-key="about.title">
+                Sobre mi
+            </SectionTitle>
+            <Card>
+                <p class="about-description" data-i18n-key="about.description">
+                    Soy Miguel Santiesteban, un estudiante de Ingenieria
+                    Informatica de 22 anos de las Islas Canarias, Espana. Me
+                    especializo en desarrollo backend y disfruto crear proyectos
+                    desde cero, resolver problemas complejos y aprender de forma
+                    continua.
+                </p>
+                <div class="btn-ctn">
+                    <Button
+                        href="/cv-miguel-santiesteban-aguiar-esp.pdf"
+                        download
+                        data-i18n-key="about.downloadCv"
+                        data-i18n-attr-href="about.downloadCv.href"
+                    >
+                        Descargar CV
+                    </Button>
+                    <Button
+                        variant="rainbow"
+                        type="button"
+                        data-contact-modal-trigger
+                        aria-label="Abrir formulario de contacto"
+                        data-i18n-key="about.contact"
+                        data-i18n-attr-aria-label="contact.modal.open"
+                    >
+                        Contacto
+                    </Button>
+                </div>
+            </Card>
+        </Section>
 
-        <Card
-            title="Tecnologias"
-            titleKey="about.stack"
-            titleId="stack-heading"
-        >
-            <div role="list" aria-label="Tecnologías que manejo" style="display: contents;">
-                <Chip role="listitem">TypeScript</Chip>
-                <Chip role="listitem">Node.js</Chip>
-                <Chip role="listitem">NestJS</Chip>
-                <Chip role="listitem">Prisma</Chip>
-                <Chip role="listitem">MySQL</Chip>
-                <Chip role="listitem">React</Chip>
-                <Chip role="listitem">Docker</Chip>
-                <Chip role="listitem">GraphQL</Chip>
-                <Chip role="listitem">Astro</Chip>
-                <Chip role="listitem">Redis</Chip>
-            </div>
-        </Card>
+        <Section gap="xs" aria-labelledby="stack-heading">
+            <SectionTitle id="stack-heading" data-i18n-key="about.stack">
+                Tecnologias
+            </SectionTitle>
+            <Card>
+                <div role="list" aria-label="Tecnologías que manejo" style="display: contents;">
+                    <Chip role="listitem">TypeScript</Chip>
+                    <Chip role="listitem">Node.js</Chip>
+                    <Chip role="listitem">NestJS</Chip>
+                    <Chip role="listitem">Prisma</Chip>
+                    <Chip role="listitem">MySQL</Chip>
+                    <Chip role="listitem">React</Chip>
+                    <Chip role="listitem">Docker</Chip>
+                    <Chip role="listitem">GraphQL</Chip>
+                    <Chip role="listitem">Astro</Chip>
+                    <Chip role="listitem">Redis</Chip>
+                </div>
+            </Card>
+        </Section>
 
-        <Card
-            title="Proyectos destacados"
-            titleKey="about.topProjects"
-            titleId="featured-heading"
-            class="card-fill"
-        >
+        <Section gap="xs" fill aria-labelledby="featured-heading">
+            <SectionTitle id="featured-heading" data-i18n-key="about.topProjects">
+                Proyectos destacados
+            </SectionTitle>
             <ProjectGrid>
                 {featuredProjects.map((project) => (
                     <ProjectCard {...project} />
                 ))}
             </ProjectGrid>
-        </Card>
+        </Section>
     </Container>
 </div>
 
@@ -118,9 +120,6 @@ const featuredProjects = projects.slice(0, 3);
         line-height: 1.6;
     }
 
-    .card-fill {
-        flex: 1;
-    }
 
     .visually-hidden {
         position: absolute;
