@@ -1,0 +1,204 @@
+---
+import Carousel from "./Carousel.astro";
+import type { Slide } from "./Carousel.astro";
+import Chip from "./Chip.astro";
+import Button from "./Button.astro";
+
+export interface Props {
+    name: string;
+    description: string;
+    slides?: Slide[];
+    stack: string[];
+    liveUrl?: string;
+    repoUrl?: string;
+    nameKey?: string;
+    descriptionKey?: string;
+}
+
+const {
+    name,
+    description,
+    slides = [],
+    stack = [],
+    liveUrl,
+    repoUrl,
+    nameKey,
+    descriptionKey,
+} = Astro.props;
+---
+
+<article class="project-card" role="listitem">
+    <Carousel slides={slides} ariaLabel={`Galería de ${name}`} />
+
+    <div class="project-card__content">
+        <h3 class="project-card__title" data-i18n-key={nameKey}>{name}</h3>
+        <p class="project-card__description" data-i18n-key={descriptionKey}>
+            {description}
+        </p>
+        <footer class="project-card__footer">
+            {stack.length > 0 && (
+                <div class="project-card__tags" role="list" aria-label="Tecnologías utilizadas">
+                    {stack.map((tech) => (
+                        <Chip role="listitem">{tech}</Chip>
+                    ))}
+                </div>
+            )}
+            {(liveUrl || repoUrl) && (
+                <nav class="project-card__links" aria-label="Enlaces del proyecto">
+                    {liveUrl && (
+                        <Button
+                            href={liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            data-i18n-key="project.button.live"
+                        >
+                            Ver demo
+                        </Button>
+                    )}
+                    {repoUrl && (
+                        <Button
+                            variant="ghost"
+                            href={repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            data-i18n-key="project.button.repo"
+                        >
+                            Repositorio
+                        </Button>
+                    )}
+                </nav>
+            )}
+        </footer>
+    </div>
+</article>
+
+<style>
+    .project-card {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(6px, 1vh, var(--space-sm));
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--br-big);
+        padding: clamp(3px, 0.5vh, var(--space-xs));
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        min-height: 0;
+        min-width: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .project-card__content {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(8px, 1.5vh, 12px);
+        flex: 1;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .project-card__title {
+        font-size: var(--project-title-max, clamp(1rem, 1.8vw, 1.2rem));
+        padding: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .project-card__description {
+        font-size: var(--project-desc-max, 0.92rem);
+        line-height: 1.35;
+        padding: 0;
+    }
+
+    .project-card__footer {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+        padding-top: var(--space-xs);
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .project-card__tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .project-card__links {
+        display: flex;
+        gap: var(--space-sm);
+        flex-wrap: wrap;
+        min-width: 0;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    /* Responsive */
+    @media (min-width: 1200px) {
+        .project-card__title {
+            font-size: 1rem;
+        }
+
+        .project-card__description {
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (min-width: 900px) and (max-width: 1199px) {
+        .project-card__title {
+            font-size: 0.9rem;
+        }
+
+        .project-card__description {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (min-width: 640px) and (max-width: 899px) {
+        .project-card__title {
+            font-size: 0.85rem;
+        }
+
+        .project-card__description {
+            font-size: 0.72rem;
+        }
+    }
+
+    @media (max-width: 639px) {
+        .project-card {
+            display: grid;
+            grid-template-columns: minmax(0, 48%) 1fr;
+            grid-template-rows: 1fr;
+            align-items: stretch;
+            column-gap: var(--space-sm);
+        }
+
+        .project-card__content {
+            grid-column: 2;
+            grid-row: 1;
+            gap: var(--space-xs);
+        }
+
+        .project-card__title {
+            font-size: 0.75rem;
+        }
+
+        .project-card__description {
+            font-size: 0.65rem;
+        }
+
+        .project-card__tags {
+            display: none !important;
+        }
+    }
+</style>

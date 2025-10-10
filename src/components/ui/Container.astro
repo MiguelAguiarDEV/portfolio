@@ -1,0 +1,52 @@
+---
+export interface Props {
+    as?: 'div' | 'section' | 'aside' | 'article';
+    variant?: 'column' | 'fill';
+    class?: string;
+    'aria-label'?: string;
+    'aria-labelledby'?: string;
+}
+
+const {
+    as: Tag = 'div',
+    variant,
+    class: className,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledby,
+} = Astro.props;
+
+const classes = ['container'];
+if (variant) classes.push(`container--${variant}`);
+if (className) classes.push(className);
+---
+
+<Tag
+    class:list={classes}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+>
+    <slot />
+</Tag>
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        min-height: 0;
+        min-width: 0;
+        gap: var(--space-sm);
+        overflow: visible;
+        padding: 0;
+    }
+
+    .container--fill {
+        flex: 1 1 auto;
+    }
+
+    .container--column {
+        gap: var(--space-sm);
+    }
+</style>

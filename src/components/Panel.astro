@@ -16,6 +16,9 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
 <div class="panel" id={id} aria-hidden={ariaHidden} style={panelStyle}>
     <div class="bg"></div>
     <section aria-labelledby={headingId}>
+        <h1 id={headingId} class="visually-hidden" data-i18n-key={`panel.${id}.title`}>
+            {title}
+        </h1>
         <slot />
     </section>
 </div>
@@ -37,13 +40,15 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         inset: 0;
         background: var(--bg, #111);
         pointer-events: none;
+        padding: 0;
     }
 
     .panel > section {
-        margin-top: 30px;
+        padding-top: clamp(20px, 3vh, 30px);
         position: relative;
         z-index: 1;
         width: min(1200px, 84vw);
+        max-width: 100%;
         height: min(85vh, 85svh);
         max-height: min(85vh, 85svh);
         min-height: min(85vh, 85svh);
@@ -52,6 +57,7 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         justify-content: center;
         border-radius: var(--radius);
         overflow: visible;
+        box-sizing: border-box;
     }
 
     .panel > section > * {
@@ -59,21 +65,19 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         height: 100%;
         max-height: 100%;
         overflow: hidden;
+        padding: 0;
     }
 
-    .panel h1 {
-        margin: 0 0 10px;
-        font-size: var(--fs-2);
-    }
-
-    .panel p {
-        margin: 0;
-        font-size: var(--fs-1);
-        opacity: 0.9;
-    }
-
-    .panel .lead {
-        margin-bottom: 16px;
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
     }
 
     .panel.entering {
@@ -93,9 +97,11 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
     @media (max-width: 1000px) {
         .panel > section {
             width: min(960px, 92vw);
+            max-width: 100%;
             height: min(85vh, 85svh);
             max-height: min(85vh, 85svh);
             min-height: min(85vh, 85svh);
+            padding-top: clamp(16px, 2.5vh, 24px);
         }
     }
 </style>

@@ -4,25 +4,43 @@
 /* CSS Variables                */
 /* ============================ */
 :root {
+    /* Border Radius */
     --br-big: 14px;
     --br-mid: 9px;
     --br-sm: 12px;
-    --gap-big: 12px;
-    --gap-mid: 8px;
+
+    /* Spacing System (usar preferentemente) */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+    --space-3xl: 48px;
+
+    /* Gap (deprecated - usar --space-*) */
+    --gap-big: var(--space-md);
+    --gap-mid: var(--space-sm);
     --gap-sm: 6px;
+
+    /* Colors */
     --accent: #5dd3ff;
     --ring: rgba(255, 255, 255, 0.14);
     --ink: #fafafa;
     --panel: rgba(255, 255, 255, 0.05);
+
+    /* Animations */
     --wipe-ms: 700ms;
+
+    /* Layout */
     --panel-y-offset: 30px;
 
     /* Navbar variables */
     --nav-h: 48px;
-    --nav-gap: 6px;
-    --nav-pad: 8px;
-    --nav-margin-top: 24px;
-    --nav-margin-inline: 24px;
+    --nav-gap: var(--space-sm);
+    --nav-pad: var(--space-sm);
+    --nav-margin-top: var(--space-xl);
+    --nav-margin-inline: var(--space-xl);
 }
 
 /* ============================ */
@@ -45,22 +63,86 @@ body {
     background: #0f0f10;
     color: #fafafa;
     overflow: hidden;
-    line-height: 1.4;
+    line-height: 1.5;
+    font-size: 16px;
+}
+
+/* ============================ */
+/* Typography                   */
+/* ============================ */
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--ink);
+}
+
+h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+h2 {
+    font-size: clamp(1.35rem, 3vw, 1.875rem);
+}
+
+h3 {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+h4 {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+h5 {
+    font-size: clamp(0.95rem, 1.75vw, 1.125rem);
+}
+
+h6 {
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+}
+
+p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--ink);
+}
+
+strong, b {
+    font-weight: 600;
+}
+
+em, i {
+    font-style: italic;
+}
+
+small {
+    font-size: 0.875em;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: color-mix(in oklab, var(--accent) 80%, white);
 }
 
 /* ============================ */
 /* Layout System                */
 /* ============================ */
 .layout {
-    margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: minmax(0, 360px) 1fr;
     grid-template-rows: 1fr;
     width: 100%;
+    max-width: 100%;
     height: 100%;
     max-height: 100%;
-    gap: var(--gap-big);
+    gap: var(--space-md);
+    box-sizing: border-box;
 }
 
 .column {
@@ -71,8 +153,9 @@ body {
     max-height: 100%;
     min-height: 0;
     min-width: 0;
-    gap: var(--gap-mid);
+    gap: var(--space-sm);
     overflow: visible;
+    padding: 0;
 }
 
 .column>.fill {
@@ -89,15 +172,17 @@ body {
     flex: 0 1 auto;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: var(--space-xs);
     min-height: 0;
     max-width: 100%;
+    padding: 0;
 }
 
 .card-title {
-    margin: 0 0 0 15px;
-    font-size: 18px;
-    font-weight: bold;
+    padding: 0 0 0 var(--space-lg);
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    font-weight: 700;
+    line-height: 1.3;
 }
 
 .card {
@@ -105,12 +190,14 @@ body {
     border: 1px solid var(--ring);
     border-radius: var(--br-big);
     /* box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); */
-    padding: 4px;
-    gap: 4px;
+    padding: var(--space-xs);
+    gap: var(--space-xs);
     display: flex;
     flex-wrap: wrap;
     min-height: 0;
+    min-width: 0;
     max-width: 100%;
+    box-sizing: border-box;
 }
 
 /* ============================ */
@@ -118,14 +205,18 @@ body {
 /* ============================ */
 .projects {
     display: grid;
-    gap: 8px;
+    gap: var(--space-sm);
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: 1fr;
     align-items: stretch;
     justify-items: stretch;
     min-width: 0;
     min-height: 0;
+    width: 100%;
+    max-width: 100%;
     height: 100%;
+    box-sizing: border-box;
+    padding: 0;
 }
 
 .fill>.projects {
@@ -139,7 +230,8 @@ body {
     width: 100%;
     height: 100%;
     min-height: 0;
-    gap: 8px;
+    gap: var(--space-sm);
+    padding: 0;
 }
 
 .project>.carousel {
@@ -147,7 +239,7 @@ body {
     height: auto;
     flex: 0 0 auto;
     aspect-ratio: 16 / 9;
-    border-radius: 12px;
+    border-radius: var(--br-mid);
     overflow: hidden;
     background: #0d131d;
 }
@@ -162,7 +254,8 @@ body {
     flex: 1 1 auto;
     min-width: 0;
     min-height: 0;
-    gap: 0.35rem;
+    gap: var(--space-sm);
+    padding: 0;
 }
 
 .p-content>* {
@@ -171,7 +264,7 @@ body {
 
 .p-title {
     font-size: clamp(1rem, 1.8vw, 1.2rem);
-    margin: 0;
+    padding: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -185,6 +278,7 @@ body {
     overflow: hidden;
     line-height: 1.35;
     max-height: calc(1em * 1.35 * 3);
+    padding: 0;
 }
 
 .p-footer {
@@ -192,8 +286,8 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: 0.5rem;
-    margin-top: auto;
+    gap: var(--space-sm);
+    padding-top: var(--space-sm);
     min-width: 0;
     max-width: 100%;
     flex: 0 0 auto;
@@ -203,19 +297,21 @@ body {
 .p-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem;
+    gap: var(--space-xs);
     min-width: 0;
     max-width: 100%;
     overflow: hidden;
+    padding: 0;
 }
 
 .p-links {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--space-sm);
     flex-wrap: wrap;
     align-items: center;
     min-width: 0;
     max-width: 100%;
+    padding: 0;
 }
 
 /* ============================ */
@@ -225,6 +321,7 @@ body {
     position: absolute;
     inset: 0;
     pointer-events: none;
+    padding: 0;
 }
 
 .arrow {
@@ -241,32 +338,35 @@ body {
     background: rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(4px);
     color: #fff;
+    padding: 0;
 }
 
 .arrow.left {
-    left: 8px;
+    left: var(--space-sm);
 }
 
 .arrow.right {
-    right: 8px;
+    right: var(--space-sm);
 }
 
 .dots {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 8px;
+    bottom: var(--space-sm);
     display: flex;
-    gap: 8px;
+    gap: var(--space-sm);
     justify-content: center;
     pointer-events: auto;
+    padding: 0;
 }
 
 .dot {
-    width: 8px;
-    height: 8px;
+    width: var(--space-sm);
+    height: var(--space-sm);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.35);
+    padding: 0;
 }
 
 .dot.is-active {
@@ -279,10 +379,10 @@ body {
 .chips {
     display: inline-flex;
     align-items: center;
-    font-size: 0.78rem;
+    font-size: clamp(0.7rem, 0.78rem, 0.85rem);
     font-weight: 500;
     line-height: 1;
-    padding: 0.35rem 0.6rem;
+    padding: clamp(0.3rem, 0.35rem, 0.4rem) clamp(0.5rem, 0.6rem, 0.7rem);
     border-radius: var(--br-mid);
     border: 1px solid var(--ring);
     color: var(--ink);
@@ -296,16 +396,17 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    box-sizing: border-box;
 }
 
 .btn {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 0.9rem, 1rem);
     font-weight: 600;
     line-height: 1;
-    padding: 0.55rem 0.85rem;
+    padding: clamp(0.45rem, 0.55rem, 0.65rem) clamp(0.7rem, 0.85rem, 1rem);
     border-radius: 10px;
     border: 1px solid var(--ring);
     color: var(--ink);
@@ -318,6 +419,7 @@ body {
     flex-shrink: 1;
     min-width: 0;
     max-width: 100%;
+    box-sizing: border-box;
 }
 
 .btn:hover {
@@ -338,7 +440,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: end;
-    gap: var(--gap-mid);
+    gap: var(--space-sm);
+    padding: 0;
 }
 
 /* ============================ */
@@ -350,13 +453,14 @@ body {
     align-items: end;
     flex: 1 1 auto;
     min-height: 0;
+    padding: 0;
 }
 
 .avatar {
     width: auto;
     max-height: 100%;
     object-fit: contain;
-
+    padding: 0;
     -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
     mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
 }
@@ -387,8 +491,8 @@ body {
 .social-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
     text-decoration: none;
     color: var(--ink);
     transition: background 0.2s ease;
@@ -406,11 +510,13 @@ body {
 .social-icon {
     font-size: 1.5rem;
     flex-shrink: 0;
+    padding: 0;
 }
 
 .social-name {
     font-size: 0.95rem;
     font-weight: 600;
+    padding: 0;
 }
 
 /* ============================ */
@@ -525,7 +631,6 @@ body {
         font-size: 80%;
     }
 
-    h3,
     .card-title {
         font-size: 0.9rem;
     }

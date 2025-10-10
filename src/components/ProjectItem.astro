@@ -42,10 +42,10 @@ const {
 const hasSlides = slides.length > 0;
 ---
 
-<article class="project-card">
+<article class="project-card" role="listitem">
     {
         hasSlides ? (
-            <div class="project-card__carousel">
+            <div class="project-card__carousel" role="region" aria-label={`Galería de ${name}`}>
                 <div class="project-card__slides">
                     {slides.map((slide, index) => (
                         <figure
@@ -83,14 +83,14 @@ const hasSlides = slides.length > 0;
                         </figure>
                     ))}
                 </div>
-                <div class="project-card__controls">
+                <div class="project-card__controls" aria-label="Controles del carrusel">
                     <button
                         class="project-card__arrow project-card__arrow--left"
                         type="button"
                         aria-label="Anterior"
                         data-i18n-attr-aria-label="project.carousel.prev"
                     >
-                        &lsaquo;
+                        <span aria-hidden="true">&lsaquo;</span>
                     </button>
                     <button
                         class="project-card__arrow project-card__arrow--right"
@@ -98,14 +98,17 @@ const hasSlides = slides.length > 0;
                         aria-label="Siguiente"
                         data-i18n-attr-aria-label="project.carousel.next"
                     >
-                        &rsaquo;
+                        <span aria-hidden="true">&rsaquo;</span>
                     </button>
-                    <div class="project-card__dots">
+                    <div class="project-card__dots" role="tablist" aria-label="Indicadores de diapositivas">
                         {slides.map((_, index) => (
-                            <i
+                            <button
                                 class={`project-card__dot ${index === 0 ? "project-card__dot--active" : ""}`}
                                 key={`dot-${index}`}
                                 data-index={index}
+                                role="tab"
+                                aria-selected={index === 0 ? "true" : "false"}
+                                aria-label={`Diapositiva ${index + 1}`}
                             />
                         ))}
                     </div>
@@ -115,22 +118,24 @@ const hasSlides = slides.length > 0;
             <div
                 class="project-card__no-preview"
                 data-i18n-key="project.noPreview"
+                role="img"
+                aria-label="Sin vista previa disponible"
             >
                 Sin vista previa
             </div>
         )
     }
     <div class="project-card__content">
-        <h4 class="project-card__title" data-i18n-key={nameKey}>{name}</h4>
+        <h3 class="project-card__title" data-i18n-key={nameKey}>{name}</h3>
         <p class="project-card__description" data-i18n-key={descriptionKey}>
             {description}
         </p>
-        <div class="project-card__footer">
+        <footer class="project-card__footer">
             {
                 stack.length > 0 && (
-                    <div class="project-card__tags">
+                    <div class="project-card__tags" role="list" aria-label="Tecnologías utilizadas">
                         {stack.map((tech) => (
-                            <span class="project-card__tag" key={tech}>
+                            <span class="project-card__tag" role="listitem" key={tech}>
                                 {tech}
                             </span>
                         ))}
@@ -139,7 +144,7 @@ const hasSlides = slides.length > 0;
             }
             {
                 (liveUrl || repoUrl) && (
-                    <div class="project-card__links">
+                    <nav class="project-card__links" aria-label="Enlaces del proyecto">
                         {liveUrl && (
                             <a
                                 class="project-card__btn project-card__btn--primary"
@@ -162,10 +167,10 @@ const hasSlides = slides.length > 0;
                                 Repositorio
                             </a>
                         )}
-                    </div>
+                    </nav>
                 )
             }
-        </div>
+        </footer>
     </div>
 </article>
 
@@ -195,9 +200,10 @@ const hasSlides = slides.length > 0;
                     idx === index,
                 );
             });
-            dots.forEach((d, idx) =>
-                d.classList.toggle("project-card__dot--active", idx === index),
-            );
+            dots.forEach((d, idx) => {
+                d.classList.toggle("project-card__dot--active", idx === index);
+                d.setAttribute("aria-selected", idx === index ? "true" : "false");
+            });
         }
 
         btnLeft &&
@@ -222,15 +228,18 @@ const hasSlides = slides.length > 0;
     .project-card {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: clamp(6px, 1vh, var(--space-sm));
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 14px;
-        padding: 4px;
+        border-radius: var(--br-big);
+        padding: clamp(3px, 0.5vh, var(--space-xs));
         width: 100%;
+        max-width: 100%;
         height: 100%;
         min-height: 0;
         min-width: 0;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     /* Sin preview */
@@ -239,12 +248,13 @@ const hasSlides = slides.length > 0;
         place-items: center;
         width: 100%;
         aspect-ratio: 16 / 9;
-        border-radius: 12px;
+        border-radius: var(--br-mid);
         background: rgba(255, 255, 255, 0.05);
         font-size: 0.9rem;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         opacity: 0.75;
+        padding: var(--space-md);
     }
 
     /* Carousel */
@@ -252,21 +262,23 @@ const hasSlides = slides.length > 0;
         position: relative;
         width: 100%;
         aspect-ratio: 16 / 9;
-        border-radius: 12px;
+        border-radius: var(--br-mid);
         overflow: hidden;
         background: #0d131d;
+        padding: 0;
     }
 
     .project-card__slides {
         position: absolute;
         inset: 0;
         overflow: hidden;
+        padding: 0;
     }
 
     .project-card__slide {
         position: absolute;
         inset: 0;
-        margin: 0;
+        padding: 0;
         opacity: 0;
         visibility: hidden;
         transition:
@@ -292,6 +304,7 @@ const hasSlides = slides.length > 0;
         position: absolute;
         inset: 0;
         pointer-events: none;
+        padding: 0;
     }
 
     .project-card__arrow {
@@ -310,6 +323,7 @@ const hasSlides = slides.length > 0;
         color: #fff;
         cursor: pointer;
         transition: all 0.2s ease;
+        padding: 0;
     }
 
     .project-card__arrow:hover {
@@ -318,31 +332,34 @@ const hasSlides = slides.length > 0;
     }
 
     .project-card__arrow--left {
-        left: 8px;
+        left: var(--space-sm);
     }
 
     .project-card__arrow--right {
-        right: 8px;
+        right: var(--space-sm);
     }
 
     .project-card__dots {
         position: absolute;
         left: 0;
         right: 0;
-        bottom: 8px;
+        bottom: var(--space-sm);
         display: flex;
-        gap: 8px;
+        gap: var(--space-sm);
         justify-content: center;
         pointer-events: auto;
+        padding: 0;
     }
 
     .project-card__dot {
-        width: 8px;
-        height: 8px;
+        width: var(--space-sm);
+        height: var(--space-sm);
         border-radius: 999px;
         background: rgba(255, 255, 255, 0.35);
         cursor: pointer;
         transition: background 0.2s ease;
+        border: none;
+        padding: 0;
     }
 
     .project-card__dot:hover {
@@ -357,13 +374,16 @@ const hasSlides = slides.length > 0;
     .project-card__content {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: clamp(8px, 1.5vh, 12px);
         flex: 1;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
     }
 
     .project-card__title {
         font-size: var(--project-title-max);
-        margin: 0;
+        padding: 0;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -372,15 +392,15 @@ const hasSlides = slides.length > 0;
     .project-card__description {
         font-size: var(--project-desc-max);
         line-height: 1.35;
-        margin: 0;
+        padding: 0;
     }
 
     /* Footer */
     .project-card__footer {
         display: flex;
         flex-direction: column;
-        gap: 4px;
-        margin-top: auto;
+        gap: var(--space-xs);
+        padding-top: var(--space-xs);
         min-width: 0;
         max-width: 100%;
         overflow: hidden;
@@ -389,19 +409,20 @@ const hasSlides = slides.length > 0;
     .project-card__tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.3rem;
+        gap: var(--space-xs);
         min-width: 0;
         max-width: 100%;
         overflow: hidden;
+        padding: 0;
     }
 
     .project-card__tag {
         display: inline-flex;
         align-items: center;
-        font-size: 0.78rem;
+        font-size: clamp(0.7rem, 0.78rem, 0.85rem);
         font-weight: 500;
         line-height: 1;
-        padding: 0.35rem 0.6rem;
+        padding: clamp(0.3rem, 0.35rem, 0.4rem) clamp(0.5rem, 0.6rem, 0.7rem);
         border-radius: 9px;
         border: 1px solid rgba(255, 255, 255, 0.14);
         color: #fafafa;
@@ -416,24 +437,26 @@ const hasSlides = slides.length > 0;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        box-sizing: border-box;
     }
 
     .project-card__links {
         display: flex;
-        gap: 0.5rem;
+        gap: var(--space-sm);
         flex-wrap: wrap;
         min-width: 0;
         max-width: 100%;
+        padding: 0;
     }
 
     .project-card__btn {
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
-        font-size: 0.9rem;
+        font-size: clamp(0.8rem, 0.9rem, 1rem);
         font-weight: 600;
         line-height: 1;
-        padding: 0.55rem 0.85rem;
+        padding: clamp(0.45rem, 0.55rem, 0.65rem) clamp(0.7rem, 0.85rem, 1rem);
         border-radius: 10px;
         border: 1px solid rgba(255, 255, 255, 0.14);
         color: #fafafa;
@@ -446,6 +469,7 @@ const hasSlides = slides.length > 0;
         flex-shrink: 1;
         min-width: 0;
         max-width: 100%;
+        box-sizing: border-box;
     }
 
     .project-card__btn:hover {

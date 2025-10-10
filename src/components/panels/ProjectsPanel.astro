@@ -11,22 +11,25 @@ export interface Props {
 const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 ---
 
-<div class="panel-projects">
-    <div class="panel-projects__header">
+<section class="panel-projects" aria-labelledby="projects-panel-heading">
+    <header class="panel-projects__header">
         <span></span>
-        <h3 class="card-title" data-i18n-key={titleKey}>
+        <h2 id="projects-panel-heading" class="card-title" data-i18n-key={titleKey}>
             {title}
-        </h3>
+        </h2>
         <span></span>
-    </div>
+    </header>
     <div
         class="panel-projects__pagination"
         id="pagination-ctn"
         data-total-projects={projects.length}
+        role="region"
+        aria-label="Galería de proyectos con paginación"
     >
         <button
             class="panel-projects__nav-btn panel-projects__nav-btn--prev"
-            aria-label="Previous page"
+            aria-label="Página anterior"
+            data-i18n-attr-aria-label="pagination.prev"
         >
             <svg
                 width="20"
@@ -34,6 +37,7 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
                 viewBox="0 0 20 20"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
             >
                 <path
                     d="M12.5 15L7.5 10L12.5 5"
@@ -44,13 +48,14 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
             </svg>
         </button>
         <div class="panel-projects__container">
-            <div class="panel-projects__grid" id="projects-grid">
+            <div class="panel-projects__grid" id="projects-grid" role="list">
                 {projects.map((project) => <ProjectItem {...project} />)}
             </div>
         </div>
         <button
             class="panel-projects__nav-btn panel-projects__nav-btn--next"
-            aria-label="Next page"
+            aria-label="Página siguiente"
+            data-i18n-attr-aria-label="pagination.next"
         >
             <svg
                 width="20"
@@ -58,6 +63,7 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
                 viewBox="0 0 20 20"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
             >
                 <path
                     d="M7.5 15L12.5 10L7.5 5"
@@ -68,7 +74,7 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
             </svg>
         </button>
     </div>
-</div>
+</section>
 
 <script>
     // Configuración responsive de items por página y layout
@@ -266,32 +272,37 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
         flex-direction: column;
         height: 100%;
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     /* Header */
     .panel-projects__header {
         display: flex;
         align-items: stretch;
-        gap: 12px;
+        gap: var(--space-md);
+        padding: 0;
         transition: gap 0.3s ease;
     }
 
     .panel-projects__header span {
-        border-radius: 8px;
+        border-radius: var(--space-sm);
         color: rgba(255, 255, 255, 0.7);
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 8px;
+        padding: var(--space-sm);
         transition: all 0.2s ease;
         flex-shrink: 0;
         width: 44px;
     }
 
     .panel-projects__title {
-        margin: 0 0 0 15px;
-        font-size: 18px;
+        padding: 0 0 0 var(--space-lg);
+        font-size: clamp(1rem, 2vw, 1.125rem);
         font-weight: bold;
     }
 
@@ -299,9 +310,10 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
     .panel-projects__pagination {
         display: flex;
         align-items: stretch;
-        gap: 12px;
+        gap: var(--space-md);
         flex: 1;
         min-height: 0;
+        padding: 0;
         transition: gap 0.3s ease;
     }
 
@@ -317,13 +329,13 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
     .panel-projects__nav-btn {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
+        border-radius: var(--space-sm);
         color: rgba(255, 255, 255, 0.7);
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 8px;
+        padding: var(--space-sm);
         transition: all 0.2s ease;
         flex-shrink: 0;
         width: 44px;
@@ -368,22 +380,24 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
         position: absolute;
         inset: 0;
         display: grid;
-        gap: 8px;
+        gap: clamp(6px, 1vh, 8px);
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: repeat(2, 1fr);
         align-content: stretch;
         align-items: stretch;
         overflow: hidden;
-        padding: 2px;
+        padding: clamp(1px, 0.25vh, 2px);
+        box-sizing: border-box;
     }
 
     /* Placeholder */
     .panel-projects__placeholder {
         background: transparent;
         border: 1px dashed rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
+        border-radius: var(--space-sm);
         width: 100%;
         height: 100%;
+        padding: 0;
     }
 
     /* Scrollbar */
@@ -423,7 +437,7 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 
         .panel-projects__nav-btn {
             width: 40px;
-            padding: 6px;
+            padding: var(--space-sm);
         }
     }
 
@@ -444,7 +458,7 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
 
         .panel-projects__nav-btn {
             width: 40px;
-            padding: 6px;
+            padding: var(--space-sm);
         }
     }
 
@@ -456,12 +470,12 @@ const { title = "Repositorios de GitHub", titleKey, projects } = Astro.props;
         }
 
         .panel-projects__pagination {
-            gap: 8px;
+            gap: var(--space-sm);
         }
 
         .panel-projects__nav-btn {
             width: 36px;
-            padding: 4px;
+            padding: var(--space-xs);
         }
 
         .panel-projects__nav-btn svg {
