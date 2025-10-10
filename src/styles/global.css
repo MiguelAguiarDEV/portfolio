@@ -616,8 +616,9 @@ a:hover {
         grid-template-columns: 1fr;
     }
 
-    .layout>aside.column {
-        display: none;
+    .layout>aside.column,
+    .layout>aside {
+        display: none !important;
     }
 }
 
