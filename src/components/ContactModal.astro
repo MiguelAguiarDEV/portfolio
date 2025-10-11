@@ -36,39 +36,54 @@ import ContactForm from "./ContactForm.astro";
 </div>
 
 <script>
-    const modal = document.getElementById("contact-modal");
-    const backdrop = modal?.querySelector(".modal-backdrop");
-    const closeBtn = modal?.querySelector(".modal-close");
-    const openBtn = document.querySelector("[data-contact-modal-trigger]");
+    function initContactModal() {
+        const modal = document.getElementById("contact-modal");
+        const backdrop = modal?.querySelector(".modal-backdrop");
+        const closeBtn = modal?.querySelector(".modal-close");
 
-    function openModal() {
-        if (!modal) return;
-        modal.setAttribute("aria-hidden", "false");
-        modal.classList.add("modal--open");
-        document.body.style.overflow = "hidden";
-    }
-
-    function closeModal() {
-        if (!modal) return;
-        modal.setAttribute("aria-hidden", "true");
-        modal.classList.remove("modal--open");
-        document.body.style.overflow = "";
-    }
-
-    openBtn?.addEventListener("click", (e) => {
-        e.preventDefault();
-        openModal();
-    });
-
-    closeBtn?.addEventListener("click", closeModal);
-    backdrop?.addEventListener("click", closeModal);
-
-    // Cerrar con ESC
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal?.classList.contains("modal--open")) {
-            closeModal();
+        function openModal() {
+            if (!modal) return;
+            modal.setAttribute("aria-hidden", "false");
+            modal.classList.add("modal--open");
+            document.body.style.overflow = "hidden";
         }
-    });
+
+        function closeModal() {
+            if (!modal) return;
+            modal.setAttribute("aria-hidden", "true");
+            modal.classList.remove("modal--open");
+            document.body.style.overflow = "";
+        }
+
+        // Usar delegación de eventos en el documento
+        // Esto funciona incluso si el botón se carga después
+        document.addEventListener("click", (e) => {
+            const target = e.target as HTMLElement;
+            // Verificar si el elemento clickeado o alguno de sus padres tiene el atributo
+            const triggerBtn = target.closest("[data-contact-modal-trigger]");
+            if (triggerBtn) {
+                e.preventDefault();
+                openModal();
+            }
+        });
+
+        closeBtn?.addEventListener("click", closeModal);
+        backdrop?.addEventListener("click", closeModal);
+
+        // Cerrar con ESC
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && modal?.classList.contains("modal--open")) {
+                closeModal();
+            }
+        });
+    }
+
+    // Ejecutar cuando el DOM esté completamente cargado
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initContactModal);
+    } else {
+        initContactModal();
+    }
 </script>
 
 <style>
@@ -79,21 +94,26 @@ import ContactForm from "./ContactForm.astro";
         display: flex;
         align-items: center;
         justify-content: center;
-        opacity: 0;
         visibility: hidden;
-        transition:
-            opacity 0.3s ease,
-            visibility 0.3s ease;
+        transition: visibility 0.35s ease;
     }
 
     .modal--open {
-        opacity: 1;
         visibility: visible;
     }
 
     .modal-backdrop {
         position: absolute;
         inset: 0;
+        background: rgba(0, 0, 0, 0);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        transition:
+            background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            backdrop-filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .modal--open .modal-backdrop {
         background: rgba(0, 0, 0, 0.75);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
@@ -110,12 +130,16 @@ import ContactForm from "./ContactForm.astro";
         width: 550px;
         max-height: 90vh;
         overflow: hidden;
-        transform: scale(0.9);
-        transition: transform 0.3s ease;
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+        transition:
+            opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .modal--open .modal-content {
-        transform: scale(1);
+        opacity: 1;
+        transform: scale(1) translateY(0);
     }
 
     .modal-header {
