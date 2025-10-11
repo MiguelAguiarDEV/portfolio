@@ -9,7 +9,9 @@ export interface Props {
     class?: string;
     'data-i18n-key'?: string;
     'data-i18n-attr-href'?: string;
+    'data-i18n-attr-aria-label'?: string;
     'aria-label'?: string;
+    [key: string]: any; // Permite atributos adicionales
 }
 
 const {
@@ -22,7 +24,9 @@ const {
     class: className,
     'data-i18n-key': i18nKey,
     'data-i18n-attr-href': i18nAttrHref,
+    'data-i18n-attr-aria-label': i18nAttrAriaLabel,
     'aria-label': ariaLabel,
+    ...rest
 } = Astro.props;
 
 const Tag = href ? 'a' : 'button';
@@ -40,7 +44,9 @@ const isRainbow = variant === 'rainbow';
             download={download}
             data-i18n-key={i18nKey}
             data-i18n-attr-href={i18nAttrHref}
+            data-i18n-attr-aria-label={i18nAttrAriaLabel}
             aria-label={ariaLabel}
+            {...rest}
         >
             <slot />
         </Tag>
@@ -55,7 +61,9 @@ const isRainbow = variant === 'rainbow';
         download={download}
         data-i18n-key={i18nKey}
         data-i18n-attr-href={i18nAttrHref}
+        data-i18n-attr-aria-label={i18nAttrAriaLabel}
         aria-label={ariaLabel}
+        {...rest}
     >
         <slot />
     </Tag>

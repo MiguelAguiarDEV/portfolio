@@ -36,39 +36,59 @@ import ContactForm from "./ContactForm.astro";
 </div>
 
 <script>
-    const modal = document.getElementById("contact-modal");
-    const backdrop = modal?.querySelector(".modal-backdrop");
-    const closeBtn = modal?.querySelector(".modal-close");
-    const openBtn = document.querySelector("[data-contact-modal-trigger]");
+    function initContactModal() {
+        const modal = document.getElementById("contact-modal");
+        const backdrop = modal?.querySelector(".modal-backdrop");
+        const closeBtn = modal?.querySelector(".modal-close");
 
-    function openModal() {
-        if (!modal) return;
-        modal.setAttribute("aria-hidden", "false");
-        modal.classList.add("modal--open");
-        document.body.style.overflow = "hidden";
-    }
+        console.log("ContactModal: Inicializando modal", { modal });
 
-    function closeModal() {
-        if (!modal) return;
-        modal.setAttribute("aria-hidden", "true");
-        modal.classList.remove("modal--open");
-        document.body.style.overflow = "";
-    }
-
-    openBtn?.addEventListener("click", (e) => {
-        e.preventDefault();
-        openModal();
-    });
-
-    closeBtn?.addEventListener("click", closeModal);
-    backdrop?.addEventListener("click", closeModal);
-
-    // Cerrar con ESC
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal?.classList.contains("modal--open")) {
-            closeModal();
+        function openModal() {
+            if (!modal) return;
+            console.log("ContactModal: Abriendo modal");
+            modal.setAttribute("aria-hidden", "false");
+            modal.classList.add("modal--open");
+            document.body.style.overflow = "hidden";
         }
-    });
+
+        function closeModal() {
+            if (!modal) return;
+            console.log("ContactModal: Cerrando modal");
+            modal.setAttribute("aria-hidden", "true");
+            modal.classList.remove("modal--open");
+            document.body.style.overflow = "";
+        }
+
+        // Usar delegación de eventos en el documento
+        // Esto funciona incluso si el botón se carga después
+        document.addEventListener("click", (e) => {
+            const target = e.target as HTMLElement;
+            // Verificar si el elemento clickeado o alguno de sus padres tiene el atributo
+            const triggerBtn = target.closest("[data-contact-modal-trigger]");
+            if (triggerBtn) {
+                e.preventDefault();
+                console.log("ContactModal: Click en botón de abrir detectado");
+                openModal();
+            }
+        });
+
+        closeBtn?.addEventListener("click", closeModal);
+        backdrop?.addEventListener("click", closeModal);
+
+        // Cerrar con ESC
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && modal?.classList.contains("modal--open")) {
+                closeModal();
+            }
+        });
+    }
+
+    // Ejecutar cuando el DOM esté completamente cargado
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initContactModal);
+    } else {
+        initContactModal();
+    }
 </script>
 
 <style>
