@@ -267,4 +267,16 @@ const carouselId = `carousel-${Math.random().toString(36).substr(2, 9)}`;
     .carousel__dot--active {
         background: #fff;
     }
+
+    /* Mobile: < 640px */
+    @media (max-width: 639px) {
+        .carousel,
+        .carousel__no-preview {
+            aspect-ratio: unset;
+            height: 100%;
+            grid-column: 1;
+            grid-row: 1;
+            align-self: stretch;
+        }
+    }
 </style>
