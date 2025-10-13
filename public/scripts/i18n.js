@@ -4,13 +4,13 @@ const SUPPORTED_LANGS = ["es", "en"];
 const translations = {
     es: {
         "nav.sections": "Secciones",
-        "nav.about": "Sobre mi",
+        "nav.about": "Sobre mí",
         "nav.projects": "Proyectos",
         "lang.toggle.label": "ES",
-        "lang.toggle.aria": "Cambiar idioma a ingles",
-        "about.title": "Sobre mi",
+        "lang.toggle.aria": "Cambiar idioma a inglés",
+        "about.title": "Sobre mí",
         "about.description":
-            "Soy Miguel Santiesteban, un estudiante de Ingenieria Informatica de 22 anos de las Islas Canarias, Espana. Me especializo en desarrollo backend y disfruto crear proyectos desde cero, resolver problemas complejos y aprender de forma continua.",
+            "Soy Miguel Santiesteban, un estudiante de Ingeniería Informática de 22 años de las Islas Canarias, España. Me especializo en desarrollo backend y disfruto crear proyectos desde cero, resolver problemas complejos y aprender de forma continua.",
         "about.downloadCv": "Descargar CV",
         "about.downloadCv.href": "/cv-miguel-santiesteban-aguiar-esp.pdf",
         "about.contact": "Contacto",
@@ -24,7 +24,7 @@ const translations = {
         "contact.form.message.label": "Mensaje",
         "contact.form.message.placeholder": "Tu mensaje...",
         "contact.form.submit": "Enviar mensaje",
-        "about.stack": "Tecnologias",
+        "about.stack": "Tecnologías",
         "about.topProjects": "Proyectos destacados",
         "projects.title": "Repositorios de GitHub",
         "project.videoFallback": "Tu navegador no soporta video.",
@@ -35,7 +35,7 @@ const translations = {
         "project.noPreview": "Sin vista previa",
         "project.battleship.name": "Battleship vs AI",
         "project.battleship.description":
-            "Batalla de hundir la flota contra un bot en JavaScript con logica basica de IA.",
+            "Batalla de hundir la flota contra un bot en JavaScript con lógica básica de IA.",
         "project.clipsync.name": "Clip Sync",
         "project.clipsync.description":
             "Sincroniza el portapapeles entre dispositivos usando WebSocket y HTTP.",
@@ -44,24 +44,24 @@ const translations = {
             "Herramienta para analizar ficheros CSV grandes como trabajo de fin de grado.",
         "project.profileRepo.name": "Perfil de GitHub",
         "project.profileRepo.description":
-            "Codigo fuente del README y configuraciones de mi perfil en GitHub.",
+            "Código fuente del README y configuraciones de mi perfil en GitHub.",
         "project.pdfUtility.name": "PDF Utility",
         "project.pdfUtility.description":
-            "Coleccion de utilidades web ligeras para trabajar con documentos PDF.",
+            "Colección de utilidades web ligeras para trabajar con documentos PDF.",
         "project.portfolio.name": "Portfolio",
         "project.portfolio.description":
             "Sitio personal construido con Astro para mostrar experiencia y proyectos.",
         "project.queater.name": "Queater",
         "project.queater.description":
-            "Prototipo de gestion de colas y pedidos con enfoque en tiempo real.",
+            "Prototipo de gestión de colas y pedidos con enfoque en tiempo real.",
         "project.vulca.name": "Vulca Torneos",
         "project.vulca.description":
             "Plataforma para gestionar torneos y resultados con stack TypeScript.",
         "chip.backend": "Backend",
         "chip.canary": "Islas Canarias",
         "chip.remote": "Remoto",
-        "chip.csStudent": "Estudiante de informatica",
-        "chip.bilingual": "Ingles / Espanol",
+        "chip.csStudent": "Estudiante de informática",
+        "chip.bilingual": "Inglés / Español",
     },
     en: {
         "nav.sections": "Sections",
