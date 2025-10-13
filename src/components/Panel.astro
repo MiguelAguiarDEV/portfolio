@@ -114,6 +114,19 @@ const panelStyle = background ? `--bg: ${background}` : undefined;
         .panel > section {
             width: min(960px, 92vw);
             max-width: 100%;
+            margin-bottom: calc(var(--edge-margin) * 2);
+            height: calc(
+                100vh - var(--nav-margin-top) - var(--nav-h) - var(--nav-panel-gap) -
+                    (var(--edge-margin) * 2)
+            );
+            max-height: calc(
+                100vh - var(--nav-margin-top) - var(--nav-h) - var(--nav-panel-gap) -
+                    (var(--edge-margin) * 2)
+            );
+            min-height: calc(
+                100vh - var(--nav-margin-top) - var(--nav-h) - var(--nav-panel-gap) -
+                    (var(--edge-margin) * 2)
+            );
         }
     }
 </style>
