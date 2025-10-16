@@ -1,21 +1,21 @@
 ---
 export interface Props {
-    as?: 'div' | 'section' | 'aside' | 'article';
-    variant?: 'column' | 'fill';
+    as?: "div" | "section" | "aside" | "article";
+    variant?: "column" | "fill";
     class?: string;
-    'aria-label'?: string;
-    'aria-labelledby'?: string;
+    "aria-label"?: string;
+    "aria-labelledby"?: string;
 }
 
 const {
-    as: Tag = 'div',
+    as: Tag = "div",
     variant,
     class: className,
-    'aria-label': ariaLabel,
-    'aria-labelledby': ariaLabelledby,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledby,
 } = Astro.props;
 
-const classes = ['container'];
+const classes = ["container"];
 if (variant) classes.push(`container--${variant}`);
 if (className) classes.push(className);
 ---
@@ -37,7 +37,7 @@ if (className) classes.push(className);
         max-height: 100%;
         min-height: 0;
         min-width: 0;
-        gap: var(--space-sm);
+        gap: var(--space-md);
         overflow: visible;
         padding: 0;
     }
