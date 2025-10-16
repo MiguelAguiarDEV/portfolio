@@ -99,6 +99,8 @@ const {
         min-width: 0;
         box-sizing: border-box;
         overflow: hidden;
+        container-type: size;
+        container-name: project-card;
     }
 
     .project-card__content {
@@ -214,6 +216,21 @@ const {
         }
 
         .project-card__tags {
+            display: none !important;
+        }
+    }
+
+    /* Container queries para responsive basado en el espacio disponible */
+    /* Cuando la altura es MUY limitada, ocultar el stack primero */
+    @container project-card (max-height: 275px) {
+        .project-card__tags {
+            display: none !important;
+        }
+    }
+
+    /* Si aún con el stack oculto no hay suficiente espacio, ocultar la descripción */
+    @container project-card (max-height: 245px) {
+        .project-card__description {
             display: none !important;
         }
     }

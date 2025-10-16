@@ -265,6 +265,8 @@ const hasSlides = slides.length > 0;
         min-width: 0;
         box-sizing: border-box;
         overflow: visible;
+        container-type: size;
+        container-name: project-card;
     }
 
     /* Sin preview */
@@ -587,6 +589,25 @@ const hasSlides = slides.length > 0;
         }
 
         .project-card__tags {
+            display: none !important;
+        }
+    }
+
+    /* ============================ */
+    /* Container Queries            */
+    /* ============================ */
+
+    /* Cuando la altura es MUY limitada, ocultar el stack primero */
+    @container project-card (max-height: 260px) {
+        .project-card__tags {
+            display: none !important;
+            background-color: red;
+        }
+    }
+
+    /* Si aún con el stack oculto no hay suficiente espacio, ocultar la descripción */
+    @container project-card (max-height: 230px) {
+        .project-card__description {
             display: none !important;
         }
     }
