@@ -598,15 +598,15 @@ const hasSlides = slides.length > 0;
     /* ============================ */
 
     /* Cuando la altura es MUY limitada, ocultar el stack primero */
-    @container project-card (max-height: 260px) {
+    @container project-card (max-height: 275px) {
         .project-card__tags {
             display: none !important;
-            background-color: red;
+            /* background-color: red; */
         }
     }
 
     /* Si aún con el stack oculto no hay suficiente espacio, ocultar la descripción */
-    @container project-card (max-height: 230px) {
+    @container project-card (max-height: 235px) {
         .project-card__description {
             display: none !important;
         }
