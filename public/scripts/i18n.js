@@ -214,8 +214,12 @@ const applyTranslations = (lang) => {
 
     const toggle = document.querySelector("[data-lang-toggle]");
     if (toggle) {
-        const label = dictionary["lang.toggle.label"] ?? lang.toUpperCase();
-        toggle.textContent = label;
+        // No actualizar el contenido si el botón contiene banderas (SVGs)
+        const hasFlags = toggle.querySelector('.flag-icon');
+        if (!hasFlags) {
+            const label = dictionary["lang.toggle.label"] ?? lang.toUpperCase();
+            toggle.textContent = label;
+        }
     }
 };
 

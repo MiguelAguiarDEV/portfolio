@@ -105,18 +105,50 @@ const { items } = Astro.props;
             aria-label="Cambiar idioma"
             data-i18n-attr-aria-label="lang.toggle.aria"
         >
-            <img
-                src="/flags/es.svg"
-                alt="Español"
+            <svg
                 class="flag-icon flag-es"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 750 500"
                 data-lang="es"
-            />
-            <img
-                src="/flags/en.svg"
-                alt="English"
+            >
+                <rect width="750" height="500" fill="#c60b1e" />
+                <rect y="125" width="750" height="250" fill="#ffc400" />
+            </svg>
+            <svg
                 class="flag-icon flag-en"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 60 30"
                 data-lang="en"
-            />
+            >
+                <defs>
+                    <clipPath id="flag-en-s">
+                        <path d="M0,0 v30 h60 v-30 z" />
+                    </clipPath>
+                    <clipPath id="flag-en-t">
+                        <path d="M30,15 h30 v15 z v-15 h-30 z h-30 v15 z v-15 h30 z" />
+                    </clipPath>
+                </defs>
+                <g clip-path="url(#flag-en-s)">
+                    <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
+                    <path
+                        d="M0,0 L60,30 M60,0 L0,30"
+                        stroke="#fff"
+                        stroke-width="6"></path>
+                    <path
+                        d="M0,0 L60,30 M60,0 L0,30"
+                        clip-path="url(#flag-en-t)"
+                        stroke="#C8102E"
+                        stroke-width="4"></path>
+                    <path
+                        d="M30,0 v30 M0,15 h60"
+                        stroke="#fff"
+                        stroke-width="10"></path>
+                    <path
+                        d="M30,0 v30 M0,15 h60"
+                        stroke="#C8102E"
+                        stroke-width="6"></path>
+                </g>
+            </svg>
         </button>
     </div>
 </nav>
@@ -244,17 +276,6 @@ const { items } = Astro.props;
         display: flex;
         align-items: center;
         gap: 6px;
-        transition:
-            transform 0.2s,
-            background-color 0.2s;
-    }
-
-    .lang-toggle:hover {
-        background: color-mix(in oklab, #ffffff 12%, transparent);
-    }
-
-    .lang-toggle:active {
-        transform: scale(0.98);
     }
 
     .lang-toggle:focus-visible {
@@ -264,26 +285,43 @@ const { items } = Astro.props;
 
     .flag-icon {
         width: 24px;
-        height: auto;
+        height: 16px;
         border-radius: 4px;
-        transition: opacity 0.2s;
+        transition:
+            opacity 0.2s,
+            transform 0.2s,
+            box-shadow 0.2s;
+        display: block;
+        flex-shrink: 0;
+        cursor: pointer;
+        opacity: 0.5;
     }
 
-    /* Mostrar solo la bandera activa según el idioma */
-    :global([lang="es"]) .flag-en {
-        opacity: 0.4;
+    .flag-icon:hover {
+        opacity: 0.8;
+        transform: scale(1.1);
     }
 
+    /* Bandera activa según el idioma */
     :global([lang="es"]) .flag-es {
         opacity: 1;
-    }
-
-    :global([lang="en"]) .flag-es {
-        opacity: 0.4;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
     }
 
     :global([lang="en"]) .flag-en {
         opacity: 1;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Hover en bandera activa */
+    :global([lang="es"]) .flag-es:hover {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    :global([lang="en"]) .flag-en:hover {
+        opacity: 1;
+        transform: scale(1.05);
     }
 
     /* Responsive: En pantallas pequeñas */
