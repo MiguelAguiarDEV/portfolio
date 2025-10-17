@@ -14,14 +14,8 @@ export const socials: Social[] = [
     },
     {
         name: "LinkedIn",
-        url: "https://linkedin.com/in/miguelaguiardev",
+        url: "https://es.linkedin.com/in/miguelaguiardev",
         icon: "linkedin",
         ariaLabel: "Visitar perfil de LinkedIn"
-    },
-    {
-        name: "Email",
-        url: "mailto:contact@miguelaguiar.dev",
-        icon: "email",
-        ariaLabel: "Enviar un correo electrónico"
     }
 ];
