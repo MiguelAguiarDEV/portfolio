@@ -1,4 +1,6 @@
 ---
+import { socials } from "@/data/socials";
+
 export interface NavItem {
     id: string;
     label: string;
@@ -12,57 +14,191 @@ export interface Props {
 const { items } = Astro.props;
 ---
 
-<nav
-    class="navbar"
-    aria-label="Secciones"
-    data-i18n-attr-aria-label="nav.sections"
->
-    {
-        items.map((item, index) => (
-            <button
-                data-target={item.id}
-                aria-current={index === 0 ? "page" : "false"}
-                data-i18n-key={item.labelKey}
-            >
-                {item.label}
-            </button>
-        ))
-    }
-    <button
-        class="lang-toggle"
-        type="button"
-        data-lang-toggle
-        aria-label="Cambiar idioma a ingles"
-        data-i18n-attr-aria-label="lang.toggle.aria"
-        data-i18n-key="lang.toggle.label"
-    >
-        ES
-    </button>
+<nav class="navbar-container" aria-label="Navegación principal">
+    <!-- Isla izquierda: Redes sociales -->
+    <div class="navbar-island navbar-island--socials">
+        {
+            socials.map((social) => (
+                <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.ariaLabel}
+                    class="social-link"
+                >
+                    {social.icon === "github" && (
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                            <path d="M9 18c-4.51 2-5-2-7-2" />
+                        </svg>
+                    )}
+                    {social.icon === "linkedin" && (
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                            <rect x="2" y="9" width="4" height="12" />
+                            <circle cx="4" cy="4" r="2" />
+                        </svg>
+                    )}
+                    {social.icon === "email" && (
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                        </svg>
+                    )}
+                </a>
+            ))
+        }
+    </div>
+
+    <!-- Isla central: Navegación -->
+    <div class="navbar-island navbar-island--nav">
+        {
+            items.map((item, index) => (
+                <button
+                    data-target={item.id}
+                    aria-current={index === 0 ? "page" : "false"}
+                    data-i18n-key={item.labelKey}
+                    class="nav-button"
+                >
+                    {item.label}
+                </button>
+            ))
+        }
+    </div>
+
+    <!-- Isla derecha: Selector de idioma -->
+    <div class="navbar-island navbar-island--lang">
+        <button
+            class="lang-toggle"
+            type="button"
+            data-lang-toggle
+            aria-label="Cambiar idioma"
+            data-i18n-attr-aria-label="lang.toggle.aria"
+        >
+            <img
+                src="/flags/es.svg"
+                alt="Español"
+                class="flag-icon flag-es"
+                data-lang="es"
+            />
+            <img
+                src="/flags/en.svg"
+                alt="English"
+                class="flag-icon flag-en"
+                data-lang="en"
+            />
+        </button>
+    </div>
 </nav>
 
 <style>
-    .navbar {
+    .navbar-container {
         position: fixed;
         left: 50%;
-        top: var(--nav-margin-top);
         transform: translateX(-50%);
+        top: var(--nav-margin-top);
         z-index: 1000;
-        height: var(--nav-h);
-        max-width: calc(100vw - 2rem);
+        width: min(1200px, 84vw);
+        max-width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-sm, 12px);
+        pointer-events: none;
+        box-sizing: border-box;
+    }
+
+    .navbar-island {
         display: flex;
         align-items: center;
         gap: 2px;
         padding: 5px;
         border-radius: 15px;
         background: rgba(255, 255, 255, 0.05);
-        /* backdrop-filter: blur(14px) saturate(140%); */
-        /* -webkit-backdrop-filter: blur(14px) saturate(140%); */
-        /* box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25); */
+        backdrop-filter: blur(14px) saturate(140%);
+        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
         pointer-events: auto;
+        height: var(--nav-h);
         box-sizing: border-box;
     }
 
-    .navbar button {
+    .navbar-island--socials {
+        flex-shrink: 0;
+    }
+
+    .navbar-island--nav {
+        flex: 0 1 auto;
+        min-width: 0;
+    }
+
+    .navbar-island--lang {
+        flex-shrink: 0;
+    }
+
+    /* Enlaces de redes sociales */
+    .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(6px, 1vh, 8px) clamp(8px, 1.5vw, 10px);
+        border-radius: 10px;
+        color: #fff;
+        opacity: 0.75;
+        transition:
+            opacity 0.2s,
+            transform 0.2s,
+            background-color 0.2s;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .social-link:hover {
+        opacity: 1;
+        background: color-mix(in oklab, #ffffff 12%, transparent);
+    }
+
+    .social-link:active {
+        transform: scale(0.95);
+    }
+
+    .social-link:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.8);
+        outline-offset: 2px;
+    }
+
+    /* Botones de navegación */
+    .nav-button {
         appearance: none;
         border: 0;
         background: transparent;
@@ -81,25 +217,96 @@ const { items } = Astro.props;
         min-width: 0;
     }
 
-    .navbar button[aria-current="page"] {
+    .nav-button[aria-current="page"] {
         opacity: 1;
         background: color-mix(in oklab, #ffffff 16%, transparent);
     }
 
-    .navbar button:active {
+    .nav-button:hover {
+        opacity: 1;
+    }
+
+    .nav-button:active {
         transform: scale(0.98);
     }
 
-    .navbar button:focus-visible {
+    .nav-button:focus-visible {
         outline: 2px solid rgba(255, 255, 255, 0.8);
         outline-offset: 2px;
     }
 
+    /* Selector de idioma */
     .lang-toggle {
-        font-weight: 600;
-        text-transform: uppercase;
-        padding-left: var(--space-md);
-        margin-left: var(--space-xs);
-        border-left: 1px solid rgba(255, 255, 255, 0.15);
+        appearance: none;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        padding: clamp(4px, 1vh, 6px) clamp(6px, 1.5vw, 8px);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition:
+            transform 0.2s,
+            background-color 0.2s;
+    }
+
+    .lang-toggle:hover {
+        background: color-mix(in oklab, #ffffff 12%, transparent);
+    }
+
+    .lang-toggle:active {
+        transform: scale(0.98);
+    }
+
+    .lang-toggle:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.8);
+        outline-offset: 2px;
+    }
+
+    .flag-icon {
+        width: 24px;
+        height: auto;
+        border-radius: 4px;
+        transition: opacity 0.2s;
+    }
+
+    /* Mostrar solo la bandera activa según el idioma */
+    :global([lang="es"]) .flag-en {
+        opacity: 0.4;
+    }
+
+    :global([lang="es"]) .flag-es {
+        opacity: 1;
+    }
+
+    :global([lang="en"]) .flag-es {
+        opacity: 0.4;
+    }
+
+    :global([lang="en"]) .flag-en {
+        opacity: 1;
+    }
+
+    /* Responsive: En pantallas pequeñas */
+    @media (max-width: 1000px) {
+        .navbar-container {
+            width: min(960px, 92vw);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .navbar-container {
+            gap: var(--space-xs, 8px);
+        }
+
+        .social-link {
+            padding: clamp(6px, 1vh, 8px);
+        }
+
+        .nav-button {
+            font-size: clamp(0.7rem, var(--fs-1), 0.85rem);
+            padding: clamp(6px, 1vh, 8px) clamp(6px, 1.5vw, 10px);
+        }
     }
 </style>

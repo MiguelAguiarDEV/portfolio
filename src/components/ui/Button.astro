@@ -1,42 +1,60 @@
 ---
 export interface Props {
-    variant?: 'primary' | 'ghost' | 'rainbow';
+    variant?: "primary" | "ghost" | "rainbow";
     href?: string;
-    type?: 'button' | 'submit' | 'reset';
-    target?: '_blank' | '_self';
+    type?: "button" | "submit" | "reset";
+    target?: "_blank" | "_self";
     rel?: string;
     download?: boolean | string;
     class?: string;
-    'data-i18n-key'?: string;
-    'data-i18n-attr-href'?: string;
-    'data-i18n-attr-aria-label'?: string;
-    'aria-label'?: string;
+    "data-i18n-key"?: string;
+    "data-i18n-attr-href"?: string;
+    "data-i18n-attr-aria-label"?: string;
+    "aria-label"?: string;
     [key: string]: any; // Permite atributos adicionales
 }
 
 const {
-    variant = 'primary',
+    variant = "primary",
     href,
-    type = 'button',
+    type = "button",
     target,
     rel,
     download,
     class: className,
-    'data-i18n-key': i18nKey,
-    'data-i18n-attr-href': i18nAttrHref,
-    'data-i18n-attr-aria-label': i18nAttrAriaLabel,
-    'aria-label': ariaLabel,
+    "data-i18n-key": i18nKey,
+    "data-i18n-attr-href": i18nAttrHref,
+    "data-i18n-attr-aria-label": i18nAttrAriaLabel,
+    "aria-label": ariaLabel,
     ...rest
 } = Astro.props;
 
-const Tag = href ? 'a' : 'button';
-const isRainbow = variant === 'rainbow';
+const Tag = href ? "a" : "button";
+const isRainbow = variant === "rainbow";
 ---
 
-{isRainbow ? (
-    <span class="btn-rainbow">
+{
+    isRainbow ? (
+        <span class="btn-rainbow">
+            <Tag
+                class:list={["btn", `btn--${variant}`, className]}
+                href={href}
+                type={!href ? type : undefined}
+                target={target}
+                rel={rel}
+                download={download}
+                data-i18n-key={i18nKey}
+                data-i18n-attr-href={i18nAttrHref}
+                data-i18n-attr-aria-label={i18nAttrAriaLabel}
+                aria-label={ariaLabel}
+                {...rest}
+            >
+                <slot />
+            </Tag>
+        </span>
+    ) : (
         <Tag
-            class:list={['btn', `btn--${variant}`, className]}
+            class:list={["btn", `btn--${variant}`, className]}
             href={href}
             type={!href ? type : undefined}
             target={target}
@@ -50,24 +68,8 @@ const isRainbow = variant === 'rainbow';
         >
             <slot />
         </Tag>
-    </span>
-) : (
-    <Tag
-        class:list={['btn', `btn--${variant}`, className]}
-        href={href}
-        type={!href ? type : undefined}
-        target={target}
-        rel={rel}
-        download={download}
-        data-i18n-key={i18nKey}
-        data-i18n-attr-href={i18nAttrHref}
-        data-i18n-attr-aria-label={i18nAttrAriaLabel}
-        aria-label={ariaLabel}
-        {...rest}
-    >
-        <slot />
-    </Tag>
-)}
+    )
+}
 
 <style>
     .btn {
@@ -78,13 +80,17 @@ const isRainbow = variant === 'rainbow';
         font-weight: 600;
         line-height: 1;
         padding: clamp(0.45rem, 0.55rem, 0.65rem) clamp(0.7rem, 0.85rem, 1rem);
-        border-radius: 10px;
+        border-radius: var(--br-mid);
         border: 1px solid var(--ring);
         color: var(--ink);
         background: rgba(255, 255, 255, 0.08);
         text-decoration: none;
         backdrop-filter: blur(4px);
-        transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+        transition:
+            background 160ms ease,
+            border-color 160ms ease,
+            box-shadow 160ms ease,
+            transform 160ms ease;
         box-shadow: 0 2px 18px rgba(0, 0, 0, 0.28);
         cursor: pointer;
         flex-shrink: 1;
@@ -109,9 +115,10 @@ const isRainbow = variant === 'rainbow';
 
     /* Rainbow variant wrapper */
     .btn-rainbow {
+        --rainbow-border-radius: var(--br-mid);
         position: relative;
         display: inline-block;
-        border-radius: var(--br-mid);
+        border-radius: var(--rainbow-border-radius);
         padding: 2px;
         isolation: isolate;
         overflow: hidden;
@@ -156,11 +163,11 @@ const isRainbow = variant === 'rainbow';
     }
 
     .btn-rainbow:hover {
-        transform: scale(1.06);
+        transform: scale(1.05);
     }
 
     .btn-rainbow .btn:hover {
-        transform: scale(1.04);
+        transform: scale(1);
         box-shadow: 0 0.9rem 1.6rem rgba(0, 0, 0, 0.45);
     }
 

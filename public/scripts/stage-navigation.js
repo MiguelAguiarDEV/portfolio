@@ -11,10 +11,10 @@ const init = () => {
     const panels = Array.from(document.querySelectorAll(".panel"));
     if (panels.length === 0)
         return;
-    const nav = document.querySelector(".navbar");
+    const nav = document.querySelector(".navbar-island--nav");
     if (!nav)
         return;
-    const buttons = Array.from(nav.querySelectorAll("button"));
+    const buttons = Array.from(nav.querySelectorAll(".nav-button"));
     let zCounter = 1;
     const initialButton = buttons.find((btn) => btn.getAttribute("aria-current") === "page");
     let current = initialButton?.dataset.target ?? panels[0]?.id ?? "";
