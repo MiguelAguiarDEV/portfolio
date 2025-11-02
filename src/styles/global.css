@@ -634,7 +634,7 @@ a:hover {
 @media (max-width: 640px) {
     :root {
         --edge-margin: var(--space-sm);
-        --nav-panel-gap: var(--space-xs);
+        --nav-panel-gap: var(--space-sm);
         --nav-h: 44px;
         --nav-gap: 4px;
         --nav-pad: 6px;
